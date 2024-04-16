@@ -1,9 +1,9 @@
-using PetFamily.Domain.ValueObjects;
+﻿using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.API.Contracts;
-
-public record CreatePetRequest(
-     string Nickname,
+namespace PetFamily.Application.Models
+{
+    public record CreatePetModel(
+        string Nickname,
         string Description,
         DateTime BirthDate,
         string Breed,
@@ -20,5 +20,7 @@ public record CreatePetRequest(
         bool Vaccine,
         PhoneNumber ContactPhoneNumber,
         PhoneNumber VolunteerPhoneNumber,
-        bool OnTreatment
-    );
+        bool OnTreatment,
+        DateTime CreatedDate
+        );
+}

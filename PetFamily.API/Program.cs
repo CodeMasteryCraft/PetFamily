@@ -1,21 +1,17 @@
 using Microsoft.EntityFrameworkCore;
+using PetFamily.Application.Common;
 using PetFamily.Infrastructure;
+using PetFamily.Infrastructure.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<PetFamilyDbContext>();
+builder.Services.AddApplication();
+builder.Services.AddInfastructure();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyDbContext>();
-
-    dbContext.Database.Migrate();
-}
 
 app.UseSwagger();
 app.UseSwaggerUI();
