@@ -1,4 +1,5 @@
-﻿using PetFamily.Application.Models;
+﻿using LanguageExt.Common;
+using PetFamily.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace PetFamily.Application.Interfaces
         /// <param name="model"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task CreateAsync(CreatePetModel model,CancellationToken cancellationToken);
+        Task<Result<Guid>> CreateAsync(CreatePetModel model,CancellationToken cancellationToken);
     }
 }

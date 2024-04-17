@@ -24,9 +24,9 @@ public class PetController : ControllerBase
     {
         CreatePetModel model = new PetMap().MapWith(request);
 
-        await _perService.CreateAsync(model,ct);
+        var result = await _perService.CreateAsync(model,ct);
 
-        return Ok();
+        return result.Match<IActionResult>(p => Created(), e => BadRequest());
     }
     
     [HttpGet]

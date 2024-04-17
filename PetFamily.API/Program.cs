@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PetFamily.API.Middleware;
 using PetFamily.Application.Common;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.Common;
@@ -15,6 +16,8 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCustomException();
 
 app.MapControllers();
 

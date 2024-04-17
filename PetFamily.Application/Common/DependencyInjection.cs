@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using PetFamily.Application.Common.Validations;
 using PetFamily.Application.Interfaces;
 using PetFamily.Application.Pets.Services;
+using PetFamily.Domain.Entities;
 
 namespace PetFamily.Application.Common
 {
@@ -14,6 +17,7 @@ namespace PetFamily.Application.Common
         /// <returns></returns>
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddScoped<IValidator<Pet>, PetValidator>();
             services.AddTransient<IPetService, PetService>();
 
             return services;

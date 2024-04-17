@@ -9,6 +9,7 @@ public class Pet
     }
 
     public Pet(
+        Guid id,
         string nickname,
         string description,
         DateTime birthDate,
