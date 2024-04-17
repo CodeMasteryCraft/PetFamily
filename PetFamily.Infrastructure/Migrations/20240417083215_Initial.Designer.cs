@@ -13,7 +13,7 @@ using PetFamily.Infrastructure;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(PetFamilyDbContext))]
-    [Migration("20240415173541_Initial")]
+    [Migration("20240417083215_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace PetFamily.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -155,8 +155,8 @@ namespace PetFamily.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<int>("Grams")
-                                .HasColumnType("integer")
+                            b1.Property<float>("Kilograms")
+                                .HasColumnType("real")
                                 .HasColumnName("weight");
                         });
 

@@ -37,7 +37,7 @@ namespace PetFamily.Infrastructure.Migrations
                     contact_phone_number = table.Column<string>(type: "text", nullable: false),
                     place = table.Column<string>(type: "text", nullable: false),
                     volunteer_phone_number = table.Column<string>(type: "text", nullable: false),
-                    weight = table.Column<int>(type: "integer", nullable: false)
+                    weight = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {

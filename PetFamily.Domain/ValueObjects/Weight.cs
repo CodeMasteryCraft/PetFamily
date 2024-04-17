@@ -2,10 +2,10 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record Weight
 {
-    public int Grams { get; set; }
+    public float Kilograms { get; set; }
 
-    public Weight(float weight)
+    public Weight(float kilograms)
     {
-        Grams = Convert.ToInt32(weight) * 1000;
+        Kilograms = kilograms;
     }
 }
