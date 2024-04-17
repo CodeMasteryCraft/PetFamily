@@ -37,7 +37,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             b => { b.Property(a => a.Value).HasColumnName("place"); });
 
         builder.ComplexProperty(p => p.Weight,
-            b => { b.Property(a => a.Grams).HasColumnName("weight"); });
+            b => { b.Property(a => a.Kilograms).HasColumnName("weight"); });
 
         builder.ComplexProperty(p => p.ContactPhoneNumber,
             b => { b.Property(a => a.Number).HasColumnName("contact_phone_number"); });
