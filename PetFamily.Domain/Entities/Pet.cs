@@ -107,7 +107,7 @@ public class Pet
         return new Pet(
             nickname,
             "",
-            DateTimeOffset.Now,
+            DateTimeOffset.UtcNow,
             "",
             color,
             address,
@@ -122,6 +122,6 @@ public class Pet
             contactPhoneNumber,
             volunteerPhoneNumber,
             false,
-            DateTimeOffset.Now);
+            DateTimeOffset.UtcNow);
     }
 }
