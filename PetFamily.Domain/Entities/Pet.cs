@@ -8,11 +8,8 @@ public class Pet
 {
     public const int MAX_NAME_LENGTH = 100;
 
-    private Pet()
-    {
-    }
-
     private Pet(
+        Guid id,
         string nickname,
         string description,
         DateTimeOffset birthDate,
@@ -32,6 +29,7 @@ public class Pet
         bool onTreatment,
         DateTimeOffset createdDate)
     {
+        Id = id;
         Nickname = nickname;
         Description = description;
         BirthDate = birthDate;
@@ -84,44 +82,69 @@ public class Pet
     private readonly List<Photo> _photos = [];
 
     public static Result<Pet, Error> Create(
+        Guid id,
         string nickname,
+        string description,
+        DateTimeOffset birthDate,
+        string breed,
         string color,
         Address address,
         Place place,
-        Weight weight,
+        bool castration,
+        string peopleAttitude,
+        string animalAttitude,
         bool onlyOneInFamily,
         string health,
+        int? height,
+        Weight weight,
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
-        bool onTreatment)
+        bool onTreatment,
+        DateTimeOffset createdDate)
     {
         if (nickname.IsEmpty() || nickname.Length > MAX_NAME_LENGTH)
             return Errors.General.InvalidLength();
 
+        if (description.IsEmpty())
+            return Errors.General.ValueIsRequired();
+
+        if(birthDate > DateTimeOffset.Now)
+            return Errors.General.InvalidIsDate();
+
+        if (breed.IsEmpty())
+            return Errors.General.ValueIsRequired();
+
         if (color.IsEmpty())
-            return Errors.General.InvalidLength();
+            return Errors.General.ValueIsRequired();
+
+        if (peopleAttitude.IsEmpty())
+            return Errors.General.ValueIsRequired();
+
+        if (animalAttitude.IsEmpty())
+            return Errors.General.ValueIsRequired();
 
         if (health.IsEmpty())
-            return Errors.General.InvalidLength();
+            return Errors.General.ValueIsRequired();
 
         return new Pet(
+            id,
             nickname,
-            "",
-            DateTimeOffset.UtcNow,
-            "",
+            description,
+            birthDate,
+            breed,
             color,
             address,
             place,
-            false,
-            "",
-            "",
-            false,
+            castration,
+            peopleAttitude,
+            animalAttitude,
+            onlyOneInFamily,
             health,
-            null,
+            height,
             weight,
             contactPhoneNumber,
             volunteerPhoneNumber,
-            false,
-            DateTimeOffset.UtcNow);
+            onTreatment,
+            createdDate);
     }
 }

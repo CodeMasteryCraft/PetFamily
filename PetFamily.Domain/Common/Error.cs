@@ -26,14 +26,18 @@ public static class Errors
         public static Error ValueIsInvalid(string name) =>
             new("value.is.invalid", $"{name} is invalid");
 
-        public static Error ValueIsRequried() =>
+        public static Error ValueIsRequired() =>
             new("value.is.required", "Value is required");
+
+        public static Error InvalidIsDate() =>
+            new("invalid.is.date", "Invalid is date");
 
         public static Error InvalidLength(string? name = null)
         {
             var label = name == null ? " " : " " + name + " ";
             return new("invalid.string.length", $"Invalid{label}length");
         }
+
     }
     
     public static class Place

@@ -16,9 +16,18 @@ public class PetController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreatePetRequest request, CancellationToken ct)
+    public async Task<IActionResult> Create(
+        [FromBody] CreatePetRequest petRequest,
+        [FromBody] CreateVaccinationRequest vaccinationRequest,
+        [FromBody]CreatePhotoRequest photoRequest,
+        [FromBody] CancellationToken ct)
     {
-        var idResult = await _petsService.CreatePet(request, ct);
+        var idResult = await _petsService.CreatePet(
+            petRequest,
+            photoRequest,
+            vaccinationRequest, 
+            ct);
+
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
         

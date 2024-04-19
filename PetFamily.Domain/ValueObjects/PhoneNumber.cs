@@ -18,7 +18,7 @@ public record PhoneNumber
     public static Result<PhoneNumber, Error> Create(string input)
     {
         if (input.IsEmpty())
-            return Errors.General.ValueIsRequried();
+            return Errors.General.ValueIsRequired();
 
         if (Regex.IsMatch(input, russionPhoneRegex) == false)
             return Errors.General.ValueIsInvalid("phone number");

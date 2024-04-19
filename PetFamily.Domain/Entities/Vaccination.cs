@@ -1,13 +1,13 @@
+using CSharpFunctionalExtensions;
+using PetFamily.Domain.Common;
+
 namespace PetFamily.Domain.Entities;
 
 public class Vaccination
 {
-    private Vaccination()
+    private Vaccination(Guid id,string name, DateTimeOffset applied)
     {
-    }
-
-    public Vaccination(string name, DateTime applied)
-    {
+        Id = id;
         Name = name;
         Applied = applied;
     }
@@ -16,5 +16,16 @@ public class Vaccination
 
     public string Name { get; private set; }
 
-    public DateTime Applied { get; private set; }
+    public DateTimeOffset Applied { get; private set; }
+
+    public static Result<Vaccination, Error> Create(Guid id,string name, DateTimeOffset applied)
+    {
+        if(name.IsEmpty())
+            Errors.General.ValueIsInvalid(name);
+
+        if (applied > DateTimeOffset.Now)
+            Errors.General.InvalidIsDate();
+
+        return new Vaccination(id, name,applied);
+    }
 }

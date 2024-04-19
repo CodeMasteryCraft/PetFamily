@@ -16,41 +16,68 @@ public class PetsService
         _petsRepository = petsRepository;
     }
 
-    public async Task<Result<Guid, Error>> CreatePet(CreatePetRequest request, CancellationToken ct)
+    public async Task<Result<Guid, Error>> CreatePet(
+        CreatePetRequest petRequest, 
+        CreatePhotoRequest photoRequest, 
+        CreateVaccinationRequest vaccinationRequest, 
+        CancellationToken ct)
     {
-        var address = Address.Create(request.City, request.Street, request.Building, request.Index);
+        var address = Address.Create(petRequest.City, petRequest.Street, petRequest.Building, petRequest.Index);
         if (address.IsFailure)
             return address.Error;
 
-        var place = Place.Create(request.Place);
+        var place = Place.Create(petRequest.Place);
         if (place.IsFailure)
             return place.Error;
 
-        var weight = Weight.Create(request.Weight);
+        var weight = Weight.Create(petRequest.Weight);
         if (weight.IsFailure)
             return weight.Error;
 
-        var contactPhoneNumber = PhoneNumber.Create(request.ContactPhoneNumber);
+        var contactPhoneNumber = PhoneNumber.Create(petRequest.ContactPhoneNumber);
         if (contactPhoneNumber.IsFailure)
             return contactPhoneNumber.Error;
 
-        var volunteerPhoneNumber = PhoneNumber.Create(request.VolunteerPhoneNumber);
+        var volunteerPhoneNumber = PhoneNumber.Create(petRequest.VolunteerPhoneNumber);
         if (volunteerPhoneNumber.IsFailure)
             return volunteerPhoneNumber.Error;
 
+        var photo = Photo.Create(
+            Guid.NewGuid(),
+            photoRequest.Path,
+            photoRequest.IsMain
+            );
+
+        var vaccination = Vaccination.Create(
+            Guid.NewGuid(),
+            vaccinationRequest.Name,
+            vaccinationRequest.Applied
+            );
+
         var pet = Pet.Create(
-            request.Nickname,
-            request.Color,
+            Guid.NewGuid(),
+            petRequest.Nickname,
+            petRequest.Description,
+            petRequest.BirthDate,
+            petRequest.Breed,
+            petRequest.Color,
             address.Value,
             place.Value,
+            petRequest.Castration,
+            petRequest.PeopleAttitude,
+            petRequest.AnimalAttitude,
+            petRequest.OnlyOneInFamily,
+            petRequest.Health,
+            petRequest.Height,
             weight.Value,
-            false,
-            "fsdfsdf",
             contactPhoneNumber.Value,
             volunteerPhoneNumber.Value,
-            true);
+            petRequest.OnTreatment,
+            DateTimeOffset.Now
+            );
 
         var idResult = await _petsRepository.Add(pet.Value, ct);
+
         if (idResult.IsFailure)
             return idResult.Error;
         

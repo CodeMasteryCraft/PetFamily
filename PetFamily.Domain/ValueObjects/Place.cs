@@ -20,7 +20,7 @@ public record Place
     public static Result<Place, Error> Create(string input)
     {
         if (input.IsEmpty())
-            return Errors.General.ValueIsRequried();
+            return Errors.General.ValueIsRequired();
 
         var place = input.Trim().ToUpper();
 
