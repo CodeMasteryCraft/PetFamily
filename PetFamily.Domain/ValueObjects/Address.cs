@@ -20,17 +20,22 @@ public record Address
 
     public static Result<Address, Error> Create(string city, string street, string building, string index)
     {
-        if (city.IsEmpty())
-            return Errors.General.ValueIsRequried();
+        city = city.Trim();
+        street = street.Trim();
+        building = building.Trim();
+        index = index.Trim();
 
-        if (street.IsEmpty())
-            return Errors.General.ValueIsRequried();
+        if (city.Length is < 1 or > 100)
+            return Errors.General.InvalidLength("city");
 
-        if (building.IsEmpty())
-            return Errors.General.ValueIsRequried();
+        if (street.Length is < 1 or > 100)
+            return Errors.General.InvalidLength("street");
 
-        if (index.IsEmpty())
-            return Errors.General.ValueIsRequried();
+        if (building.Length is < 1 or > 100)
+            return Errors.General.InvalidLength("building");
+
+        if (index.Length != 6)
+            return Errors.General.InvalidLength("index");
 
         return new Address(city, street, building, index);
     }

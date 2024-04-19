@@ -1,15 +1,26 @@
+using System.Text.Json;
+
 namespace PetFamily.Domain.Common;
 
 public class Error
 {
-    public string Code { get; set; }
-
-    public string Message { get; set; }
+    public string Code { get; }
+    public string Message { get; }
 
     public Error(string code, string message)
     {
         Code = code;
         Message = message;
+    }
+
+    public string Serialize()
+    {
+        return JsonSerializer.Serialize(this);
+    }
+
+    public static Error? Deserialize(string serialized)
+    {
+        return JsonSerializer.Deserialize<Error>(serialized);
     }
 }
 

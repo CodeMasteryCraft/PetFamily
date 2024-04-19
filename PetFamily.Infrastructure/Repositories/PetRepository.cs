@@ -17,6 +17,9 @@ public class PetRepository : IPetsRepository
     public async Task<Result<Guid, Error>> Add(Pet pet, CancellationToken ct)
     {
         await _dbContext.AddAsync(pet, ct);
+
+        return Errors.General.NotFound();
+        
         var result = await _dbContext.SaveChangesAsync(ct);
 
         if (result == 0)
