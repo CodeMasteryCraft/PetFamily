@@ -20,25 +20,25 @@ public static class Errors
         public static Error NotFound(Guid? id = null)
         {
             var forId = id == null ? "" : $" for Id '{id}'";
-            return new("record.not.found", $"Record not found{forId}");
+            return new("record.not.found", $"record not found{forId}");
         }
-        
-        public static Error ValueIsInvalid(string name) =>
-            new("value.is.invalid", $"{name} is invalid");
 
-        public static Error ValueIsRequried() =>
-            new("value.is.required", "Value is required");
+        public static Error ValueIsInvalid(string? name)
+        {
+            var label = name ?? "Value";
+            return new("value.is.invalid", $"{label} is invalid");
+        }
+
+        public static Error ValueIsRequried(string? name)
+        {
+            var label = name ?? "Value";
+            return new("value.is.required", $"{label} is required");
+        }
 
         public static Error InvalidLength(string? name = null)
         {
             var label = name == null ? " " : " " + name + " ";
-            return new("invalid.string.length", $"Invalid{label}length");
+            return new("invalid.string.length", $"invalid{label}length");
         }
-    }
-    
-    public static class Place
-    {
-        public static Error ValueIsRequried() =>
-            new("place.is.required", "Place is required");
     }
 }
