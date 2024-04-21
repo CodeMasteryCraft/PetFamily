@@ -6,18 +6,26 @@ namespace PetFamily.Application.Validators;
 
 public static class CustomValidators
 {
-    public static IRuleBuilderOptions<T, TElement> MustBeValueObject<T, TElement, TValueObject>(
+    // https://docs.fluentvalidation.net/en/latest/custom-validators.html?highlight=custom#writing-a-custom-validator
+    public static IRuleBuilderOptionsConditions<T, TElement> MustBeValueObject<T, TElement, TValueObject>(
         this IRuleBuilder<T, TElement> ruleBuilder,
-        Func<TElement, Result<TValueObject, Error>> factoryMethod)
+        Func<TElement, Result<TValueObject, IReadOnlyList<Error>>> factoryMethod)
     {
-        return (IRuleBuilderOptions<T, TElement>)ruleBuilder.Custom((value, context) =>
+        return ruleBuilder.Custom((value, context) =>
         {
-            Result<TValueObject, Error> result = factoryMethod(value);
+            var result = factoryMethod(value);
 
             if (result.IsSuccess)
                 return;
 
-            context.AddFailure(result.Error.Serialize());
+            foreach (var error in result.Error)
+                context.AddFailure(error.Serialize());
         });
+    }
+
+    public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(
+        this IRuleBuilderOptions<T, TProperty> rule, Error error)
+    {
+        return rule.WithMessage(error.Serialize());
     }
 }

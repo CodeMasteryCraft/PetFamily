@@ -12,11 +12,10 @@ public record Weight
         Kilograms = kilograms;
     }
 
-    public static Result<Weight, Error> Create(float kilograms)
+    public static Result<Weight, IReadOnlyList<Error>> Create(float kilograms)
     {
-        if (kilograms <= 0)
-            return Errors.General.ValueIsInvalid("weight");
-
-        return new Weight(kilograms);
+        return ResultBuilder.Create()
+            .AddErrorCondition(() => kilograms <= 0, () => Errors.General.ValueIsInvalid("weight"))
+            .Build(() => new Weight(kilograms));
     }
 }

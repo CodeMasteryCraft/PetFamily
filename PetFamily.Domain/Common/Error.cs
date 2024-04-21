@@ -34,13 +34,13 @@ public static class Errors
             return new("record.not.found", $"record not found{forId}");
         }
 
-        public static Error ValueIsInvalid(string? name)
+        public static Error ValueIsInvalid(string? name = null)
         {
             var label = name ?? "Value";
             return new("value.is.invalid", $"{label} is invalid");
         }
 
-        public static Error ValueIsRequried(string? name)
+        public static Error ValueIsRequried(string? name = null)
         {
             var label = name ?? "Value";
             return new("value.is.required", $"{label} is required");

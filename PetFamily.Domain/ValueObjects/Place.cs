@@ -5,8 +5,8 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record Place
 {
-    public static readonly Place InHospital = new(nameof(InHospital).ToUpper());
-    public static readonly Place AtHome = new(nameof(AtHome).ToUpper());
+    public static readonly Place InHospital = new(nameof(InHospital));
+    public static readonly Place AtHome = new(nameof(AtHome));
 
     private static readonly Place[] _all = [InHospital, AtHome];
 
@@ -17,9 +17,18 @@ public record Place
         Value = value;
     }
 
-    public static Result<Place, Error> Create(string input)
+    public static Result<Place, IReadOnlyList<Error>> Create(string input)
     {
-        if (input.IsEmpty())
+        var place = input.Trim();
+
+        return ResultBuilder.Create()
+            .AddErrorCondition(
+                () => _all.Any(p => p.Value.Equals(place, StringComparison.InvariantCultureIgnoreCase)) == false,
+                () => Errors.General.ValueIsRequried("input"))
+            .Build(() => new Place(place));
+
+
+        /*if (input.IsEmpty())
             return Errors.General.ValueIsRequried("input");
 
         var place = input.Trim().ToUpper();
@@ -29,6 +38,6 @@ public record Place
             return Errors.General.ValueIsInvalid("place");
         }
 
-        return new Place(place);
+        return new Place(place);*/
     }
 }

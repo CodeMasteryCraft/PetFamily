@@ -4,9 +4,10 @@ using PetFamily.Domain.Common;
 
 namespace PetFamily.Domain.ValueObjects;
 
-public record PhoneNumber
+public partial record PhoneNumber
 {
-    private const string russionPhoneRegex = @"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$";
+    [GeneratedRegex("^(\\+7|8)\\d{10}$")]
+    private static partial Regex PhoneRegex();
 
     public string Number { get; }
 
@@ -15,16 +16,12 @@ public record PhoneNumber
         Number = number;
     }
 
-    public static Result<PhoneNumber, Error> Create(string input)
+    public static Result<PhoneNumber, IReadOnlyList<Error>> Create(string input)
     {
-        input = input.Trim();
+        input = string.Concat(input.Where(chr => chr >= '0' && chr <= '9').Take(13));
 
-        if (input.Length < 1)
-            return Errors.General.InvalidLength("phone number");
-
-        if (Regex.IsMatch(input, russionPhoneRegex) == false)
-            return Errors.General.ValueIsInvalid("phone number");
-
-        return new PhoneNumber(input);
+        return ResultBuilder.Create()
+            .AddErrorCondition(() => PhoneRegex().IsMatch(input) == false, () => Errors.General.ValueIsInvalid("phone number"))
+            .Build(() => new PhoneNumber($"+{input}"));
     }
 }

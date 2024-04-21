@@ -5,25 +5,24 @@ namespace PetFamily.API.Validation;
 public class Envelope
 {
     public object? Result { get; }
-    public string? ErrorCode { get; }
-    public string? ErrorMessage { get; }
+    public IReadOnlyCollection<Error>? Errors { get; }
     public DateTime TimeGenerated { get; }
 
-    private Envelope(object? result, Error? error)
+    private Envelope(object? result, IReadOnlyCollection<Error>? errors = null)
     {
         Result = result;
-        ErrorCode = error?.Code;
-        ErrorMessage = error?.Message;
+        Errors = errors;
         TimeGenerated = DateTime.Now;
     }
 
     public static Envelope Ok(object? result = null)
     {
-        return new(result, null);
+        return new(result);
     }
 
-    public static Envelope Error(Error? error)
+    public static Envelope Error(params Error?[] errors)
     {
-        return new(null, error);
+        var filtered = errors.Where(item => item != null).Cast<Error>();
+        return new(null, filtered.Any() ? filtered.ToArray() : null);
     }
 }

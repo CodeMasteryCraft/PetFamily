@@ -9,7 +9,11 @@ using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
 
 builder.Services.AddApplication();
 

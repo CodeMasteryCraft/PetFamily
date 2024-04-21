@@ -17,12 +17,7 @@ public class PetController : ApplicationController
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePetRequest request, CancellationToken ct)
     {
-        var idResult = await _petsService.CreatePet(request, ct);
-
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
-
-        return Ok(idResult.Value);
+        return AsEnvelopeResult(await _petsService.CreatePet(request, ct));
     }
 
     [HttpGet]

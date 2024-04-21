@@ -16,7 +16,7 @@ public class PetsService
         _petsRepository = petsRepository;
     }
 
-    public async Task<Result<Guid, Error>> CreatePet(CreatePetRequest request, CancellationToken ct)
+    public async Task<Result<Guid, IReadOnlyList<Error>>> CreatePet(CreatePetRequest request, CancellationToken ct)
     {
         var address = Address.Create(request.City, request.Street, request.Building, request.Index).Value;
         var place = Place.Create(request.Place).Value;
@@ -36,10 +36,6 @@ public class PetsService
             volunteerPhoneNumber,
             true);
 
-        var idResult = await _petsRepository.Add(pet.Value, ct);
-        if (idResult.IsFailure)
-            return idResult.Error;
-
-        return idResult;
+        return await _petsRepository.Add(pet.Value, ct);
     }
 }

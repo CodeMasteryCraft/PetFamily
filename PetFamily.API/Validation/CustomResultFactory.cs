@@ -11,19 +11,22 @@ public class CustomResultFactory : IFluentValidationAutoValidationResultFactory
         ActionExecutingContext context,
         ValidationProblemDetails? validationProblemDetails)
     {
-        if (validationProblemDetails is null)
+        /// Если WithError не будет назначен, десереализация не пройдет
+        static Error? FromString(string value)
         {
-            return new BadRequestObjectResult("Invalid error");
-        }
+            try { return Error.Deserialize(value); } catch { return null; }
+        };
 
-        var validationError = validationProblemDetails.Errors.First();
-
-        var errorString = validationError.Value.First();
-
-        var error = Error.Deserialize(errorString);
-
-        var envelope = Envelope.Error(error);
-
-        return new BadRequestObjectResult(envelope);
+        return validationProblemDetails is null /// По идее, такого быть не должно от слова "совсем"
+            ? throw new ArgumentNullException(nameof(validationProblemDetails))
+            : new BadRequestObjectResult(
+                Envelope.Error(validationProblemDetails.Errors
+                    .Select(error => error.Value
+                        .Select(value => FromString(value))
+                        .Where(error => error != null)
+                        )
+                    .SelectMany(x => x)
+                    .ToArray())
+        );
     }
 }

@@ -1,5 +1,6 @@
 using Contracts.Requests;
 using FluentValidation;
+using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Application.Validators.Pets;
