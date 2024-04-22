@@ -1,18 +1,24 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
+using System.Dynamic;
 
 namespace PetFamily.Domain.Entities;
 
 public class Pet
 {
+    //почему я задал именно такое ограничене по длине?
+    //чекнул на сайте https://text.ru/seo примерный объем текста,
+    //и понял, что данное количество символов достаточно для данных строк
     public const int MAX_NAME_LENGTH = 100;
-
-    private Pet()
-    {
-    }
+    public const int MAX_NAME_DESCRIPTION = 1500;
+    public const int MAX_NAME_BREED = 50;
+    public const int MAX_NAME_COLOR = 50;
+    public const int MAX_NAME_ATTITUBE = 750;
+    public const int MAX_NAME_HEALTH = 750;
 
     private Pet(
+        Guid id,
         string nickname,
         string description,
         DateTimeOffset birthDate,
@@ -32,6 +38,7 @@ public class Pet
         bool onTreatment,
         DateTimeOffset createdDate)
     {
+        Id = id;
         Nickname = nickname;
         Description = description;
         BirthDate = birthDate;
@@ -84,44 +91,78 @@ public class Pet
     private readonly List<Photo> _photos = [];
 
     public static Result<Pet, Error> Create(
+        Guid id,
         string nickname,
+        string description,
+        DateTimeOffset birthDate,
+        string breed,
         string color,
         Address address,
         Place place,
-        Weight weight,
+        bool castration,
+        string peopleAttitude,
+        string animalAttitude,
         bool onlyOneInFamily,
         string health,
+        int? height,
+        Weight weight,
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
-        bool onTreatment)
+        bool onTreatment,
+        DateTimeOffset createdDate)
     {
-        if (nickname.IsEmpty() || nickname.Length > MAX_NAME_LENGTH)
-            return Errors.General.InvalidLength();
+        nickname = nickname.Trim();
+        description = description.Trim();
+        breed = breed.Trim();
+        color = color.Trim();
+        peopleAttitude = peopleAttitude.Trim();
+        animalAttitude = animalAttitude.Trim();
+        health = health.Trim();
 
-        if (color.IsEmpty())
-            return Errors.General.InvalidLength();
+        if (nickname.Length is < 1 or > MAX_NAME_LENGTH)
+            return Errors.General.InvalidLength(nickname);
 
-        if (health.IsEmpty())
-            return Errors.General.InvalidLength();
+        if (description.Length is < 1 or > MAX_NAME_DESCRIPTION)
+            return Errors.General.InvalidLength(description);
+
+        if (birthDate > DateTimeOffset.UtcNow)
+            return Errors.General.DateIsInvalid(birthDate);
+
+        if (breed.Length is < 1 or > MAX_NAME_BREED)
+            return Errors.General.InvalidLength(breed);
+
+        if (color.Length is < 1 or > MAX_NAME_COLOR)
+            return Errors.General.InvalidLength(color);
+
+        if (peopleAttitude.Length is < 1 or > MAX_NAME_ATTITUBE)
+            return Errors.General.InvalidLength(peopleAttitude);
+
+        if (animalAttitude.Length is < 1 or > MAX_NAME_ATTITUBE)
+            return Errors.General.InvalidLength(animalAttitude);
+
+        if (health.Length is < 1 or > MAX_NAME_HEALTH)
+            return Errors.General.InvalidLength(health);
+
 
         return new Pet(
+            id,
             nickname,
-            "",
-            DateTimeOffset.UtcNow,
-            "",
+            description,
+            birthDate,
+            breed,
             color,
             address,
             place,
-            false,
-            "",
-            "",
-            false,
+            castration,
+            peopleAttitude,
+            animalAttitude,
+            onlyOneInFamily,
             health,
-            null,
+            height,
             weight,
             contactPhoneNumber,
             volunteerPhoneNumber,
-            false,
-            DateTimeOffset.UtcNow);
+            onTreatment,
+            createdDate);
     }
 }

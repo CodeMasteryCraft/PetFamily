@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using PetFamily.Domain.Common;
+using System.Globalization;
 
 namespace PetFamily.Application.Validators;
 
@@ -18,6 +19,14 @@ public static class CustomValidators
                 return;
 
             context.AddFailure(result.Error.Serialize());
+        });
+    }
+    public static IRuleBuilderOptions<T, TError> WithError<T, TError>(
+        this IRuleBuilder<T, TError> rule)
+    {
+        return (IRuleBuilderOptions<T, TError>)rule.Custom((value, context) =>
+        {
+            
         });
     }
 }

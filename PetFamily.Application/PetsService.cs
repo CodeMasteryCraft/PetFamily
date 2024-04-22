@@ -1,5 +1,6 @@
 ﻿using Contracts.Requests;
 using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Http.Timeouts;
 using PetFamily.Application.Abstractions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
@@ -25,16 +26,26 @@ public class PetsService
         var volunteerPhoneNumber = PhoneNumber.Create(request.VolunteerPhoneNumber).Value;
 
         var pet = Pet.Create(
+            Guid.NewGuid(),
             request.Nickname,
+            request.Description,
+            request.BirthDate,
+            request.Breed,
             request.Color,
             address,
             place,
+            request.Castration,
+            request.PeopleAttitude,
+            request.PeopleAttitude,
+            request.OnlyOneInFamily,
+            request.Health,
+            request.Height,
             weight,
-            false,
-            "fsdfsdf",
             contactPhoneNumber,
             volunteerPhoneNumber,
-            true);
+            request.OnTreatment,
+            DateTimeOffset.UtcNow
+            );
 
         var idResult = await _petsRepository.Add(pet.Value, ct);
         if (idResult.IsFailure)

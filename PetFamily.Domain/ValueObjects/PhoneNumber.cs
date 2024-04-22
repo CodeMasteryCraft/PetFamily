@@ -6,7 +6,15 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record PhoneNumber
 {
-    private const string russionPhoneRegex = @"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$";
+    private const int MAX_LENGTH_NUMBER = 18;
+
+    private const string sngPhoneRegex = 
+        @"^((8|\+374|\+994|\+995|\+375|\+7|\+380|\+38|\+996|\+998|\+993)
+        [\- ]?)?\(?\d{3,5}\)?
+        [\- ]?\d{1}[\- ]?\d{1}
+        [\- ]?\d{1}[\- ]?\d{1}
+        [\- ]?\d{1}(([\- ]?\d{1})?
+        [\- ]?\d{1})?$";
 
     public string Number { get; }
 
@@ -19,10 +27,10 @@ public record PhoneNumber
     {
         input = input.Trim();
 
-        if (input.Length < 1)
+        if (input.Length  is < 1 or > MAX_LENGTH_NUMBER)
             return Errors.General.InvalidLength("phone number");
 
-        if (Regex.IsMatch(input, russionPhoneRegex) == false)
+        if (Regex.IsMatch(input, sngPhoneRegex) == false)
             return Errors.General.ValueIsInvalid("phone number");
 
         return new PhoneNumber(input);
