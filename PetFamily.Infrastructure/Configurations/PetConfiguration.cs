@@ -10,6 +10,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
     {
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Nickname).IsRequired();
+        builder.Property(p => p.Nickname).IsRequired();
         builder.Property(p => p.Description).IsRequired();
         builder.Property(p => p.BirthDate).IsRequired();
         builder.Property(p => p.Breed).IsRequired();

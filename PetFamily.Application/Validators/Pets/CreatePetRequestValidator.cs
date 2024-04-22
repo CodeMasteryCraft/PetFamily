@@ -1,4 +1,4 @@
-using Contracts.Requests;
+using Contracts.Pets.Requests;
 using FluentValidation;
 using PetFamily.Domain.ValueObjects;
 

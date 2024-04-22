@@ -1,6 +1,7 @@
-﻿namespace Contracts.Requests;
+﻿namespace Contracts.Pets.Requests;
 
 public record CreatePetRequest(
+    Guid VolunteerId,
     string Nickname,
     string Color,
     string City,

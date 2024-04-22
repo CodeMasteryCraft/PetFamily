@@ -1,7 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Validators;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using PetFamily.Application.Services;
 
 namespace PetFamily.Application;
 

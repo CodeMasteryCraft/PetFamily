@@ -1,11 +1,13 @@
-﻿using Contracts.Requests;
+﻿using Contracts.Pets.Requests;
+using Contracts.Pets.Responses;
 using CSharpFunctionalExtensions;
 using PetFamily.Application.Abstractions;
+using PetFamily.Application.Extensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.Application;
+namespace PetFamily.Application.Services;
 
 public class PetsService
 {
@@ -41,5 +43,24 @@ public class PetsService
             return idResult.Error;
 
         return idResult;
+    }
+
+    public async Task<GetPetsByPageResponse> Get(GetPetsByPageRequest request, CancellationToken ct)
+    {
+        var pets = await _petsRepository.GetByPage(request.Page, request.Size, ct);
+
+        if (pets is null)
+        {
+            
+        }
+
+        var petDtos = pets.Select(p => p.ToDto());
+
+        foreach (var pet in pets)
+        {
+            Console.WriteLine(pet);
+        }
+
+        return new(petDtos);
     }
 }

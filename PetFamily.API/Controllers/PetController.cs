@@ -1,6 +1,6 @@
-using Contracts.Requests;
+using Contracts.Pets.Requests;
 using Microsoft.AspNetCore.Mvc;
-using PetFamily.Application;
+using PetFamily.Application.Services;
 
 namespace PetFamily.API.Controllers;
 
@@ -24,10 +24,12 @@ public class PetController : ApplicationController
 
         return Ok(idResult.Value);
     }
-
+    
     [HttpGet]
-    public IActionResult Get()
+    public async Task<IActionResult> Get([FromQuery] GetPetsByPageRequest request, CancellationToken ct)
     {
-        return Ok();
+        var response = await _petsService.Get(request, ct);
+
+        return Ok(response);
     }
 }
