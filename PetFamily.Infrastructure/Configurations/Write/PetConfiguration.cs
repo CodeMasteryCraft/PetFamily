@@ -2,12 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Entities;
 
-namespace PetFamily.Infrastructure.Configurations;
+namespace PetFamily.Infrastructure.Configurations.Write;
 
 public class PetConfiguration : IEntityTypeConfiguration<Pet>
 {
     public void Configure(EntityTypeBuilder<Pet> builder)
     {
+        builder.ToTable("pets");
+        
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Nickname).IsRequired();
         builder.Property(p => p.Nickname).IsRequired();

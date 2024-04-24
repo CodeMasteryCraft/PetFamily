@@ -3,29 +3,30 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Domain.Entities;
 
-namespace PetFamily.Infrastructure;
+namespace PetFamily.Infrastructure.DbContexts;
 
-public class PetFamilyDbContext : DbContext
+public class PetFamilyWriteDbContext : DbContext
 {
     private readonly IConfiguration _configuration;
 
-    public PetFamilyDbContext(IConfiguration configuration)
+    public PetFamilyWriteDbContext(IConfiguration configuration)
     {
         _configuration = configuration;
     }
 
     public DbSet<Pet> Pets => Set<Pet>();
-    public DbSet<Volunteer> Volunteers => Set<Volunteer>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString(nameof(PetFamilyDbContext)));
+        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PetFamily"));
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PetFamilyDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(PetFamilyWriteDbContext).Assembly,
+            type => type.FullName?.Contains("Configurations.Write") ?? false);
     }
 }

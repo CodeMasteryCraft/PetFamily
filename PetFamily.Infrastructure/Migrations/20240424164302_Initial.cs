@@ -44,7 +44,7 @@ namespace PetFamily.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "photo",
+                name: "photos",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -54,9 +54,9 @@ namespace PetFamily.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_photo", x => x.id);
+                    table.PrimaryKey("pk_photos", x => x.id);
                     table.ForeignKey(
-                        name: "fk_photo_pets_pet_id",
+                        name: "fk_photos_pets_pet_id",
                         column: x => x.pet_id,
                         principalTable: "pets",
                         principalColumn: "id");
@@ -82,8 +82,8 @@ namespace PetFamily.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_photo_pet_id",
-                table: "photo",
+                name: "ix_photos_pet_id",
+                table: "photos",
                 column: "pet_id");
 
             migrationBuilder.CreateIndex(
@@ -96,7 +96,7 @@ namespace PetFamily.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "photo");
+                name: "photos");
 
             migrationBuilder.DropTable(
                 name: "vaccination");

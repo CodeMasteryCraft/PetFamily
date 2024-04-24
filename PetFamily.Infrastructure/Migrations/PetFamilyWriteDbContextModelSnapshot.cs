@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using PetFamily.Infrastructure;
+using PetFamily.Infrastructure.DbContexts;
 
 #nullable disable
 
 namespace PetFamily.Infrastructure.Migrations
 {
-    [DbContext(typeof(PetFamilyDbContext))]
-    partial class PetFamilyDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(PetFamilyWriteDbContext))]
+    partial class PetFamilyWriteDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -177,12 +177,12 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnName("pet_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_photo");
+                        .HasName("pk_photos");
 
                     b.HasIndex("PetId")
-                        .HasDatabaseName("ix_photo_pet_id");
+                        .HasDatabaseName("ix_photos_pet_id");
 
-                    b.ToTable("photo", (string)null);
+                    b.ToTable("photos", (string)null);
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Vaccination", b =>
@@ -219,7 +219,7 @@ namespace PetFamily.Infrastructure.Migrations
                     b.HasOne("PetFamily.Domain.Entities.Pet", null)
                         .WithMany("Photos")
                         .HasForeignKey("PetId")
-                        .HasConstraintName("fk_photo_pets_pet_id");
+                        .HasConstraintName("fk_photos_pets_pet_id");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Vaccination", b =>

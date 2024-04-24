@@ -1,24 +1,21 @@
-﻿using Contracts.Pets.Requests;
-using Contracts.Pets.Responses;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using PetFamily.Application.Abstractions;
-using PetFamily.Application.Extensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.Application.Services;
+namespace PetFamily.Application.Pets.CreatePet;
 
-public class PetsService
+public class CreatePetService
 {
     private readonly IPetsRepository _petsRepository;
 
-    public PetsService(IPetsRepository petsRepository)
+    public CreatePetService(IPetsRepository petsRepository)
     {
         _petsRepository = petsRepository;
     }
 
-    public async Task<Result<Guid, Error>> CreatePet(CreatePetRequest request, CancellationToken ct)
+    public async Task<Result<Guid, Error>> Handle(CreatePetRequest request, CancellationToken ct)
     {
         var address = Address.Create(request.City, request.Street, request.Building, request.Index).Value;
         var place = Place.Create(request.Place).Value;
@@ -43,24 +40,5 @@ public class PetsService
             return idResult.Error;
 
         return idResult;
-    }
-
-    public async Task<GetPetsByPageResponse> Get(GetPetsByPageRequest request, CancellationToken ct)
-    {
-        var pets = await _petsRepository.GetByPage(request.Page, request.Size, ct);
-
-        if (pets is null)
-        {
-            
-        }
-
-        var petDtos = pets.Select(p => p.ToDto());
-
-        foreach (var pet in pets)
-        {
-            Console.WriteLine(pet);
-        }
-
-        return new(petDtos);
     }
 }

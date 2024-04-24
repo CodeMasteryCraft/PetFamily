@@ -1,8 +1,24 @@
-using Contracts.Pets.Requests;
-using FluentValidation;
+﻿using FluentValidation;
+using PetFamily.Application.CommonValidators;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.Application.Validators.Pets;
+namespace PetFamily.Application.Pets.CreatePet;
+
+public record CreatePetRequest(
+    Guid VolunteerId,
+    string Nickname,
+    string Color,
+    string City,
+    string Street,
+    string Building,
+    string Index,
+    string Place,
+    float Weight,
+    bool OnlyOneInFamily,
+    string Health,
+    string ContactPhoneNumber,
+    string VolunteerPhoneNumber,
+    bool onTreatment);
 
 public class CreatePetRequestValidator : AbstractValidator<CreatePetRequest>
 {
