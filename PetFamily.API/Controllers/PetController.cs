@@ -3,7 +3,6 @@ using PetFamily.Application.Pets.CreatePet;
 using PetFamily.Application.Pets.GetPets;
 using PetFamily.Infrastructure.Queries;
 using PetFamily.Infrastructure.Queries.Pets;
-using PetFamily.Infrastructure.Queries.Pets.GetPets;
 
 namespace PetFamily.API.Controllers;
 

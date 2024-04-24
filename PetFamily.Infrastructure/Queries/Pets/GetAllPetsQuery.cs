@@ -1,6 +1,6 @@
 using Dapper;
 using PetFamily.Application.Dtos;
-using PetFamily.Infrastructure.Queries.Pets.GetPets;
+using PetFamily.Application.Pets.GetPets;
 
 namespace PetFamily.Infrastructure.Queries.Pets;
 

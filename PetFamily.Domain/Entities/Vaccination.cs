@@ -16,5 +16,5 @@ public class Vaccination
 
     public string Name { get; private set; }
 
-    public DateTime Applied { get; private set; }
+    public DateTimeOffset Applied { get; private set; }
 }

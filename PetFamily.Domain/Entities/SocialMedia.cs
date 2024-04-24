@@ -1,3 +1,5 @@
+using PetFamily.Domain.ValueObjects;
+
 namespace PetFamily.Domain.Entities;
 
 //TODO Result pattern + валидация

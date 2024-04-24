@@ -1,4 +1,4 @@
-namespace PetFamily.Domain.Entities;
+namespace PetFamily.Domain.ValueObjects;
 
 public record Social
 {
