@@ -18,7 +18,7 @@ public class PetRepository : IPetsRepository
     {
         await _dbContext.AddAsync(pet, ct);
 
-        return Errors.General.NotFound();
+        //return Errors.General.NotFound();
         
         var result = await _dbContext.SaveChangesAsync(ct);
 

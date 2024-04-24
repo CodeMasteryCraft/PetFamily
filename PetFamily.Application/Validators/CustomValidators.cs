@@ -1,7 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using PetFamily.Domain.Common;
-using System.Globalization;
 
 namespace PetFamily.Application.Validators;
 
@@ -21,12 +20,13 @@ public static class CustomValidators
             context.AddFailure(result.Error.Serialize());
         });
     }
-    public static IRuleBuilderOptions<T, TError> WithError<T, TError>(
-        this IRuleBuilder<T, TError> rule)
+
+    //столько мучался в изучении этого FluentValidation, а ответ был настолько прост
+    //в 27 строке передавал не IRuleBuilder, а надо было IRuleBuilderOptions
+    //принцип работы с FluentValidation, понял,но стоит изучить IRuleBuilder и все его различия
+    public static IRuleBuilderOptions<T, TElement> WithError<T, TElement>(
+        this IRuleBuilderOptions<T, TElement> ruleBuilder, Error error)
     {
-        return (IRuleBuilderOptions<T, TError>)rule.Custom((value, context) =>
-        {
-            
-        });
+        return ruleBuilder.WithMessage(error.Serialize());
     }
 }

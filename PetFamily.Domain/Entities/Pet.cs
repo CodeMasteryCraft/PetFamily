@@ -1,22 +1,12 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Contracts.ConstantValue;
+using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
-using System.Dynamic;
 
 namespace PetFamily.Domain.Entities;
 
 public class Pet
 {
-    //почему я задал именно такое ограничене по длине?
-    //чекнул на сайте https://text.ru/seo примерный объем текста,
-    //и понял, что данное количество символов достаточно для данных строк
-    public const int MAX_NAME_LENGTH = 100;
-    public const int MAX_NAME_DESCRIPTION = 1500;
-    public const int MAX_NAME_BREED = 50;
-    public const int MAX_NAME_COLOR = 50;
-    public const int MAX_NAME_ATTITUBE = 750;
-    public const int MAX_NAME_HEALTH = 750;
-
     private Pet(
         Guid id,
         string nickname,
@@ -119,30 +109,29 @@ public class Pet
         animalAttitude = animalAttitude.Trim();
         health = health.Trim();
 
-        if (nickname.Length is < 1 or > MAX_NAME_LENGTH)
+        if (nickname.Length is < 1 or > PetConstant.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(nickname);
 
-        if (description.Length is < 1 or > MAX_NAME_DESCRIPTION)
+        if (description.Length is < 1 or > PetConstant.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength(description);
 
         if (birthDate > DateTimeOffset.UtcNow)
             return Errors.General.DateIsInvalid(birthDate);
 
-        if (breed.Length is < 1 or > MAX_NAME_BREED)
+        if (breed.Length is < 1 or > PetConstant.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(breed);
 
-        if (color.Length is < 1 or > MAX_NAME_COLOR)
+        if (color.Length is < 1 or > PetConstant.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(color);
 
-        if (peopleAttitude.Length is < 1 or > MAX_NAME_ATTITUBE)
+        if (peopleAttitude.Length is < 1 or > PetConstant.MEDIUM_TITLE_LENGTH)
             return Errors.General.InvalidLength(peopleAttitude);
 
-        if (animalAttitude.Length is < 1 or > MAX_NAME_ATTITUBE)
+        if (animalAttitude.Length is < 1 or > PetConstant.MEDIUM_TITLE_LENGTH)
             return Errors.General.InvalidLength(animalAttitude);
 
-        if (health.Length is < 1 or > MAX_NAME_HEALTH)
+        if (health.Length is < 1 or > PetConstant.MEDIUM_TITLE_LENGTH)
             return Errors.General.InvalidLength(health);
-
 
         return new Pet(
             id,

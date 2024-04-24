@@ -4,6 +4,7 @@ using PetFamily.Application.Validators;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
+using System.Security.Cryptography.X509Certificates;
 
 namespace PetFamily.Application.Validators.Pets;
 
@@ -11,25 +12,8 @@ public class CreatePetRequestValidator : AbstractValidator<CreatePetRequest>
 {
     public CreatePetRequestValidator()
     {
-        //Возможно валидацию всех типов можно было сделать в таком видео, но не смог реализовать проверку на null переменные bool в Pet,
-        // а так же Pet должен иметь id и createdDate
-        /*RuleFor(x => new
-        {
-            x.Nickname,
-            x.Description,
-            x.BirthDate,
-            x.Breed,
-            x.Color,
-            x.PeopleAttitude,
-            x.AnimalAttitude,
-            x.Health,
-            x.Height
-        })
-                .MustBeValueObject(x => Pet.Create(
-                    x.Nickname, x.Description, x.BirthDate, x.Breed, x.Color, x.PeopleAttitude, x.Health, x.Height));*/
-
-        RuleFor(x => x.Nickname).NotEmpty().MaximumLength(100);
-        RuleFor(x => x.Description).MaximumLength(1500).WithError(Errors.General.InvalidLength());
+        RuleFor(x => x.Nickname).NotEmpty().MaximumLength(100).WithError(Errors.General.InvalidLength());
+        RuleFor(x => x.Description).MaximumLength(1500);
         RuleFor(x => x.BirthDate).GreaterThan(DateTimeOffset.UtcNow);
         RuleFor(x => x.Breed).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Color).NotEmpty().MaximumLength(50);
