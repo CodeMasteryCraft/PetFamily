@@ -34,7 +34,7 @@ public record Address
         if (building.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength("building");
 
-        if (index.Length != 6)
+        if (index.Length != Constraints.INDEX_TITLE_LENGTH)
             return Errors.General.InvalidLength("index");
 
         return new Address(city, street, building, index);

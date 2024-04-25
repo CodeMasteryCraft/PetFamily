@@ -4,6 +4,8 @@ using PetFamily.Application.Abstractions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
+using System.Drawing;
+using System.IO;
 
 namespace PetFamily.Application;
 
@@ -26,15 +28,23 @@ public class PetsService
 
         var pet = Pet.Create(
             request.Nickname,
+            request.Description,
+            request.BirthDate,
+            request.Breed,
             request.Color,
             address,
             place,
+            request.Castration,
+            request.PeopleAttitude,
+            request.AnimalAttitude,
+            request.OnlyOneInFamily,
+            request.Health,
+            request.Height,
             weight,
-            false,
-            "fsdfsdf",
             contactPhoneNumber,
             volunteerPhoneNumber,
-            true);
+            request.OnTreatment,
+            request.CreatedDate);
 
         var idResult = await _petsRepository.Add(pet.Value, ct);
         if (idResult.IsFailure)

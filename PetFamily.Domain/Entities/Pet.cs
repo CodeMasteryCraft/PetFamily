@@ -6,7 +6,6 @@ namespace PetFamily.Domain.Entities;
 
 public class Pet
 {
-    public const int MAX_NAME_LENGTH = 100;
 
     private Pet()
     {
@@ -85,43 +84,72 @@ public class Pet
 
     public static Result<Pet, Error> Create(
         string nickname,
+        string description,
+        DateTimeOffset birthDate,
+        string breed,
         string color,
         Address address,
         Place place,
-        Weight weight,
+        bool castration,
+        string peopleAttitude,
+        string animalAttitude,
         bool onlyOneInFamily,
         string health,
+        int height,
+        Weight weight,
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
-        bool onTreatment)
+        bool onTreatment,
+        DateTimeOffset createdDate)
     {
-        if (nickname.IsEmpty() || nickname.Length > MAX_NAME_LENGTH)
+        if (nickname.IsEmpty() || nickname.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 
-        if (color.IsEmpty())
+        if (description.IsEmpty() || description.Length > Constraints.MAXIMUM_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 
-        if (health.IsEmpty())
+        if (birthDate.Year < Constraints.YEAR1900 || birthDate > DateTimeOffset.UtcNow)
+            return Errors.General.ValueIsInvalid(nameof(birthDate.Year));
+
+        if (breed.IsEmpty() || breed.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();
+
+        if (color.IsEmpty() || color.Length > Constraints.SHORT_TITLE_LENGTH)
+            return Errors.General.InvalidLength();
+
+        if (peopleAttitude.IsEmpty() || peopleAttitude.Length > Constraints.LONG_TITLE_LENGTH)
+            return Errors.General.InvalidLength();
+
+        if (animalAttitude.IsEmpty() || animalAttitude.Length > Constraints.LONG_TITLE_LENGTH)
+            return Errors.General.InvalidLength();
+
+        if (health.IsEmpty() || health.Length > Constraints.MAXIMUM_TITLE_LENGTH)
+            return Errors.General.InvalidLength();
+
+        if (height <= 0)
+            return Errors.General.ValueIsInvalid(nameof(height));
+
+        if (createdDate.Year < Constraints.YEAR1900 || createdDate > DateTimeOffset.UtcNow)
+            return Errors.General.ValueIsInvalid(nameof(createdDate));
 
         return new Pet(
             nickname,
-            "",
+            description,
             DateTimeOffset.UtcNow,
-            "",
+            breed,
             color,
             address,
             place,
-            false,
-            "",
-            "",
-            false,
+            castration,
+            peopleAttitude,
+            animalAttitude,
+            onlyOneInFamily,
             health,
-            null,
+            height,
             weight,
             contactPhoneNumber,
             volunteerPhoneNumber,
-            false,
+            onTreatment,
             DateTimeOffset.UtcNow);
     }
 }
