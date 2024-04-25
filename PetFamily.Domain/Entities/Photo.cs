@@ -10,8 +10,6 @@ public class Photo
         IsMain = isMain;
     }
 
-
-
     public Guid Id { get; private set; }
 
     public string Path { get; private set; }

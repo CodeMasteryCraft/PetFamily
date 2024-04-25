@@ -5,11 +5,7 @@ namespace PetFamily.Domain.Entities;
 //TODO Result pattern + валидация
 public class SocialMedia
 {
-    private SocialMedia()
-    {
-    }
-
-    public SocialMedia(Guid id, string link, Social social)
+    private SocialMedia(Guid id, string link, Social social)
     {
         Id = id;
         Link = link;
@@ -19,4 +15,9 @@ public class SocialMedia
     public Guid Id { get; set; }
     public string Link { get; set; }
     public Social Social { get; set; }
+
+    private static SocialMedia Create()
+    {
+
+    }
 }

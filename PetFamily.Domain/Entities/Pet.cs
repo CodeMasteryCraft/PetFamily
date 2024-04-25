@@ -1,6 +1,6 @@
-﻿using Contracts.ConstantValue;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using PetFamily.Domain.Contracts;
 using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Domain.Entities;
@@ -109,28 +109,28 @@ public class Pet
         animalAttitude = animalAttitude.Trim();
         health = health.Trim();
 
-        if (nickname.Length is < 1 or > PetConstant.SHORT_TITLE_LENGTH)
+        if (nickname.Length is < 1 or > ConstantValue.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(nickname);
 
-        if (description.Length is < 1 or > PetConstant.LONG_TITLE_LENGTH)
+        if (description.Length is < 1 or > ConstantValue.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength(description);
 
         if (birthDate > DateTimeOffset.UtcNow)
             return Errors.General.DateIsInvalid(birthDate);
 
-        if (breed.Length is < 1 or > PetConstant.SHORT_TITLE_LENGTH)
+        if (breed.Length is < 1 or > ConstantValue.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(breed);
 
-        if (color.Length is < 1 or > PetConstant.SHORT_TITLE_LENGTH)
+        if (color.Length is < 1 or > ConstantValue.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(color);
 
-        if (peopleAttitude.Length is < 1 or > PetConstant.MEDIUM_TITLE_LENGTH)
+        if (peopleAttitude.Length is < 1 or > ConstantValue.MEDIUM_TITLE_LENGTH)
             return Errors.General.InvalidLength(peopleAttitude);
 
-        if (animalAttitude.Length is < 1 or > PetConstant.MEDIUM_TITLE_LENGTH)
+        if (animalAttitude.Length is < 1 or > ConstantValue.MEDIUM_TITLE_LENGTH)
             return Errors.General.InvalidLength(animalAttitude);
 
-        if (health.Length is < 1 or > PetConstant.MEDIUM_TITLE_LENGTH)
+        if (health.Length is < 1 or > ConstantValue.MEDIUM_TITLE_LENGTH)
             return Errors.General.InvalidLength(health);
 
         return new Pet(
