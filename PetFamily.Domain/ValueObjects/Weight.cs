@@ -5,7 +5,7 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record Weight
 {
-    public float Kilograms { get; set; }
+    public float Kilograms { get; }
 
     private Weight(float kilograms)
     {

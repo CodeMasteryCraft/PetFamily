@@ -16,13 +16,19 @@ public class CustomResultFactory : IFluentValidationAutoValidationResultFactory
             return new BadRequestObjectResult("Invalid error");
         }
 
-        var validationError = validationProblemDetails.Errors.First();
+        var validationError = validationProblemDetails.Errors;
 
-        var errorString = validationError.Value.First();
+        List<Error> errors = new List<Error>();
 
-        var error = Error.Deserialize(errorString);
+        foreach (var ve in validationError)
+        {
+            var errorArray = ve.Value;
 
-        var envelope = Envelope.Error(error);
+            foreach (var er in errorArray)
+                errors.Add(Error.Deserialize(er));
+        }
+        var envelope = Envelope.Error(errors);
+
 
         return new BadRequestObjectResult(envelope);
     }

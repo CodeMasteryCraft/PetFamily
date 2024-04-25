@@ -19,7 +19,7 @@ public record Place
 
     public static Result<Place, Error> Create(string input)
     {
-        if (input.IsEmpty())
+        if (input.IsEmpty() || input.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.ValueIsRequried("input");
 
         var place = input.Trim().ToUpper();
