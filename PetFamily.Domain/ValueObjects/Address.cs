@@ -1,10 +1,15 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using System.Text.RegularExpressions;
 
 namespace PetFamily.Domain.ValueObjects;
 
 public record Address
 {
+    public const int MAX_LENGTH_ADDRESS = 150;
+
+    public const string russianPostcodeREgax = @"^([1-6]{1}[0-9]{5})$";
+
     private Address(string city, string street, string building, string index)
     {
         City = city;
@@ -25,17 +30,17 @@ public record Address
         building = building.Trim();
         index = index.Trim();
 
-        if (city.Length is < 1 or > 100)
+        if (city.Length is < 1 or > MAX_LENGTH_ADDRESS)
             return Errors.General.InvalidLength("city");
 
-        if (street.Length is < 1 or > 100)
+        if (street.Length is < 1 or > MAX_LENGTH_ADDRESS)
             return Errors.General.InvalidLength("street");
 
-        if (building.Length is < 1 or > 100)
+        if (building.Length is < 1 or > MAX_LENGTH_ADDRESS)
             return Errors.General.InvalidLength("building");
 
-        if (index.Length != 6)
-            return Errors.General.InvalidLength("index");
+        if (Regex.IsMatch(index, russianPostcodeREgax) == false)
+            return Errors.General.ValueIsInvalid("index");
 
         return new Address(city, street, building, index);
     }

@@ -34,13 +34,13 @@ public static class Errors
             return new("record.not.found", $"record not found{forId}");
         }
 
-        public static Error ValueIsInvalid(string? name)
+        public static Error ValueIsInvalid(string? name = null)
         {
             var label = name ?? "Value";
             return new("value.is.invalid", $"{label} is invalid");
         }
 
-        public static Error ValueIsRequried(string? name)
+        public static Error ValueIsRequried(string? name = null)
         {
             var label = name ?? "Value";
             return new("value.is.required", $"{label} is required");
@@ -50,6 +50,11 @@ public static class Errors
         {
             var label = name == null ? " " : " " + name + " ";
             return new("invalid.string.length", $"invalid{label}length");
+        }
+
+        public static Error DateIsInvalid(DateTimeOffset? name = null)
+        {
+            return new(".date.is.invalid", $"invalid{name} null");
         }
     }
 }
