@@ -1,22 +1,28 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.Abstractions;
+using PetFamily.Application.Features.Pets;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.Application.Pets.CreatePet;
+namespace PetFamily.Application.Features.Volunteer.CreatePet;
 
 public class CreatePetService
 {
     private readonly IPetsRepository _petsRepository;
+    private readonly IVolunteerRepository _volunteerRepository;
 
-    public CreatePetService(IPetsRepository petsRepository)
+    public CreatePetService(IPetsRepository petsRepository, IVolunteerRepository volunteerRepository)
     {
         _petsRepository = petsRepository;
+        _volunteerRepository = volunteerRepository;
     }
 
     public async Task<Result<Guid, Error>> Handle(CreatePetRequest request, CancellationToken ct)
     {
+        var volunteer = await _volunteerRepository.GetById(request.VolunteerId, ct);
+        if (volunteer.IsFailure)
+            return volunteer.Error;
+
         var address = Address.Create(request.City, request.Street, request.Building, request.Index).Value;
         var place = Place.Create(request.Place).Value;
         var weight = Weight.Create(request.Weight).Value;
@@ -35,10 +41,11 @@ public class CreatePetService
             volunteerPhoneNumber,
             true);
 
-        var idResult = await _petsRepository.Add(pet.Value, ct);
-        if (idResult.IsFailure)
-            return idResult.Error;
+        if (pet.IsFailure)
+            return pet.Error;
 
-        return idResult;
+        volunteer.Value.PublishPet(pet.Value);
+
+        return await _volunteerRepository.Save(volunteer.Value, ct);
     }
 }

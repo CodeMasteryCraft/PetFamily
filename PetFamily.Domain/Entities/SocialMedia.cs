@@ -9,9 +9,8 @@ public class SocialMedia
     {
     }
 
-    public SocialMedia(Guid id, string link, Social social)
+    public SocialMedia(string link, Social social)
     {
-        Id = id;
         Link = link;
         Social = social;
     }

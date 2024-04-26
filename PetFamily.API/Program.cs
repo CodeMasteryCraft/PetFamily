@@ -1,7 +1,6 @@
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
-using PetFamily.Application.Abstractions;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Repositories;

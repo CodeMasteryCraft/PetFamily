@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Abstractions;
+using PetFamily.Application.Features.Pets;
+using PetFamily.Application.Features.Volunteer;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Queries;
 using PetFamily.Infrastructure.Queries.Pets;
@@ -22,6 +23,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IPetsRepository, PetRepository>();
+        services.AddScoped<IVolunteerRepository, VolunteerRepository>();
         return services;
     }
 

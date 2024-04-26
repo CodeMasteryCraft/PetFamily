@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Abstractions;
+using PetFamily.Application.Features.Pets;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure.DbContexts;
@@ -16,18 +16,6 @@ public class PetRepository : IPetsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Guid, Error>> Add(Pet pet, CancellationToken ct)
-    {
-        await _dbContext.AddAsync(pet, ct);
-
-        var result = await _dbContext.SaveChangesAsync(ct);
-
-        if (result == 0)
-            return new Error("record.saving", "Pet can not be save");
-
-        return pet.Id;
-    }
-
     public async Task<Result<Pet, Error>> GetById(Guid id)
     {
         var pet = await _dbContext.Pets.FindAsync(id);
@@ -36,45 +24,5 @@ public class PetRepository : IPetsRepository
             return Errors.General.NotFound(id);
 
         return pet;
-    }
-
-    public async Task<IReadOnlyList<Pet>> GetByPage(int page, int size, CancellationToken ct)
-    {
-        return await _dbContext.Pets
-            .AsNoTracking()
-            .Skip((page - 1) * size)
-            .Take(size)
-            .ToListAsync(ct);
-    }
-
-    public async Task<IReadOnlyList<Pet>> GetByFilter(GetPetsFilter filter)
-    {
-        var query = _dbContext.Pets.AsNoTracking();
-
-        if (string.IsNullOrWhiteSpace(filter.Nickname) == false)
-        {
-            query = query.Where(p => p.Nickname.Contains(filter.Nickname));
-        }
-
-        if (string.IsNullOrWhiteSpace(filter.Breed) == false)
-        {
-            query = query.Where(p => p.Nickname.Contains(filter.Breed));
-        }
-
-        if (string.IsNullOrWhiteSpace(filter.Color) == false)
-        {
-            query = query.Where(p => p.Nickname.Contains(filter.Color));
-        }
-
-        var pets = await query.ToListAsync();
-
-        return pets;
-    }
-
-    public class GetPetsFilter
-    {
-        public string? Nickname { get; set; }
-        public string? Breed { get; set; }
-        public string? Color { get; set; }
     }
 }

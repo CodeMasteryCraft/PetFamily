@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetFamily.Infrastructure.DbContexts;
@@ -12,9 +13,11 @@ using PetFamily.Infrastructure.DbContexts;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(PetFamilyWriteDbContext))]
-    partial class PetFamilyWriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240426155556_AddVolunteerEntity")]
+    partial class AddVolunteerEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,12 +258,12 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnName("pet_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_vaccinations");
+                        .HasName("pk_vaccination");
 
                     b.HasIndex("PetId")
-                        .HasDatabaseName("ix_vaccinations_pet_id");
+                        .HasDatabaseName("ix_vaccination_pet_id");
 
-                    b.ToTable("vaccinations", (string)null);
+                    b.ToTable("vaccination", (string)null);
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Volunteer", b =>
@@ -337,7 +340,7 @@ namespace PetFamily.Infrastructure.Migrations
                     b.HasOne("PetFamily.Domain.Entities.Pet", null)
                         .WithMany("Vaccinations")
                         .HasForeignKey("PetId")
-                        .HasConstraintName("fk_vaccinations_pets_pet_id");
+                        .HasConstraintName("fk_vaccination_pets_pet_id");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Pet", b =>
