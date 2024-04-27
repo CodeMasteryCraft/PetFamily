@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Entities;
+using PetFamily.Domain.Common;
 
 namespace PetFamily.Application.Features.SocialMedias;
 

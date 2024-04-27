@@ -1,5 +1,4 @@
 using CSharpFunctionalExtensions;
-using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Features.Pets;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;

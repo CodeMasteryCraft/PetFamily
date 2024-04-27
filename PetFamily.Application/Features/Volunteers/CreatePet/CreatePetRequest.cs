@@ -2,7 +2,7 @@
 using PetFamily.Application.CommonValidators;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.Application.Features.Volunteer.CreatePet;
+namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
 public record CreatePetRequest(
     Guid VolunteerId,
