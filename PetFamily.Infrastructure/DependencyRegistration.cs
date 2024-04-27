@@ -1,8 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Features.Pets;
-using PetFamily.Application.Features.Volunteer;
+using PetFamily.Application.Features.Volunteers;
 using PetFamily.Infrastructure.DbContexts;
-using PetFamily.Infrastructure.Queries;
 using PetFamily.Infrastructure.Queries.Pets;
 using PetFamily.Infrastructure.Repositories;
 

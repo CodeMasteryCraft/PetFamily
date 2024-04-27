@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PetFamily.Application.Features.Volunteer.CreatePet;
-using PetFamily.Application.Features.Volunteer.CreateVolunteer;
+using PetFamily.Application.Features.Volunteers.CreateVolunteer;
+using PetFamily.Application.Features.Volunteers.CreatePet;
 
 namespace PetFamily.API.Controllers;
 

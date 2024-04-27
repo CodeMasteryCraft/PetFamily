@@ -1,23 +1,23 @@
-using CSharpFunctionalExtensions;
-using PetFamily.Application.Features.Pets;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Application.Features.SocialMedias;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Repositories;
 
-public class PetRepository : IPetsRepository
+public class SocialMediaRepository : ISocialMediasRepository
 {
     private readonly PetFamilyWriteDbContext _dbContext;
 
-    public PetRepository(PetFamilyWriteDbContext dbContext)
+    public SocialMediaRepository(PetFamilyWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Pet, Error>> GetById(Guid id)
+    public async Task<Result<SocialMedia, Error>> GetById(Guid id)
     {
-        var pet = await _dbContext.Pets.FindAsync(id);
+        var pet = await _dbContext.SocialMedias.FindAsync(id);
 
         if (pet is null)
             return Errors.General.NotFound(id);

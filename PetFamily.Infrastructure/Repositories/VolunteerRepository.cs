@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Features.Volunteer;
+using PetFamily.Application.Features.Volunteers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure.DbContexts;
