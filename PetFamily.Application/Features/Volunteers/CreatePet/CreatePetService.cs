@@ -4,7 +4,7 @@ using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.Application.Features.Volunteer.CreatePet;
+namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
 public class CreatePetService
 {

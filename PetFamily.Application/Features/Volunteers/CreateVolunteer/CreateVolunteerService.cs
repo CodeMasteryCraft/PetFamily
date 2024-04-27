@@ -3,7 +3,7 @@ using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.Application.Features.Volunteer.CreateVolunteer;
+namespace PetFamily.Application.Features.Volunteers.CreateVolunteer;
 
 public class CreateVolunteerService
 {
@@ -23,7 +23,7 @@ public class CreateVolunteerService
                 return new SocialMedia(s.Link, social);
             });
 
-        var volunteer = new Domain.Entities.Volunteer(
+        var volunteer = new Volunteer(
             request.Name,
             request.Description,
             request.YearsExperience,
