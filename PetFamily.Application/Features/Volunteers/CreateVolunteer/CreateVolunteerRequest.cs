@@ -1,3 +1,5 @@
+using PetFamily.Application.Features.Volunteers.CreateSocialMedia;
+
 namespace PetFamily.Application.Features.Volunteers.CreateVolunteer;
 
 public record CreateVolunteerRequest(
@@ -7,4 +9,4 @@ public record CreateVolunteerRequest(
     int NumberOfPetsFoundHome,
     string DonationInfo,
     bool FromShelter, 
-    List<CreateSocialRequest> SocialMedias);
+    List<CreateSocialMediaRequest> SocialMedias);
