@@ -31,15 +31,24 @@ public class CreatePetService
 
         var pet = Pet.Create(
             request.Nickname,
+            request.Description,
+            request.BirthDate,
+            request.Breed,
             request.Color,
             address,
             place,
+            request.Castration,
+            request.PeopleAttitude,
+            request.AnimalAttitude,
+            request.OnlyOneInFamily,
+            request.Health,
+            request.Height,
             weight,
-            false,
-            "fsdfsdf",
             contactPhoneNumber,
             volunteerPhoneNumber,
-            true);
+            request.OnTreatment,
+            request.CreatedDate
+            );
 
         if (pet.IsFailure)
             return pet.Error;
