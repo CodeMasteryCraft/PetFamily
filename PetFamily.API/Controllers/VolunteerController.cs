@@ -36,7 +36,7 @@ public class VolunteerController : ApplicationController
         return Ok(idResult.Value);
     }
     
-    [HttpPost("socialMdeia")]
+    [HttpPost("socialMedia")]
     public async Task<IActionResult> Create(
         [FromServices] CreateSocialMediaService service,
         [FromBody] CreateSocialMediaRequest request,
