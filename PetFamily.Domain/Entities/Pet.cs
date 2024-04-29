@@ -152,4 +152,13 @@ public class Pet
             onTreatment,
             createdDate);
     }
+
+    public void PublishVaccination(IEnumerable<Vaccination> vaccinations)
+    {
+        foreach (var vaccination in vaccinations)
+        {
+            
+            _vaccinations.Add(vaccination);
+        }
+    }
 }

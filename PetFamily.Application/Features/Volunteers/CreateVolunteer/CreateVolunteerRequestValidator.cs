@@ -10,8 +10,20 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
 {
     public CreateVolunteerRequestValidator()
     {
-        // написать метод RuleForEach для SocialMedia
-        RuleForEach(v => v.SocialMedias);
+        // написать метод WithError
+        RuleForEach(x => x.SocialMedias).ChildRules(order => 
+        {
+            order.RuleFor(x => x.Social).
+                MinimumLength(Constraints.MINIMUM_TITLE_LENGTH).
+                MaximumLength(Constraints.SHORT_TITLE_LENGTH);
+        });
+        
+        RuleForEach(x => x.SocialMedias).ChildRules(order => 
+        {
+            order.RuleFor(x => x.Link).
+                MinimumLength(Constraints.MINIMUM_TITLE_LENGTH).
+                MaximumLength(Constraints.MAXIMUM_TITLE_LENGTH);
+        });
         
         RuleFor(v => v).NotNull();
         RuleFor(v => v).NotEmpty();

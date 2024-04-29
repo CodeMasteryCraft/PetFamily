@@ -12,9 +12,7 @@ public class SocialMediaConfiguration : IEntityTypeConfiguration<SocialMedia>
         builder.ToTable("social_medias");
         builder.HasKey(s => s.Id);
 
-        builder.Property(s => s.Link).
-            IsRequired(false).
-            HasMaxLength(Constraints.MAXIMUM_TITLE_LENGTH);
+        builder.Property(s => s.Link).IsRequired(false).HasMaxLength(Constraints.MAXIMUM_TITLE_LENGTH);
         builder.ComplexProperty(s => s.Social, b => 
             { b.Property(s => s.Value).
                 HasColumnName("social").

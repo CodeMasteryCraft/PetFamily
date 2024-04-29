@@ -17,6 +17,7 @@ public class PetFamilyWriteDbContext : DbContext
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
     public DbSet<Pet> Pets => Set<Pet>();
     public DbSet<SocialMedia> SocialMedias => Set<SocialMedia>();
+    public DbSet<Vaccination> Vaccinations => Set<Vaccination>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

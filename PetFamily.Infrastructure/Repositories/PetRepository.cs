@@ -6,7 +6,7 @@ using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Repositories;
 
-public class PetRepository : IPetsRepository
+public class PetRepository : IPetRepository
 {
     private readonly PetFamilyWriteDbContext _dbContext;
 
@@ -15,7 +15,7 @@ public class PetRepository : IPetsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Pet, Error>> GetById(Guid id)
+    public async Task<Result<Pet, Error>> GetById(Guid id, CancellationToken ct)
     {
         var pet = await _dbContext.Pets.FindAsync(id);
 
@@ -23,5 +23,10 @@ public class PetRepository : IPetsRepository
             return Errors.General.NotFound(id);
 
         return pet;
+    }
+
+    public Task<Result<Guid, Error>> Save(Pet pet, CancellationToken ct)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -8,12 +8,12 @@ namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
 public class CreatePetService
 {
-    private readonly IPetsRepository _petsRepository;
+    private readonly IPetRepository _petRepository;
     private readonly IVolunteerRepository _volunteerRepository;
 
-    public CreatePetService(IPetsRepository petsRepository, IVolunteerRepository volunteerRepository)
+    public CreatePetService(IPetRepository petRepository, IVolunteerRepository volunteerRepository)
     {
-        _petsRepository = petsRepository;
+        _petRepository = petRepository;
         _volunteerRepository = volunteerRepository;
     }
 
