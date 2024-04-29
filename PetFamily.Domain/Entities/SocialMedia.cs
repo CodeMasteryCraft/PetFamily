@@ -26,7 +26,7 @@ public class SocialMedia
         Social social)
     {
         
-        if (link.IsEmpty())
+        if (link.IsEmpty() || link.Length > Constraints.MAXIMUM_TITLE_LENGTH)
             return Errors.General.InvalidLength();
         
         return new SocialMedia(

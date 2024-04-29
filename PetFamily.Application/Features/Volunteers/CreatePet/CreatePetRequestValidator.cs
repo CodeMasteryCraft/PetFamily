@@ -47,10 +47,10 @@ public class CreatePetRequestValidator : AbstractValidator<CreatePetRequest>
             .MaximumLength(Constraints.SHORT_TITLE_LENGTH);
 
         RuleFor(x => x.PeopleAttitude).MinimumLength(Constraints.MINIMUM_TITLE_LENGTH)
-            .MaximumLength(Constraints.SHORT_TITLE_LENGTH);
+            .MaximumLength(Constraints.LONG_TITLE_LENGTH);
 
         RuleFor(x => x.AnimalAttitude).MinimumLength(Constraints.MINIMUM_TITLE_LENGTH)
-            .MaximumLength(Constraints.SHORT_TITLE_LENGTH);
+            .MaximumLength(Constraints.LONG_TITLE_LENGTH);
 
         RuleFor(x => x.Health).MinimumLength(Constraints.MINIMUM_TITLE_LENGTH)
             .MaximumLength(Constraints.MAXIMUM_TITLE_LENGTH);
