@@ -15,7 +15,7 @@ public record Weight
     public static Result<Weight, Error> Create(float kilograms)
     {
         if (kilograms <= 0)
-            return Errors.General.ValueIsInvalid("weight");
+            return Errors.General.ValueIsInvalid(nameof(Weight));
 
         return new Weight(kilograms);
     }

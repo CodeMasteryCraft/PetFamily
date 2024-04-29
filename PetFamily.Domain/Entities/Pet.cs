@@ -135,7 +135,7 @@ public class Pet
         return new Pet(
             nickname,
             description,
-            DateTimeOffset.UtcNow,
+            birthDate,
             breed,
             color,
             address,
@@ -150,6 +150,6 @@ public class Pet
             contactPhoneNumber,
             volunteerPhoneNumber,
             onTreatment,
-            DateTimeOffset.UtcNow);
+            createdDate);
     }
 }

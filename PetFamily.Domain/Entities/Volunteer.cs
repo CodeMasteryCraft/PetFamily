@@ -1,3 +1,7 @@
+using CSharpFunctionalExtensions;
+using PetFamily.Domain.Common;
+using PetFamily.Domain.ValueObjects;
+
 namespace PetFamily.Domain.Entities;
 
 public class Volunteer
@@ -40,6 +44,40 @@ public class Volunteer
 
     public IReadOnlyList<Pet> Pets => _pets;
     private readonly List<Pet> _pets = [];
+    
+    public static Result<Volunteer, Error> Create(
+        string name,
+        string description,
+        int yearsExperience,
+        int numberOfPetsFoundHome,
+        string donationInfo,
+        bool fromShelter,
+        IEnumerable<SocialMedia>? socialMedias)
+    {
+        
+        if (name.IsEmpty() || name.Length > Constraints.SHORT_TITLE_LENGTH)
+            return Errors.General.InvalidLength();
+        if (description.IsEmpty() || description.Length > Constraints.MAXIMUM_TITLE_LENGTH)
+            return Errors.General.InvalidLength();
+        if (yearsExperience < 0)
+            return Errors.General.ValueIsInvalid(nameof(yearsExperience));
+        if (numberOfPetsFoundHome < 0)
+            return Errors.General.ValueIsInvalid(nameof(numberOfPetsFoundHome));
+        if (donationInfo.IsEmpty() || donationInfo.Length > Constraints.MAXIMUM_TITLE_LENGTH)
+            return Errors.General.InvalidLength();
+        if (socialMedias is null)
+            return Errors.General.ValueIsInvalid(nameof(socialMedias));
+        
+        return new Volunteer(
+            name,
+            description, 
+            yearsExperience, 
+            numberOfPetsFoundHome, 
+            donationInfo, 
+            fromShelter, 
+            socialMedias
+            );
+    }
 
     public void PublishPet(Pet pet)
     {

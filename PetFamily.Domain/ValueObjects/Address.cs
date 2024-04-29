@@ -25,17 +25,17 @@ public record Address
         building = building.Trim();
         index = index.Trim();
 
-        if (city.Length is < 1 or > 100)
-            return Errors.General.InvalidLength("city");
+        if (city.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.SHORT_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(city));
 
-        if (street.Length is < 1 or > 100)
-            return Errors.General.InvalidLength("street");
+        if (street.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.MEDIUM_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(street));
 
-        if (building.Length is < 1 or > 100)
-            return Errors.General.InvalidLength("building");
+        if (building.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.SHORT_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(building));
 
-        if (index.Length != 6)
-            return Errors.General.InvalidLength("index");
+        if (index.Length != Constraints.INDEX_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(index));
 
         return new Address(city, street, building, index);
     }
