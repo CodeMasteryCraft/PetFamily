@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Volunteers.CreatePet;
-using PetFamily.Application.Features.Volunteers.CreateSocialMedia;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 
 namespace PetFamily.API.Controllers;
@@ -26,20 +25,6 @@ public class VolunteerController : ApplicationController
     public async Task<IActionResult> Create(
         [FromServices] CreatePetService service,
         [FromBody] CreatePetRequest request,
-        CancellationToken ct)
-    {
-        var idResult = await service.Handle(request, ct);
-
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
-
-        return Ok(idResult.Value);
-    }
-    
-    [HttpPost("socialMedia")]
-    public async Task<IActionResult> Create(
-        [FromServices] CreateSocialMediaService service,
-        [FromBody] CreateSocialMediaRequest request,
         CancellationToken ct)
     {
         var idResult = await service.Handle(request, ct);

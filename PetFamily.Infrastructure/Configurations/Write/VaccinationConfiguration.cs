@@ -12,7 +12,11 @@ public class VaccinationConfiguration : IEntityTypeConfiguration<Vaccination>
         builder.ToTable("vaccinations");
         builder.HasKey(p => p.Id);
 
-        builder.Property(v => v.Name).IsRequired().HasMaxLength(Constraints.SHORT_TITLE_LENGTH);
-        builder.Property(v => v.Applied).IsRequired(false).HasDefaultValue(DateTimeOffset.UtcNow);
+        builder.Property(v => v.Name)
+            .IsRequired()
+            .HasMaxLength(Constraints.MEDIUM_TITLE_LENGTH);
+
+        builder.Property(v => v.Applied)
+            .IsRequired(false);
     }
 }

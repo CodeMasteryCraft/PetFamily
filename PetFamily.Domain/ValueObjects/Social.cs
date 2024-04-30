@@ -27,15 +27,15 @@ public record Social
     public static Result<Social, Error> Create(string input)
     {
         input = input.Trim();
-        
-        if (input.IsEmpty() || input.Length > Constraints.SHORT_TITLE_LENGTH)
-            return Errors.General.InvalidLength();
+
+        if (input.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.SHORT_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(Social));
 
         var social = input.ToUpper();
 
         if (_all.Any(s => s.Value == social) == false)
         {
-            return Errors.General.ValueIsInvalid(nameof(social));
+            return Errors.General.ValueIsInvalid(nameof(Social));
         }
 
         return new Social(social);

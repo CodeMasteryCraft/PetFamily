@@ -1,9 +1,9 @@
-using System.Text.Json;
-
 namespace PetFamily.Domain.Common;
 
 public class Error
 {
+    private const string Separator = "||";
+
     public string Code { get; }
     public string Message { get; }
 
@@ -15,12 +15,17 @@ public class Error
 
     public string Serialize()
     {
-        return JsonSerializer.Serialize(this);
+        return $"{Code}{Separator}{Message}";
     }
 
-    public static Error? Deserialize(string serialized)
+    public static Error Deserialize(string serialized)
     {
-        return JsonSerializer.Deserialize<Error>(serialized);
+        var data = serialized.Split([Separator], StringSplitOptions.RemoveEmptyEntries);
+
+        if (data.Length < 2)
+            throw new($"Invalid error serialization: '{serialized}'");
+
+        return new(data[0], data[1]);
     }
 }
 
@@ -28,19 +33,22 @@ public static class Errors
 {
     public static class General
     {
+        public static Error Unexpected()
+            => new("unexpecret", "unexpecret");
+
         public static Error NotFound(Guid? id = null)
         {
             var forId = id == null ? "" : $" for Id '{id}'";
             return new("record.not.found", $"record not found{forId}");
         }
 
-        public static Error ValueIsInvalid(string? name)
+        public static Error ValueIsInvalid(string? name = null)
         {
             var label = name ?? "Value";
             return new("value.is.invalid", $"{label} is invalid");
         }
 
-        public static Error ValueIsRequried(string? name)
+        public static Error ValueIsRequried(string? name = null)
         {
             var label = name ?? "Value";
             return new("value.is.required", $"{label} is required");
@@ -49,13 +57,13 @@ public static class Errors
         public static Error InvalidLength(string? name = null)
         {
             var label = name == null ? " " : " " + name + " ";
-            return new("invalid.string.length", $"invalid{label}length");
+            return new("length.is.invalid", $"invalid{label}length");
         }
 
-        public static Error CantSave(string? name = null)
+        public static Error SaveFailure(string? name = null)
         {
             var label = name ?? "Value";
-            return new("record.cant.save", $"{label} can not be save");
+            return new("record.save.failure", $"{label} failed to save");
         }
     }
 }

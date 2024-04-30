@@ -6,11 +6,11 @@ using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Repositories;
 
-public class PetsesRepository : IPetsRepository
+public class PetsRepository : IPetsRepository
 {
     private readonly PetFamilyWriteDbContext _dbContext;
 
-    public PetsesRepository(PetFamilyWriteDbContext dbContext)
+    public PetsRepository(PetFamilyWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

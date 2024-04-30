@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.Features.Pets;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
@@ -8,12 +7,10 @@ namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
 public class CreatePetService
 {
-    private readonly IPetsRepository _petsRepository;
     private readonly IVolunteersRepository _volunteersRepository;
 
-    public CreatePetService(IPetsRepository petsRepository, IVolunteersRepository volunteersRepository)
+    public CreatePetService(IVolunteersRepository volunteersRepository)
     {
-        _petsRepository = petsRepository;
         _volunteersRepository = volunteersRepository;
     }
 
@@ -46,9 +43,8 @@ public class CreatePetService
             weight,
             contactPhoneNumber,
             volunteerPhoneNumber,
-            request.OnTreatment,
-            request.CreatedDate
-            );
+            request.OnTreatment
+        );
 
         if (pet.IsFailure)
             return pet.Error;

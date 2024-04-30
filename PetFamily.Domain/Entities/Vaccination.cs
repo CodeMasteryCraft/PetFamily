@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
 
@@ -10,7 +9,7 @@ public class Vaccination
     {
     }
 
-    public Vaccination(string name, DateTimeOffset applied)
+    public Vaccination(string name, DateTimeOffset? applied)
     {
         Name = name;
         Applied = applied;
@@ -18,21 +17,21 @@ public class Vaccination
 
     public Guid Id { get; private set; }
 
-    public string Name { get; private set; }
+    public string Name { get; private set; } = null!;
 
-    public DateTimeOffset Applied { get; private set; }
+    public DateTimeOffset? Applied { get; private set; }
 
     public static Result<Vaccination, Error> Create(
         string name,
-        DateTimeOffset applied)
+        DateTimeOffset? applied)
     {
         name = name.Trim();
-        
-        if (name.IsEmpty() || name.Length > Constraints.SHORT_TITLE_LENGTH)
+
+        if (name.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(nameof(Vaccination));
 
-        if (applied.Year < Constraints.YEAR1900 || applied > DateTimeOffset.UtcNow)
-            return Errors.General.InvalidLength(nameof(Vaccination));
+        if (applied > DateTimeOffset.UtcNow)
+            return Errors.General.ValueIsInvalid(nameof(Vaccination));
 
         return new Vaccination(name, applied);
     }

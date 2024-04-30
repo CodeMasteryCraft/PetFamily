@@ -4,7 +4,6 @@ using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Domain.Entities;
 
-//TODO Result pattern + валидация
 public class SocialMedia
 {
     private SocialMedia()
@@ -18,21 +17,18 @@ public class SocialMedia
     }
 
     public Guid Id { get; private set; }
-    public string Link { get; private set; }
-    public Social Social { get; private set; }
-    
-    public static Result<SocialMedia, Error> Create(
-        string link,
-        Social social)
+    public string Link { get; private set; } = null!;
+    public Social Social { get; private set; } = null!;
+
+    public static Result<SocialMedia, Error> Create(string link, Social social)
     {
         link = link.Trim();
-        
-        if (link.IsEmpty() || link.Length > Constraints.MAXIMUM_TITLE_LENGTH)
+
+        if (link.IsEmpty() || link.Length > Constraints.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength();
-        
+
         return new SocialMedia(
             link,
             social);
     }
-    
 }

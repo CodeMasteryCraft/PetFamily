@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using PetFamily.API.Contracts;
 using PetFamily.Domain.Common;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Results;
 
@@ -13,16 +14,20 @@ public class CustomResultFactory : IFluentValidationAutoValidationResultFactory
     {
         if (validationProblemDetails is null)
         {
-            return new BadRequestObjectResult("Invalid error");
+            throw new("ValidationProblemDetails is null");
         }
 
-        var validationError = validationProblemDetails.Errors.First();
+        List<ErrorInfo> errorInfos = [];
+        foreach (var (invalidField, validationErrors) in validationProblemDetails.Errors)
+        {
+            var errors = validationErrors
+                .Select(Error.Deserialize)
+                .Select(e => new ErrorInfo(e, invalidField));
 
-        var errorString = validationError.Value.First();
+            errorInfos.AddRange(errors);
+        }
 
-        var error = Error.Deserialize(errorString);
-
-        var envelope = Envelope.Error(error);
+        var envelope = Envelope.Error(errorInfos);
 
         return new BadRequestObjectResult(envelope);
     }

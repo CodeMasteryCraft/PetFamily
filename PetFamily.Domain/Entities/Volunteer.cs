@@ -1,6 +1,5 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
-using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Domain.Entities;
 
@@ -14,8 +13,8 @@ public class Volunteer
         string name,
         string description,
         int yearsExperience,
-        int numberOfPetsFoundHome,
-        string donationInfo,
+        int? numberOfPetsFoundHome,
+        string? donationInfo,
         bool fromShelter,
         IEnumerable<SocialMedia> socialMedias)
     {
@@ -29,11 +28,11 @@ public class Volunteer
     }
 
     public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    public string Name { get; private set; } = null!;
+    public string Description { get; private set; } = null!;
     public int YearsExperience { get; private set; }
-    public int NumberOfPetsFoundHome { get; private set; }
-    public string DonationInfo { get; private set; }
+    public int? NumberOfPetsFoundHome { get; private set; }
+    public string? DonationInfo { get; private set; }
     public bool FromShelter { get; private set; }
 
     public IReadOnlyList<Photo> Photos => _photos;
@@ -44,51 +43,43 @@ public class Volunteer
 
     public IReadOnlyList<Pet> Pets => _pets;
     private readonly List<Pet> _pets = [];
-    
+
     public static Result<Volunteer, Error> Create(
         string name,
         string description,
         int yearsExperience,
-        int numberOfPetsFoundHome,
-        string donationInfo,
+        int? numberOfPetsFoundHome,
+        string? donationInfo,
         bool fromShelter,
-        IEnumerable<SocialMedia>? socialMedias)
+        IEnumerable<SocialMedia> socialMedias)
     {
-        name = name.Trim();
-        description = description.Trim();
-        donationInfo = donationInfo.Trim();
-        
         if (name.IsEmpty() || name.Length > Constraints.SHORT_TITLE_LENGTH)
-            return Errors.General.InvalidLength();
-        if (description.IsEmpty() || description.Length > Constraints.MAXIMUM_TITLE_LENGTH)
-            return Errors.General.InvalidLength();
+            return Errors.General.InvalidLength(nameof(name));
+
+        if (description.IsEmpty() || description.Length > Constraints.LONG_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(description));
+
         if (yearsExperience < 0)
             return Errors.General.ValueIsInvalid(nameof(yearsExperience));
+
         if (numberOfPetsFoundHome < 0)
             return Errors.General.ValueIsInvalid(nameof(numberOfPetsFoundHome));
-        if (donationInfo.IsEmpty() || donationInfo.Length > Constraints.MAXIMUM_TITLE_LENGTH)
-            return Errors.General.InvalidLength();
-        if (socialMedias is null)
-            return Errors.General.ValueIsInvalid(nameof(socialMedias));
-        
+
+        if (donationInfo?.Length > Constraints.LONG_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(donationInfo));
+
         return new Volunteer(
             name,
-            description, 
-            yearsExperience, 
-            numberOfPetsFoundHome, 
-            donationInfo, 
-            fromShelter, 
-            socialMedias
-            );
+            description,
+            yearsExperience,
+            numberOfPetsFoundHome,
+            donationInfo,
+            fromShelter,
+            socialMedias);
     }
 
     public void PublishPet(Pet pet)
     {
         _pets.Add(pet);
-    }
-
-    public void AddSocialMedia(SocialMedia socialMedia)
-    {
-        _socialMedias.Add(socialMedia);
     }
 }

@@ -6,7 +6,6 @@ namespace PetFamily.Domain.Entities;
 
 public class Pet
 {
-    
     private Pet()
     {
     }
@@ -53,19 +52,19 @@ public class Pet
 
     public Guid Id { get; private set; }
 
-    public string Nickname { get; private set; }
-    public string Description { get; private set; }
-    public string Breed { get; private set; }
-    public string Color { get; private set; }
-    public string PeopleAttitude { get; private set; }
-    public string AnimalAttitude { get; private set; }
-    public string Health { get; private set; }
+    public string Nickname { get; private set; } = null!;
+    public string Description { get; private set; } = null!;
+    public string Breed { get; private set; } = null!;
+    public string Color { get; private set; } = null!;
+    public string PeopleAttitude { get; private set; } = null!;
+    public string AnimalAttitude { get; private set; } = null!;
+    public string Health { get; private set; } = null!;
 
-    public Address Address { get; private set; }
-    public Place Place { get; private set; }
-    public Weight Weight { get; private set; }
-    public PhoneNumber ContactPhoneNumber { get; private set; }
-    public PhoneNumber VolunteerPhoneNumber { get; private set; }
+    public Address Address { get; private set; } = null!;
+    public Place Place { get; private set; } = null!;
+    public Weight Weight { get; private set; } = null!;
+    public PhoneNumber ContactPhoneNumber { get; private set; } = null!;
+    public PhoneNumber VolunteerPhoneNumber { get; private set; } = null!;
 
     public bool Castration { get; private set; }
     public bool OnlyOneInFamily { get; private set; }
@@ -99,24 +98,20 @@ public class Pet
         Weight weight,
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
-        bool onTreatment,
-        DateTimeOffset createdDate)
+        bool onTreatment)
     {
-        nickname = nickname.Trim();
-        description = description.Trim();
         breed = breed.Trim();
         color = color.Trim();
         peopleAttitude = peopleAttitude.Trim();
         animalAttitude = animalAttitude.Trim();
-        health = health.Trim();
-        
+
         if (nickname.IsEmpty() || nickname.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 
-        if (description.IsEmpty() || description.Length > Constraints.MAXIMUM_TITLE_LENGTH)
+        if (description.IsEmpty() || description.Length > Constraints.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 
-        if (birthDate.Year < Constraints.YEAR1900 || birthDate > DateTimeOffset.UtcNow)
+        if (birthDate > DateTimeOffset.UtcNow)
             return Errors.General.ValueIsInvalid(nameof(birthDate.Year));
 
         if (breed.IsEmpty() || breed.Length > Constraints.SHORT_TITLE_LENGTH)
@@ -131,14 +126,11 @@ public class Pet
         if (animalAttitude.IsEmpty() || animalAttitude.Length > Constraints.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 
-        if (health.IsEmpty() || health.Length > Constraints.MAXIMUM_TITLE_LENGTH)
+        if (health.IsEmpty() || health.Length > Constraints.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 
         if (height <= 0)
             return Errors.General.ValueIsInvalid(nameof(height));
-
-        if (createdDate.Year < Constraints.YEAR1900 || createdDate > DateTimeOffset.UtcNow)
-            return Errors.General.ValueIsInvalid(nameof(createdDate));
 
         return new Pet(
             nickname,
@@ -158,15 +150,6 @@ public class Pet
             contactPhoneNumber,
             volunteerPhoneNumber,
             onTreatment,
-            createdDate);
-    }
-
-    public void AddVaccination(IEnumerable<Vaccination> vaccinations)
-    {
-        foreach (var vaccination in vaccinations)
-        {
-            
-            _vaccinations.Add(vaccination);
-        }
+            DateTimeOffset.UtcNow);
     }
 }

@@ -15,9 +15,4 @@
       <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="1.4.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\SocialMedias\" />
-      <Folder Include="Features\Vaccinations\" />
-    </ItemGroup>
-
 </Project>

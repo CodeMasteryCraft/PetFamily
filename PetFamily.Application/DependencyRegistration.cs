@@ -1,8 +1,6 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Features.Pets.CreateVaccination;
 using PetFamily.Application.Features.Volunteers.CreatePet;
-using PetFamily.Application.Features.Volunteers.CreateSocialMedia;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 
 namespace PetFamily.Application;
@@ -20,8 +18,6 @@ public static class DependencyRegistration
     {
         services.AddScoped<CreatePetService>();
         services.AddScoped<CreateVolunteerService>();
-        services.AddScoped<CreateSocialMediaService>();
-        services.AddScoped<CreateVaccinationService>();
         return services;
     }
 }

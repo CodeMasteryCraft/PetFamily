@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using FluentValidation;
+﻿using FluentValidation;
 using PetFamily.Application.CommonValidators;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
@@ -10,33 +9,33 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
 {
     public CreateVolunteerRequestValidator()
     {
-        // написать метод WithError
-        RuleForEach(x => x.SocialMedias).ChildRules(order => 
+        RuleForEach(x => x.SocialMedias).ChildRules(s =>
         {
-            order.RuleFor(x => x.Social).
-                MinimumLength(Constraints.MINIMUM_TITLE_LENGTH).
-                MaximumLength(Constraints.SHORT_TITLE_LENGTH);
-        });
-        
-        RuleForEach(x => x.SocialMedias).ChildRules(order => 
-        {
-            order.RuleFor(x => x.Link).
-                MinimumLength(Constraints.MINIMUM_TITLE_LENGTH).
-                MaximumLength(Constraints.MAXIMUM_TITLE_LENGTH);
-        });
-        
-        RuleFor(v => v).NotNull();
-        RuleFor(v => v).NotEmpty();
-        
-        RuleFor(v => v.Name).MaximumLength(Constraints.SHORT_TITLE_LENGTH);
+            s.RuleFor(x => x.Link)
+                .NotEmptyWithError()
+                .MaximumLengthWithError(Constraints.LONG_TITLE_LENGTH);
 
-        RuleFor(v => v.Description).MinimumLength(Constraints.MINIMUM_TITLE_LENGTH)
-            .MaximumLength(Constraints.MAXIMUM_TITLE_LENGTH);
+            s.RuleFor(x => x.Social).MustBeValueObject(Social.Create);
+        }).When(x => x.SocialMedias != null);
 
-        RuleFor(v => v.YearsExperience).GreaterThan(0);
-        
-        RuleFor(v => v.NumberOfPetsFoundHome).GreaterThan(0);
+        RuleFor(v => v.Name)
+            .NotEmptyWithError()
+            .MaximumLengthWithError(Constraints.SHORT_TITLE_LENGTH)
+            .WithError(Errors.General.InvalidLength());
 
-        RuleFor(v => v.DonationInfo).MaximumLength(Constraints.MAXIMUM_TITLE_LENGTH);
+        RuleFor(v => v.Description)
+            .NotEmptyWithError()
+            .MaximumLengthWithError(Constraints.LONG_TITLE_LENGTH);
+
+        RuleFor(v => v.YearsExperience)
+            .GreaterThanWithError(0);
+
+        RuleFor(v => v.NumberOfPetsFoundHome)
+            .GreaterThanWithError(0)
+            .When(x => x != null);
+
+        RuleFor(v => v.DonationInfo!)
+            .MaximumLengthWithError(Constraints.LONG_TITLE_LENGTH)
+            .When(x => x != null);
     }
 }

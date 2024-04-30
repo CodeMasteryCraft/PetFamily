@@ -21,5 +21,4 @@ public record CreatePetRequest(
     float Weight,
     string ContactPhoneNumber,
     string VolunteerPhoneNumber,
-    bool OnTreatment,
-    DateTimeOffset CreatedDate);
+    bool OnTreatment);

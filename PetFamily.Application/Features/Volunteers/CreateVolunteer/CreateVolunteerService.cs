@@ -16,12 +16,12 @@ public class CreateVolunteerService
 
     public async Task<Result<Guid, Error>> Handle(CreateVolunteerRequest request, CancellationToken ct)
     {
-        var socialMedias = request.SocialMedias
+        var socialMedias = request.SocialMedias?
             .Select(s =>
             {
                 var social = Social.Create(s.Social).Value;
                 return new SocialMedia(s.Link, social);
-            });
+            }) ?? [];
 
         var volunteer = new Volunteer(
             request.Name,
