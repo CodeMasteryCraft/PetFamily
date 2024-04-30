@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.Features.SocialMedias;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
@@ -8,14 +7,12 @@ namespace PetFamily.Application.Features.Volunteers.CreateSocialMedia;
 
 public class CreateSocialMediaService
 {
-    private readonly ISocialMediaRepository _socialMediaRepository;
+    
     private readonly IVolunteerRepository _volunteerRepository;
 
     public CreateSocialMediaService(
-        ISocialMediaRepository socialMediaRepository, 
         IVolunteerRepository volunteerRepository)
     {
-        _socialMediaRepository = socialMediaRepository;
         _volunteerRepository = volunteerRepository;
     }
 

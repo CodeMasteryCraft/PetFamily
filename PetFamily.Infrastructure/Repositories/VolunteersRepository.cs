@@ -7,11 +7,11 @@ using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Repositories;
 
-public class VolunteerRepository : IVolunteerRepository
+public class VolunteersRepository : IVolunteerRepository
 {
     private readonly PetFamilyWriteDbContext _dbContext;
 
-    public VolunteerRepository(PetFamilyWriteDbContext dbContext)
+    public VolunteersRepository(PetFamilyWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

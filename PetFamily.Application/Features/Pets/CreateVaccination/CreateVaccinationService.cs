@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.Features.Vaccinations;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 
@@ -7,13 +6,10 @@ namespace PetFamily.Application.Features.Pets.CreateVaccination;
 
 public class CreateVaccinationService
 {
-    private readonly IVaccinationRepository _vaccinationRepository;
     private readonly IPetRepository _petRepository;
 
-    public CreateVaccinationService(
-        IVaccinationRepository vaccinationRepository, IPetRepository petRepository)
+    public CreateVaccinationService(IPetRepository petRepository)
     {
-        _vaccinationRepository = vaccinationRepository;
         _petRepository = petRepository;
     }
     
