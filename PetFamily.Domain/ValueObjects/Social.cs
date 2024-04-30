@@ -26,10 +26,12 @@ public record Social
 
     public static Result<Social, Error> Create(string input)
     {
+        input = input.Trim();
+        
         if (input.IsEmpty() || input.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 
-        var social = input.Trim().ToUpper();
+        var social = input.ToUpper();
 
         if (_all.Any(s => s.Value == social) == false)
         {

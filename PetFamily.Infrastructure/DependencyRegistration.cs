@@ -21,8 +21,8 @@ public static class DependencyRegistration
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IPetRepository, PetsRepository>();
-        services.AddScoped<IVolunteerRepository, VolunteersRepository>();
+        services.AddScoped<IPetsRepository, PetsesRepository>();
+        services.AddScoped<IVolunteersRepository, VolunteersesRepository>();
         
         return services;
     }

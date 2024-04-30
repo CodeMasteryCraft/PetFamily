@@ -4,7 +4,7 @@ using PetFamily.Domain.Entities;
 
 namespace PetFamily.Application.Features.Pets;
 
-public interface IPetRepository
+public interface IPetsRepository
 {
     Task<Result<Pet, Error>> GetById(Guid id, CancellationToken ct);
     Task<Result<Guid, Error>> Save(Pet pet, CancellationToken ct);

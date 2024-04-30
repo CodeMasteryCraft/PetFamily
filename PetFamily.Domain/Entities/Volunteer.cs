@@ -54,6 +54,9 @@ public class Volunteer
         bool fromShelter,
         IEnumerable<SocialMedia>? socialMedias)
     {
+        name = name.Trim();
+        description = description.Trim();
+        donationInfo = donationInfo.Trim();
         
         if (name.IsEmpty() || name.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();

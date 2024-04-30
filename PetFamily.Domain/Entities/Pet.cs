@@ -102,6 +102,14 @@ public class Pet
         bool onTreatment,
         DateTimeOffset createdDate)
     {
+        nickname = nickname.Trim();
+        description = description.Trim();
+        breed = breed.Trim();
+        color = color.Trim();
+        peopleAttitude = peopleAttitude.Trim();
+        animalAttitude = animalAttitude.Trim();
+        health = health.Trim();
+        
         if (nickname.IsEmpty() || nickname.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 

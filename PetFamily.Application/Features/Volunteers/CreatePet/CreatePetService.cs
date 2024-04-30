@@ -8,18 +8,18 @@ namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
 public class CreatePetService
 {
-    private readonly IPetRepository _petRepository;
-    private readonly IVolunteerRepository _volunteerRepository;
+    private readonly IPetsRepository _petsRepository;
+    private readonly IVolunteersRepository _volunteersRepository;
 
-    public CreatePetService(IPetRepository petRepository, IVolunteerRepository volunteerRepository)
+    public CreatePetService(IPetsRepository petsRepository, IVolunteersRepository volunteersRepository)
     {
-        _petRepository = petRepository;
-        _volunteerRepository = volunteerRepository;
+        _petsRepository = petsRepository;
+        _volunteersRepository = volunteersRepository;
     }
 
     public async Task<Result<Guid, Error>> Handle(CreatePetRequest request, CancellationToken ct)
     {
-        var volunteer = await _volunteerRepository.GetById(request.VolunteerId, ct);
+        var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if (volunteer.IsFailure)
             return volunteer.Error;
 
@@ -55,6 +55,6 @@ public class CreatePetService
 
         volunteer.Value.PublishPet(pet.Value);
 
-        return await _volunteerRepository.Save(volunteer.Value, ct);
+        return await _volunteersRepository.Save(volunteer.Value, ct);
     }
 }

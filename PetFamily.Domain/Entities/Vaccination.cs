@@ -26,6 +26,8 @@ public class Vaccination
         string name,
         DateTimeOffset applied)
     {
+        name = name.Trim();
+        
         if (name.IsEmpty() || name.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(nameof(Vaccination));
 

@@ -6,16 +6,16 @@ namespace PetFamily.Application.Features.Pets.CreateVaccination;
 
 public class CreateVaccinationService
 {
-    private readonly IPetRepository _petRepository;
+    private readonly IPetsRepository _petsRepository;
 
-    public CreateVaccinationService(IPetRepository petRepository)
+    public CreateVaccinationService(IPetsRepository petsRepository)
     {
-        _petRepository = petRepository;
+        _petsRepository = petsRepository;
     }
     
     public async Task<Result<Guid, Error>> Handle(CreateVaccinationRequest request, CancellationToken ct)
     {
-        var pet = await _petRepository.GetById(request.PetId, ct);
+        var pet = await _petsRepository.GetById(request.PetId, ct);
         if (pet.IsFailure)
             return pet.Error;
 
@@ -31,6 +31,6 @@ public class CreateVaccinationService
 
         pet.Value.PublishVaccination(vaccinations);
 
-        return await _petRepository.Save(pet.Value, ct);
+        return await _petsRepository.Save(pet.Value, ct);
     }
 }

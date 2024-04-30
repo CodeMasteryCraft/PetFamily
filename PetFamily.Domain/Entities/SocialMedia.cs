@@ -25,6 +25,7 @@ public class SocialMedia
         string link,
         Social social)
     {
+        link = link.Trim();
         
         if (link.IsEmpty() || link.Length > Constraints.MAXIMUM_TITLE_LENGTH)
             return Errors.General.InvalidLength();

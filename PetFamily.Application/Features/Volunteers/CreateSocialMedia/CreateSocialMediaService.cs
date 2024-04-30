@@ -8,17 +8,17 @@ namespace PetFamily.Application.Features.Volunteers.CreateSocialMedia;
 public class CreateSocialMediaService
 {
     
-    private readonly IVolunteerRepository _volunteerRepository;
+    private readonly IVolunteersRepository _volunteersRepository;
 
     public CreateSocialMediaService(
-        IVolunteerRepository volunteerRepository)
+        IVolunteersRepository volunteersRepository)
     {
-        _volunteerRepository = volunteerRepository;
+        _volunteersRepository = volunteersRepository;
     }
 
     public async Task<Result<Guid, Error>> Handle(CreateSocialMediaRequest request, CancellationToken ct)
     {
-        var volunteer = await _volunteerRepository.GetById(request.VolunteerId, ct);
+        var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if (volunteer.IsFailure)
             return volunteer.Error;
 
@@ -30,6 +30,6 @@ public class CreateSocialMediaService
 
         volunteer.Value.PublishSocialMedia(socialMedia.Value);
 
-        return await _volunteerRepository.Save(volunteer.Value, ct);
+        return await _volunteersRepository.Save(volunteer.Value, ct);
     }
 }
