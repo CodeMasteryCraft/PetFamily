@@ -28,7 +28,7 @@ public class CreateSocialMediaService
         if (socialMedia.IsFailure)
             return socialMedia.Error;
 
-        volunteer.Value.PublishSocialMedia(socialMedia.Value);
+        volunteer.Value.AddSocialMedia(socialMedia.Value);
 
         return await _volunteersRepository.Save(volunteer.Value, ct);
     }

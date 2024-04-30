@@ -87,7 +87,7 @@ public class Volunteer
         _pets.Add(pet);
     }
 
-    public void PublishSocialMedia(SocialMedia socialMedia)
+    public void AddSocialMedia(SocialMedia socialMedia)
     {
         _socialMedias.Add(socialMedia);
     }

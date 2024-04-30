@@ -29,7 +29,7 @@ public class CreateVaccinationService
 
         
 
-        pet.Value.PublishVaccination(vaccinations);
+        pet.Value.AddVaccination(vaccinations);
 
         return await _petsRepository.Save(pet.Value, ct);
     }

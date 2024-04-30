@@ -161,7 +161,7 @@ public class Pet
             createdDate);
     }
 
-    public void PublishVaccination(IEnumerable<Vaccination> vaccinations)
+    public void AddVaccination(IEnumerable<Vaccination> vaccinations)
     {
         foreach (var vaccination in vaccinations)
         {
