@@ -5,11 +5,11 @@ using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
-public class CreatePetService
+public class CreatePetHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
 
-    public CreatePetService(IVolunteersRepository volunteersRepository)
+    public CreatePetHandler(IVolunteersRepository volunteersRepository)
     {
         _volunteersRepository = volunteersRepository;
     }

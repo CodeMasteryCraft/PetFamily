@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
+using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Infrastructure.Configurations.Write;
 
@@ -79,7 +80,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             b.Property(a => a.Index)
                 .HasColumnName("index")
                 .IsRequired()
-                .HasMaxLength(Constraints.INDEX_TITLE_LENGTH);
+                .HasMaxLength(Address.INDEX_TITLE_LENGTH);
         });
 
         builder.ComplexProperty(p => p.Place, b =>

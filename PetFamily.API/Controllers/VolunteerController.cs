@@ -1,6 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Minio;
+using Minio.DataModel.Args;
+using PetFamily.API.Contracts;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
+using PetFamily.Application.Features.Volunteers.UploadPhoto;
+using PetFamily.Domain.Common;
 
 namespace PetFamily.API.Controllers;
 
@@ -9,11 +14,11 @@ public class VolunteerController : ApplicationController
 {
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromServices] CreateVolunteerService service,
+        [FromServices] CreateVolunteerHandler handler,
         [FromBody] CreateVolunteerRequest request,
         CancellationToken ct)
     {
-        var idResult = await service.Handle(request, ct);
+        var idResult = await handler.Handle(request, ct);
 
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
@@ -23,15 +28,37 @@ public class VolunteerController : ApplicationController
 
     [HttpPost("pet")]
     public async Task<IActionResult> Create(
-        [FromServices] CreatePetService service,
+        [FromServices] CreatePetHandler handler,
         [FromBody] CreatePetRequest request,
         CancellationToken ct)
     {
-        var idResult = await service.Handle(request, ct);
+        var idResult = await handler.Handle(request, ct);
 
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
 
         return Ok(idResult.Value);
+    }
+
+    // [HttpPost("photo")]
+    // public async Task<IActionResult> UploadPhoto(
+    //     [FromForm] UploadVolunteerPhotoRequest request)
+    // {
+    // }
+    //
+
+    [HttpGet("photo")]
+    public async Task<IActionResult> GetPhoto(
+        string photo,
+        [FromServices] IMinioClient client)
+    {
+        var presignedGetObjectArgs = new PresignedGetObjectArgs()
+            .WithBucket("images")
+            .WithObject(photo)
+            .WithExpiry(60*60*24);
+
+        var url = await client.PresignedGetObjectAsync(presignedGetObjectArgs);
+
+        return Ok(url);
     }
 }

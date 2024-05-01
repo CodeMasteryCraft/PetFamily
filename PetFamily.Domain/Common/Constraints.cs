@@ -7,6 +7,4 @@ public readonly struct Constraints
     public const int LONG_TITLE_LENGTH = 5000;
 
     public const int MINIMUM_TITLE_LENGTH = 1;
-
-    public const int INDEX_TITLE_LENGTH = 6;
 }

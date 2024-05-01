@@ -5,6 +5,8 @@ namespace PetFamily.Domain.ValueObjects;
 
 public record Address
 {
+    public const int INDEX_TITLE_LENGTH = 6;
+
     private Address(string city, string street, string building, string index)
     {
         City = city;
@@ -21,7 +23,6 @@ public record Address
     public static Result<Address, Error> Create(string city, string street, string building, string index)
     {
         city = city.Trim();
-        street = street.Trim();
         building = building.Trim();
         index = index.Trim();
 
@@ -31,10 +32,10 @@ public record Address
         if (street.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.MEDIUM_TITLE_LENGTH)
             return Errors.General.InvalidLength(nameof(street));
 
-        if (building.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.SHORT_TITLE_LENGTH)
+        if (building.IsEmpty() || building.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength(nameof(building));
 
-        if (index.Length != Constraints.INDEX_TITLE_LENGTH)
+        if (index.Length != INDEX_TITLE_LENGTH)
             return Errors.General.InvalidLength(nameof(index));
 
         return new Address(city, street, building, index);

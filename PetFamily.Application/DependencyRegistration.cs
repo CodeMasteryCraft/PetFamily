@@ -16,8 +16,8 @@ public static class DependencyRegistration
 
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
-        services.AddScoped<CreatePetService>();
-        services.AddScoped<CreateVolunteerService>();
+        services.AddScoped<CreatePetHandler>();
+        services.AddScoped<CreateVolunteerHandler>();
         return services;
     }
 }
