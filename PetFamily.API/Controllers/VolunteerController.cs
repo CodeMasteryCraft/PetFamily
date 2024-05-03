@@ -40,12 +40,19 @@ public class VolunteerController : ApplicationController
         return Ok(idResult.Value);
     }
 
-    // [HttpPost("photo")]
-    // public async Task<IActionResult> UploadPhoto(
-    //     [FromForm] UploadVolunteerPhotoRequest request)
-    // {
-    // }
-    //
+    [HttpPost("photo")]
+    public async Task<IActionResult> UploadPhoto(
+        [FromServices] UploadVolunteerPhotoHandler handler,
+        [FromForm] UploadVolunteerPhotoRequest request,
+        CancellationToken ct)
+    {
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
 
     [HttpGet("photo")]
     public async Task<IActionResult> GetPhoto(
@@ -55,7 +62,7 @@ public class VolunteerController : ApplicationController
         var presignedGetObjectArgs = new PresignedGetObjectArgs()
             .WithBucket("images")
             .WithObject(photo)
-            .WithExpiry(60*60*24);
+            .WithExpiry(60 * 60 * 24);
 
         var url = await client.PresignedGetObjectAsync(presignedGetObjectArgs);
 

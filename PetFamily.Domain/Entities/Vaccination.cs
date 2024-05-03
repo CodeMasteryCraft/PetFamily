@@ -1,9 +1,10 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
 
-public class Vaccination
+public class Vaccination : Entity
 {
     private Vaccination()
     {
@@ -14,8 +15,6 @@ public class Vaccination
         Name = name;
         Applied = applied;
     }
-
-    public Guid Id { get; private set; }
 
     public string Name { get; private set; } = null!;
 

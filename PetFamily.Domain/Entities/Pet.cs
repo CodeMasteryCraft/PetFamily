@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
+using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
 
-public class Pet
+public class Pet : Entity
 {
     private Pet()
     {
@@ -49,8 +50,6 @@ public class Pet
         OnTreatment = onTreatment;
         CreatedDate = createdDate;
     }
-
-    public Guid Id { get; private set; }
 
     public string Nickname { get; private set; } = null!;
     public string Description { get; private set; } = null!;

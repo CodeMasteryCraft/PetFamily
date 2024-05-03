@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Domain.Entities;
 
 namespace PetFamily.Infrastructure.DbContexts;
 
-public class PetFamilyWriteDbContext : DbContext
+public class PetFamilyWriteDbContext : DbContext, IPetFamilyWriteDbContext
 {
     private readonly IConfiguration _configuration;
 

@@ -16,6 +16,7 @@ public class CreateVolunteerHandler
 
     public async Task<Result<Guid, Error>> Handle(CreateVolunteerRequest request, CancellationToken ct)
     {
+        //TODO
         var socialMedias = request.SocialMedias?
             .Select(s =>
             {
@@ -33,6 +34,8 @@ public class CreateVolunteerHandler
             socialMedias);
 
         await _volunteersRepository.Add(volunteer, ct);
-        return await _volunteersRepository.Save(volunteer, ct);
+        await _volunteersRepository.Save(ct);
+
+        return volunteer.Id;
     }
 }

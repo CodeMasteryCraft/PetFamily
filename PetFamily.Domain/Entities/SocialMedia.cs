@@ -1,10 +1,11 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
+using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
 
-public class SocialMedia
+public class SocialMedia : Entity
 {
     private SocialMedia()
     {
@@ -16,7 +17,6 @@ public class SocialMedia
         Social = social;
     }
 
-    public Guid Id { get; private set; }
     public string Link { get; private set; } = null!;
     public Social Social { get; private set; } = null!;
 

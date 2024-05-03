@@ -1,10 +1,13 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
 
-public class Volunteer
+public class Volunteer : Entity
 {
+    public const int PHOTO_COUNT_LIMIT = 5;
+
     private Volunteer()
     {
     }
@@ -27,7 +30,6 @@ public class Volunteer
         _socialMedias = socialMedias.ToList();
     }
 
-    public Guid Id { get; private set; }
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public int YearsExperience { get; private set; }
@@ -43,6 +45,22 @@ public class Volunteer
 
     public IReadOnlyList<Pet> Pets => _pets;
     private readonly List<Pet> _pets = [];
+
+    public void PublishPet(Pet pet)
+    {
+        _pets.Add(pet);
+    }
+
+    public Result<bool, Error> AddPhoto(Photo photo)
+    {
+        if (_photos.Count >= PHOTO_COUNT_LIMIT)
+        {
+            return Errors.Volunteers.PhotoCountLimit();
+        }
+
+        _photos.Add(photo);
+        return true;
+    }
 
     public static Result<Volunteer, Error> Create(
         string name,
@@ -76,10 +94,5 @@ public class Volunteer
             donationInfo,
             fromShelter,
             socialMedias);
-    }
-
-    public void PublishPet(Pet pet)
-    {
-        _pets.Add(pet);
     }
 }
