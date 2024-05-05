@@ -1,13 +1,15 @@
+using System.Data;
+
 namespace PetFamily.Domain.Common;
 
-public class Error
+public class ResultEvent
 {
     private const string Separator = "||";
 
     public string Code { get; }
-    public string Message { get; }
+    public string? Message { get; }
 
-    public Error(string code, string message)
+    public ResultEvent(string code, string? message = null)
     {
         Code = code;
         Message = message;
@@ -18,7 +20,7 @@ public class Error
         return $"{Code}{Separator}{Message}";
     }
 
-    public static Error Deserialize(string serialized)
+    public static ResultEvent Deserialize(string serialized)
     {
         var data = serialized.Split([Separator], StringSplitOptions.RemoveEmptyEntries);
 
@@ -29,52 +31,71 @@ public class Error
     }
 }
 
+public static class Seccess
+{
+    public static ResultEvent Ok() =>
+        new ("Seccess");
+}
+
 public static class Errors
 {
     public static class General
     {
-        public static Error Iternal(string message)
+        public static ResultEvent Iternal(string message)
             => new("iternal", message);
         
-        public static Error Unexpected()
+        public static ResultEvent Unexpected()
             => new("unexpecret", "unexpecret");
 
-        public static Error NotFound(Guid? id = null)
+        public static ResultEvent NotFound(Guid? id = null)
         {
             var forId = id == null ? "" : $" for Id '{id}'";
             return new("record.not.found", $"record not found{forId}");
         }
 
-        public static Error ValueIsInvalid(string? name = null)
+        public static ResultEvent ValueIsInvalid(string? name = null)
         {
             var label = name ?? "Value";
             return new("value.is.invalid", $"{label} is invalid");
         }
 
-        public static Error ValueIsRequried(string? name = null)
+        public static ResultEvent ValueIsRequried(string? name = null)
         {
             var label = name ?? "Value";
             return new("value.is.required", $"{label} is required");
         }
 
-        public static Error InvalidLength(string? name = null)
+        public static ResultEvent InvalidLength(string? name = null)
         {
             var label = name == null ? " " : " " + name + " ";
             return new("length.is.invalid", $"invalid{label}length");
         }
 
-        public static Error SaveFailure(string? name = null)
+        public static ResultEvent SaveFailure(string? name = null)
         {
             var label = name ?? "Value";
             return new("record.save.failure", $"{label} failed to save");
+        }
+
+        public static ResultEvent DeleteFailure(string? name = null)
+        {
+            var label = name ?? "Value";
+            return new("record.delete.failure", $"{label} failed to delete");
+        }
+
+        public static ResultEvent GetFailure(string? name = null)
+        {
+            var label = name ?? "Value";
+            return new("record.get.failure",$"{label} failed to get");
         }
     }
 
     public static class Volunteers
     {
-        public static Error PhotoCountLimit()
+        public static ResultEvent PhotoCountLimit()
         {
             return new("volunteers.photo.limit", "Max photo count limit is 5");
         }
+
     }
 }

@@ -4,7 +4,7 @@ public abstract class Entity
 {
     public Guid Id { get; } = Guid.Empty;
 
-    public static bool operator ==(Entity? first, Entity? second)
+    public static bool operator == (Entity? first, Entity? second)
     {
         if (ReferenceEquals(first, null) && ReferenceEquals(second, null))
             return true;

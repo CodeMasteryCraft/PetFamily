@@ -12,7 +12,7 @@ public record Weight
         Kilograms = kilograms;
     }
 
-    public static Result<Weight, Error> Create(float kilograms)
+    public static Result<Weight, ResultEvent> Create(float kilograms)
     {
         if (kilograms <= 0)
             return Errors.General.ValueIsInvalid(nameof(Weight));

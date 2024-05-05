@@ -18,7 +18,7 @@ public class UploadVolunteerPhotoHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<string, Error>> Handle(UploadVolunteerPhotoRequest request, CancellationToken ct)
+    public async Task<Result<string, ResultEvent>> Handle(UploadVolunteerPhotoRequest request, CancellationToken ct)
     {
         var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if (volunteer.IsFailure)
@@ -35,7 +35,7 @@ public class UploadVolunteerPhotoHandler
         if (isSuccessUpload.IsFailure)
             return isSuccessUpload.Error;
 
-        var objectName = await _minioProvider.UploadPhoto(request.File, path);
+        var objectName = await _minioProvider.UploadPhoto(request.File, path,ct);
         if (objectName.IsFailure)
             return objectName.Error;
 

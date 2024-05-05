@@ -24,7 +24,7 @@ public record Social
         Value = value;
     }
 
-    public static Result<Social, Error> Create(string input)
+    public static Result<Social, ResultEvent> Create(string input)
     {
         input = input.Trim();
 

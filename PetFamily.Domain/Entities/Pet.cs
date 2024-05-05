@@ -80,7 +80,7 @@ public class Pet : Entity
     public IReadOnlyList<Photo> Photos => _photos;
     private readonly List<Photo> _photos = [];
 
-    public static Result<Pet, Error> Create(
+    public static Result<Pet, ResultEvent> Create(
         string nickname,
         string description,
         DateTimeOffset birthDate,

@@ -20,7 +20,7 @@ public class SocialMedia : Entity
     public string Link { get; private set; } = null!;
     public Social Social { get; private set; } = null!;
 
-    public static Result<SocialMedia, Error> Create(string link, Social social)
+    public static Result<SocialMedia, ResultEvent> Create(string link, Social social)
     {
         link = link.Trim();
 

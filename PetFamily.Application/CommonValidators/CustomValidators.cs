@@ -8,11 +8,11 @@ public static class CustomValidators
 {
     public static IRuleBuilderOptionsConditions<T, TElement> MustBeValueObject<T, TElement, TValueObject>(
         this IRuleBuilder<T, TElement> ruleBuilder,
-        Func<TElement, Result<TValueObject, Error>> factoryMethod)
+        Func<TElement, Result<TValueObject, ResultEvent>> factoryMethod)
     {
         return ruleBuilder.Custom((value, context) =>
         {
-            Result<TValueObject, Error> result = factoryMethod(value);
+            Result<TValueObject, ResultEvent> result = factoryMethod(value);
 
             if (result.IsSuccess)
                 return;
@@ -56,6 +56,25 @@ public static class CustomValidators
             .WithError(Errors.General.InvalidLength());
     }
 
+    public static IRuleBuilderOptions<T, TProperty> GreaterThanOrEqualToWithError<T, TProperty>(
+        this IRuleBuilder<T, TProperty> ruleBuilder, TProperty valueToCompare)
+        where TProperty : IComparable<TProperty>, IComparable
+    {
+        return ruleBuilder
+            .GreaterThanOrEqualTo(valueToCompare)
+            .WithError(Errors.General.InvalidLength());
+    }
+
+    
+    public static IRuleBuilderOptions<T, TProperty?> GreaterThanOrEqualToWithError<T, TProperty>(
+        this IRuleBuilder<T, TProperty?> ruleBuilder, TProperty valueToCompare)
+        where TProperty : struct, IComparable<TProperty>, IComparable
+    {
+        return ruleBuilder
+            .GreaterThanOrEqualTo(valueToCompare)
+            .WithError(Errors.General.InvalidLength());
+    }
+
     public static IRuleBuilderOptions<T, TProperty> LessThanWithError<T, TProperty>(
         this IRuleBuilder<T, TProperty> ruleBuilder, TProperty valueToCompare)
         where TProperty : IComparable<TProperty>, IComparable
@@ -66,7 +85,7 @@ public static class CustomValidators
     }
 
     public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(
-        this IRuleBuilderOptions<T, TProperty> rule, Error error)
+        this IRuleBuilderOptions<T, TProperty> rule, ResultEvent error)
     {
         return rule
             .WithMessage(error.Serialize());

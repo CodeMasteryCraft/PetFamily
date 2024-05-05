@@ -15,7 +15,7 @@ public class PetsRepository : IPetsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Pet, Error>> GetById(Guid id, CancellationToken ct)
+    public async Task<Result<Pet, ResultEvent>> GetById(Guid id, CancellationToken ct)
     {
         var pet = await _dbContext.Pets.FindAsync(id);
 
@@ -25,7 +25,7 @@ public class PetsRepository : IPetsRepository
         return pet;
     }
 
-    public Task<Result<Guid, Error>> Save(Pet pet, CancellationToken ct)
+    public Task<Result<Guid, ResultEvent>> Save(Pet pet, CancellationToken ct)
     {
         throw new NotImplementedException();
     }

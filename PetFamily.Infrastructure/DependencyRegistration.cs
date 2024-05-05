@@ -30,6 +30,7 @@ public static class DependencyRegistration
     {
         services.AddScoped<IPetsRepository, PetsRepository>();
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
+        services.AddScoped<IPhotoRepository, PhotoRepository>();
 
         return services;
     }

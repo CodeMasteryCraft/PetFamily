@@ -13,8 +13,8 @@ using PetFamily.Infrastructure.DbContexts;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(PetFamilyWriteDbContext))]
-    [Migration("20240430100331_Initial")]
-    partial class Initial
+    [Migration("20240505101743_Initialv2")]
+    partial class Initialv2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,7 +61,7 @@ namespace PetFamily.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2024, 4, 30, 10, 3, 30, 823, DateTimeKind.Unspecified).AddTicks(8774), new TimeSpan(0, 0, 0, 0, 0)))
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2024, 5, 5, 10, 17, 42, 497, DateTimeKind.Unspecified).AddTicks(1063), new TimeSpan(0, 0, 0, 0, 0)))
                         .HasColumnName("created_date");
 
                     b.Property<string>("Description")

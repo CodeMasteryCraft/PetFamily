@@ -4,6 +4,7 @@ using PetFamily.Application.Features.Volunteers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure.DbContexts;
+using static PetFamily.Domain.Common.Errors;
 
 namespace PetFamily.Infrastructure.Repositories;
 
@@ -21,7 +22,7 @@ public class VolunteersRepository : IVolunteersRepository
         await _dbContext.Volunteers.AddAsync(volunteer, ct);
     }
 
-    public async Task<Result<int, Error>> Save(CancellationToken ct)
+    public async Task<Result<int, ResultEvent>> Save(CancellationToken ct)
     {
         var result = await _dbContext.SaveChangesAsync(ct);
 
@@ -31,7 +32,7 @@ public class VolunteersRepository : IVolunteersRepository
         return result;
     }
     
-    public async Task<Result<Volunteer, Error>> GetById(Guid id, CancellationToken ct)
+    public async Task<Result<Volunteer, ResultEvent>> GetById(Guid id, CancellationToken ct)
     {
         var volunteer = await _dbContext.Volunteers
             .Include(v => v.Pets)
@@ -42,5 +43,15 @@ public class VolunteersRepository : IVolunteersRepository
             return Errors.General.NotFound(id);
 
         return volunteer;
+    }
+
+    public async Task<Result<List<string>, ResultEvent>> GetByPhoto (Guid volunteerId, CancellationToken ct)
+    {
+        var path = await _dbContext.Volunteers
+            .Where(v => v.Id == volunteerId)
+            .SelectMany(v => v.Photos.Select(p => p.Path))
+            .ToListAsync(ct);
+
+        return path;
     }
 }

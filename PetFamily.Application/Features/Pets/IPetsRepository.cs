@@ -6,6 +6,6 @@ namespace PetFamily.Application.Features.Pets;
 
 public interface IPetsRepository
 {
-    Task<Result<Pet, Error>> GetById(Guid id, CancellationToken ct);
-    Task<Result<Guid, Error>> Save(Pet pet, CancellationToken ct);
+    Task<Result<Pet, ResultEvent>> GetById(Guid id, CancellationToken ct);
+    Task<Result<Guid, ResultEvent>> Save(Pet pet, CancellationToken ct);
 }

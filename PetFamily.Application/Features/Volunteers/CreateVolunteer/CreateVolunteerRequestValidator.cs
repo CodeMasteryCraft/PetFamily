@@ -20,18 +20,16 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
 
         RuleFor(v => v.Name)
             .NotEmptyWithError()
-            .MaximumLengthWithError(Constraints.SHORT_TITLE_LENGTH)
-            .WithError(Errors.General.InvalidLength());
+            .MaximumLengthWithError(Constraints.SHORT_TITLE_LENGTH);
 
         RuleFor(v => v.Description)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.LONG_TITLE_LENGTH);
 
-        RuleFor(v => v.YearsExperience)
-            .GreaterThanWithError(0);
+        RuleFor(v => v.YearsExperience).GreaterThanOrEqualToWithError(0);
 
         RuleFor(v => v.NumberOfPetsFoundHome)
-            .GreaterThanWithError(0)
+            .GreaterThanOrEqualToWithError(0)
             .When(x => x != null);
 
         RuleFor(v => v.DonationInfo!)

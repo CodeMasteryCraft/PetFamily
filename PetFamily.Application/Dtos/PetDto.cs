@@ -1,8 +1,9 @@
+using PetFamily.Domain.Common;
+
 namespace PetFamily.Application.Dtos;
 
-public class PetDto
+public class PetDto : Entity
 {
-    public Guid Id { get; init; }
     public string Nickname { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
     public string City { get; init; } = string.Empty;

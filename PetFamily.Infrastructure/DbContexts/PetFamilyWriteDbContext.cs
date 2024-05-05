@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Abstractions;
+using PetFamily.Application.Dtos;
 using PetFamily.Domain.Entities;
 
 namespace PetFamily.Infrastructure.DbContexts;
@@ -19,6 +20,7 @@ public class PetFamilyWriteDbContext : DbContext, IPetFamilyWriteDbContext
     public DbSet<Pet> Pets => Set<Pet>();
     public DbSet<SocialMedia> SocialMedias => Set<SocialMedia>();
     public DbSet<Vaccination> Vaccinations => Set<Vaccination>();
+    public DbSet<Photo> Photo => Set<Photo>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

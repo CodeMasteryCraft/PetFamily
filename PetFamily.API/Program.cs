@@ -1,3 +1,4 @@
+using Minio;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
@@ -20,7 +21,7 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
 
 builder.Services.AddHttpLogging(options => { });
 
-builder.Services.AddHostedService<Cleaner>();
+//builder.Services.AddHostedService<Cleaner>();
 
 var app = builder.Build();
 
@@ -34,7 +35,7 @@ app.MapControllers();
 
 app.Run();
 
-public class Cleaner : BackgroundService
+/*public class Cleaner : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -44,4 +45,4 @@ public class Cleaner : BackgroundService
             await Task.Delay(3000, stoppingToken);
         }
     }
-}
+}*/

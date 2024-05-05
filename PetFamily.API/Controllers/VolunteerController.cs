@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
-using PetFamily.API.Contracts;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
+using PetFamily.Application.Features.Volunteers.DeletePhoto;
+using PetFamily.Application.Features.Volunteers.GetPhotos;
+using PetFamily.Application.Features.Volunteers.GetsPhotos;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
-using PetFamily.Domain.Common;
 
 namespace PetFamily.API.Controllers;
 
@@ -50,22 +51,46 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return BadRequest(result.Error);
 
-        return Ok(result.Value);
+        return Ok(result.IsSuccess);
     }
 
 
     [HttpGet("photo")]
     public async Task<IActionResult> GetPhoto(
-        string photo,
-        [FromServices] IMinioClient client)
+        [FromQuery] GetVolunteerPhotoRequest request,
+        [FromServices] GetVolunteerPhotoHandler handler,
+        CancellationToken ct)
     {
-        var presignedGetObjectArgs = new PresignedGetObjectArgs()
-            .WithBucket("images")
-            .WithObject(photo)
-            .WithExpiry(60 * 60 * 24);
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        var url = await client.PresignedGetObjectAsync(presignedGetObjectArgs);
+        return Ok(result.Value);
+    }
+    
+    [HttpGet("AllPhoto")]
+    public async Task<IActionResult> GetAllPhoto(
+        [FromQuery] GetVolunteerAllPhotosRequest request,
+        [FromServices] GetVolunteerAllPhotosHandler handler,
+        CancellationToken ct)
+    {
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(url);
+        return Ok(result.Value);
+    }
+
+    [HttpDelete("photo")]
+    public async Task<IActionResult> DeletePhoto(
+        [FromForm] DeleteVolunteerPhotoRequest request,
+        [FromServices] DeleteVolunteerPhotoHandler handler,
+        CancellationToken ct)
+    {
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.IsSuccess);
     }
 }

@@ -1,10 +1,13 @@
 using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using PetFamily.Application.Abstractions;
 using PetFamily.Domain.Common;
+using PetFamily.Domain.Entities;
+using System.IO;
 
 namespace PetFamily.Infrastructure.Services;
 
@@ -21,7 +24,7 @@ public class MinioProvider : IMinioProvider
         _logger = logger;
     }
 
-    public async Task<Result<string, Error>> UploadPhoto(IFormFile photo, string path)
+    public async Task<Result<string, ResultEvent>> UploadPhoto(IFormFile photo, string path, CancellationToken ct)
     {
         try
         {
@@ -35,7 +38,7 @@ public class MinioProvider : IMinioProvider
                 var makeBucketArgs = new MakeBucketArgs()
                     .WithBucket(PhotoBucket);
 
-                await _minioClient.MakeBucketAsync(makeBucketArgs);
+                await _minioClient.MakeBucketAsync(makeBucketArgs, ct);
             }
 
             await using (var stream = photo.OpenReadStream())
@@ -46,7 +49,7 @@ public class MinioProvider : IMinioProvider
                     .WithObjectSize(stream.Length)
                     .WithObject(path);
 
-                var response = await _minioClient.PutObjectAsync(putObjectArgs);
+                var response = await _minioClient.PutObjectAsync(putObjectArgs, ct);
 
                 return response.ObjectName;
             }
@@ -58,39 +61,69 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<bool, Error>> RemovePhoto(string path)
+    public async Task<Result<ResultEvent>> RemovePhoto(string path, CancellationToken ct)
     {
         try
         {
-            var bucketExistArgs = new BucketExistsArgs()
-                .WithBucket(PhotoBucket);
-
-            var bucketExist = await _minioClient.BucketExistsAsync(bucketExistArgs);
-
-            if (bucketExist == false)
-            {
-                var makeBucketArgs = new MakeBucketArgs()
-                    .WithBucket(PhotoBucket);
-
-                await _minioClient.MakeBucketAsync(makeBucketArgs);
-            }
-
             var removeObjectArgs = new RemoveObjectArgs()
                 .WithBucket(PhotoBucket)
                 .WithObject(path);
 
-            await _minioClient.RemoveObjectAsync(removeObjectArgs);
-            return true;
+            await _minioClient.RemoveObjectAsync(removeObjectArgs, ct);
+
+            return Seccess.Ok();
         }
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            return Errors.General.SaveFailure("photo");
+            return Errors.General.DeleteFailure("photo");
         }
     }
 
-    public Task<Result<IReadOnlyList<string>, Error>> GetPhotos(List<string> pathes)
+    public async Task<Result<string, ResultEvent>> GetPhoto(string path)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var presignedGetObjectArgs = new PresignedGetObjectArgs()
+           .WithBucket("images")
+           .WithObject(path)
+           .WithExpiry(60 * 60 * 24);
+
+            var url = await _minioClient.PresignedGetObjectAsync(presignedGetObjectArgs);
+
+            return url;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return Errors.General.GetFailure("photo");
+        }
+    }
+
+    public async Task<Result<IReadOnlyList<string>, ResultEvent>> GetPhotos(List<string> paths, CancellationToken ct)
+    {
+        try
+        {
+            List<string> urls = [];
+            foreach (string path in paths)
+            {
+                var presignedGetObjectArgs = new PresignedGetObjectArgs()
+                .WithBucket("images")
+                .WithObject(path)
+                .WithExpiry(60 * 60 * 24);
+
+                var url = await _minioClient.PresignedGetObjectAsync(presignedGetObjectArgs);
+
+                urls.Add(url);
+            }
+
+            return urls;
+            //сделал ужасно не красиво, но пока сойдет
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return Errors.General.GetFailure("photo");
+        }
     }
 }

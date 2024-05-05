@@ -6,7 +6,8 @@ namespace PetFamily.Application.Abstractions;
 
 public interface IMinioProvider
 {
-    Task<Result<string, Error>> UploadPhoto(IFormFile photo, string path);
-    Task<Result<bool, Error>> RemovePhoto(string path);
-    Task<Result<IReadOnlyList<string>, Error>> GetPhotos(List<string> pathes);
+    Task<Result<string, ResultEvent>> UploadPhoto(IFormFile photo, string path, CancellationToken ct);
+    Task<Result<ResultEvent>> RemovePhoto(string path, CancellationToken ct);
+    Task<Result<string, ResultEvent>> GetPhoto(string pathes);
+    Task<Result<IReadOnlyList<string>, ResultEvent>> GetPhotos(List<string> paths, CancellationToken ct);
 }
