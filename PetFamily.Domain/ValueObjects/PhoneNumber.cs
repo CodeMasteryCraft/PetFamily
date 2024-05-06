@@ -1,10 +1,11 @@
 using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using ValueObject = PetFamily.Domain.Common.ValueObject;
 
 namespace PetFamily.Domain.ValueObjects;
 
-public record PhoneNumber
+public class PhoneNumber : ValueObject
 {
     public const string RUSSIAN_PHONE_REGEX = @"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$";
 
@@ -26,5 +27,10 @@ public record PhoneNumber
             return Errors.General.ValueIsInvalid(nameof(PhoneNumber));
 
         return new PhoneNumber(input);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Number;
     }
 }

@@ -20,15 +20,9 @@ public class Envelope
         return new(result, null);
     }
     
-    public static Envelope Error(List<ErrorInfo>? errors)
+    public static Envelope Error(params ErrorInfo[] errors)
     {
         return new(null, errors);
-    }
-
-    public static Envelope Error(List<Error>? errors)
-    {
-        var errorInfos = errors?.Select(e => new ErrorInfo(e));
-        return new(null, errorInfos);
     }
 }
 

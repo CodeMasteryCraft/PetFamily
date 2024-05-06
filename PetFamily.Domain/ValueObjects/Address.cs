@@ -1,9 +1,10 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using ValueObject = PetFamily.Domain.Common.ValueObject;
 
 namespace PetFamily.Domain.ValueObjects;
 
-public record Address
+public class Address : ValueObject
 {
     public const int INDEX_TITLE_LENGTH = 6;
 
@@ -39,5 +40,12 @@ public record Address
             return Errors.General.InvalidLength(nameof(index));
 
         return new Address(city, street, building, index);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return City;
+        yield return Street;
+        yield return Building;
     }
 }

@@ -6,6 +6,7 @@ using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
 using PetFamily.Domain.Common;
+using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.API.Controllers;
 
