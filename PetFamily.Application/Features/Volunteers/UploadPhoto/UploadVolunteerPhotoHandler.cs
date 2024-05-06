@@ -18,7 +18,7 @@ public class UploadVolunteerPhotoHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<string, ResultEvent>> Handle(UploadVolunteerPhotoRequest request, CancellationToken ct)
+    public async Task<Result<string, Error>> Handle(UploadVolunteerPhotoRequest request, CancellationToken ct)
     {
         var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if (volunteer.IsFailure)
@@ -41,9 +41,7 @@ public class UploadVolunteerPhotoHandler
 
         var result = await _volunteersRepository.Save(ct);
         if (result.IsFailure)
-        {
             return result.Error;
-        }
 
         return path;
     }

@@ -14,7 +14,7 @@ public class CreateVolunteerHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<Guid, ResultEvent>> Handle(CreateVolunteerRequest request, CancellationToken ct)
+    public async Task<Result<Guid, Error>> Handle(CreateVolunteerRequest request, CancellationToken ct)
     {
         //TODO
         var socialMedias = request.SocialMedias?

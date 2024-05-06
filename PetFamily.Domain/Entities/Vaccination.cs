@@ -20,7 +20,7 @@ public class Vaccination : Entity
 
     public DateTimeOffset? Applied { get; private set; }
 
-    public static Result<Vaccination, ResultEvent> Create(
+    public static Result<Vaccination, Error> Create(
         string name,
         DateTimeOffset? applied)
     {

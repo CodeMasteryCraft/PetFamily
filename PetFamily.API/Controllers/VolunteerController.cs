@@ -91,6 +91,6 @@ public class VolunteerController : ApplicationController
         if (result.IsFailure)
             return BadRequest(result.Error);
 
-        return Ok(result.IsSuccess);
+        return Ok(result.Value);
     }
 }

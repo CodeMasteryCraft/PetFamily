@@ -15,7 +15,7 @@ public class PhotoRepository : IPhotoRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Photo, ResultEvent>> GetById(Guid id, CancellationToken ct)
+    public async Task<Result<Photo, Error>> GetById(Guid id, CancellationToken ct)
     {
         var photo = await _dbContext.Photo.FindAsync(id);
 

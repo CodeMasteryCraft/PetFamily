@@ -20,7 +20,7 @@ public record Address
     public string Building { get; }
     public string Index { get; }
 
-    public static Result<Address, ResultEvent> Create(string city, string street, string building, string index)
+    public static Result<Address, Error> Create(string city, string street, string building, string index)
     {
         city = city.Trim();
         building = building.Trim();

@@ -17,7 +17,7 @@ public record Place
         Value = value;
     }
 
-    public static Result<Place, ResultEvent> Create(string input)
+    public static Result<Place, Error> Create(string input)
     {
         if (input.IsEmpty() || input.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();

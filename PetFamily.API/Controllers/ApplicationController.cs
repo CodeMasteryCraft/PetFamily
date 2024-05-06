@@ -14,14 +14,14 @@ public class ApplicationController : ControllerBase
         return base.Ok(envelope);
     }
 
-    protected IActionResult BadRequest(List<ResultEvent>? error)
+    protected IActionResult BadRequest(List<Error>? error)
     {
         var envelope = Envelope.Error(error);
 
         return base.BadRequest(envelope);
     }
 
-    protected IActionResult NotFound(List<ResultEvent>? error)
+    protected IActionResult NotFound(List<Error>? error)
     {
         var envelope = Envelope.Error(error);
 

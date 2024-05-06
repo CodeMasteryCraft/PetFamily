@@ -15,7 +15,7 @@ public record PhoneNumber
         Number = number;
     }
 
-    public static Result<PhoneNumber, ResultEvent> Create(string input)
+    public static Result<PhoneNumber, Error> Create(string input)
     {
         input = input.Trim();
 

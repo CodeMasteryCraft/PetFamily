@@ -19,13 +19,13 @@ public class GetVolunteerAllPhotosHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<IReadOnlyList<string>, ResultEvent>> Handle(GetVolunteerAllPhotosRequest request, CancellationToken ct)
+    public async Task<Result<IReadOnlyList<string>, Error>> Handle(GetVolunteerAllPhotosRequest request, CancellationToken ct)
     {
         var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if (volunteer.IsFailure)
             return volunteer.Error;
 
-        var photoPath = await _volunteersRepository.GetByPhoto(request.VolunteerId, ct);
+        var photoPath = await _volunteersRepository.GetByPhotos(request.VolunteerId, ct);
         if (photoPath.IsFailure)
             return photoPath.Error;
 

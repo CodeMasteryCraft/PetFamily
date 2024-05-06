@@ -19,7 +19,7 @@ public class GetVolunteerPhotoHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<string, ResultEvent>> Handle(GetVolunteerPhotoRequest request, CancellationToken ct)
+    public async Task<Result<string, Error>> Handle(GetVolunteerPhotoRequest request, CancellationToken ct)
     {
         var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if(volunteer.IsFailure)

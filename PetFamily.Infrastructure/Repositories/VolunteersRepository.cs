@@ -22,7 +22,7 @@ public class VolunteersRepository : IVolunteersRepository
         await _dbContext.Volunteers.AddAsync(volunteer, ct);
     }
 
-    public async Task<Result<int, ResultEvent>> Save(CancellationToken ct)
+    public async Task<Result<int, Error>> Save(CancellationToken ct)
     {
         var result = await _dbContext.SaveChangesAsync(ct);
 
@@ -32,7 +32,7 @@ public class VolunteersRepository : IVolunteersRepository
         return result;
     }
     
-    public async Task<Result<Volunteer, ResultEvent>> GetById(Guid id, CancellationToken ct)
+    public async Task<Result<Volunteer, Error>> GetById(Guid id, CancellationToken ct)
     {
         var volunteer = await _dbContext.Volunteers
             .Include(v => v.Pets)
@@ -45,7 +45,7 @@ public class VolunteersRepository : IVolunteersRepository
         return volunteer;
     }
 
-    public async Task<Result<List<string>, ResultEvent>> GetByPhoto (Guid volunteerId, CancellationToken ct)
+    public async Task<Result<List<string>, Error>> GetByPhotos (Guid volunteerId, CancellationToken ct)
     {
         var path = await _dbContext.Volunteers
             .Where(v => v.Id == volunteerId)
@@ -53,5 +53,17 @@ public class VolunteersRepository : IVolunteersRepository
             .ToListAsync(ct);
 
         return path;
+    }
+    
+    public async Task<Result<int, Error>> DeletePhoto (string path, CancellationToken ct)
+    {
+        var result = await _dbContext.Photo
+            .Where(v => v.Path == path)
+            .ExecuteDeleteAsync();
+
+        if (result >= 0)
+            Errors.General.DeleteFailure();
+
+        return result;
     }
 }

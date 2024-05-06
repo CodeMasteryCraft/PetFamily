@@ -24,7 +24,7 @@ public class MinioProvider : IMinioProvider
         _logger = logger;
     }
 
-    public async Task<Result<string, ResultEvent>> UploadPhoto(IFormFile photo, string path, CancellationToken ct)
+    public async Task<Result<string, Error>> UploadPhoto(IFormFile photo, string path, CancellationToken ct)
     {
         try
         {
@@ -61,7 +61,7 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<ResultEvent>> RemovePhoto(string path, CancellationToken ct)
+    public async Task<Result<string, Error>> RemovePhoto(string path, CancellationToken ct)
     {
         try
         {
@@ -71,7 +71,7 @@ public class MinioProvider : IMinioProvider
 
             await _minioClient.RemoveObjectAsync(removeObjectArgs, ct);
 
-            return Seccess.Ok();
+            return "remove seccess";
         }
         catch (Exception e)
         {
@@ -80,7 +80,7 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<string, ResultEvent>> GetPhoto(string path)
+    public async Task<Result<string, Error>> GetPhoto(string path)
     {
         try
         {
@@ -100,11 +100,12 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<IReadOnlyList<string>, ResultEvent>> GetPhotos(List<string> paths, CancellationToken ct)
+    public async Task<Result<IReadOnlyList<string>, Error>> GetPhotos(List<string> paths, CancellationToken ct)
     {
         try
         {
             List<string> urls = [];
+
             foreach (string path in paths)
             {
                 var presignedGetObjectArgs = new PresignedGetObjectArgs()

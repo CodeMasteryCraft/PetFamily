@@ -21,7 +21,7 @@ public class CustomResultFactory : IFluentValidationAutoValidationResultFactory
         foreach (var (invalidField, validationErrors) in validationProblemDetails.Errors)
         {
             var errors = validationErrors
-                .Select(ResultEvent.Deserialize)
+                .Select(Error.Deserialize)
                 .Select(e => new ErrorInfo(e, invalidField));
 
             errorInfos.AddRange(errors);

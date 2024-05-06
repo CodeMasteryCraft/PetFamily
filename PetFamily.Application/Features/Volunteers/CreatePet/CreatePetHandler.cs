@@ -14,7 +14,7 @@ public class CreatePetHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<Guid, ResultEvent>> Handle(CreatePetRequest request, CancellationToken ct)
+    public async Task<Result<Guid, Error>> Handle(CreatePetRequest request, CancellationToken ct)
     {
         var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if (volunteer.IsFailure)

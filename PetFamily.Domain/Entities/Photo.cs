@@ -15,7 +15,7 @@ public class Photo : Entity
     public string Path { get; private set; }
     public bool IsMain { get; private set; }
 
-    public static Result<Photo, ResultEvent> CreateAndActivate(string path)
+    public static Result<Photo, Error> CreateAndActivate(string path)
     {
         if(path.IsEmpty())
             return Errors.General.ValueIsInvalid();

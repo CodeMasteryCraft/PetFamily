@@ -20,7 +20,7 @@ public class Envelope
         return new(result, null);
     }
     
-    public static Envelope Error(List<ResultEvent>? errors = null)
+    public static Envelope Error(List<Error>? errors = null)
     {
         var errorInfos = errors?.Select(e => new ErrorInfo(e));
         return new(null, errorInfos);
@@ -38,7 +38,7 @@ public class ErrorInfo
     public string? ErrorMessage { get; }
     public string? InvalidField { get; }
 
-    public ErrorInfo(ResultEvent? error, string? invalidField = null)
+    public ErrorInfo(Error? error, string? invalidField = null)
     {
         ErrorCode = error?.Code;
         ErrorMessage = error?.Message;

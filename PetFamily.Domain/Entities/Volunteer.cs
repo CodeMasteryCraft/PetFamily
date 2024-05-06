@@ -46,13 +46,19 @@ public class Volunteer : Entity
     public IReadOnlyList<Pet> Pets => _pets;
     private readonly List<Pet> _pets = [];
 
-    public Result<ResultEvent> PublishPet(Pet pet)
+    public Result<Error> PublishPet(Pet pet)
     {
         _pets.Add(pet);
         return Seccess.Ok();
     }
+    
+    public Result<Error> RemovePhoto (Photo photo)
+    {
+        _photos.Remove(photo);
+        return Seccess.Ok();
+    }
 
-    public Result<ResultEvent> AddPhoto(Photo photo)
+    public Result<string,Error> AddPhoto(Photo photo)
     {
         if (_photos.Count >= 5)
         {
@@ -60,10 +66,10 @@ public class Volunteer : Entity
         }
 
         _photos.Add(photo);
-        return Seccess.Ok();
+        return "seccess";      
     }
 
-    public static Result<Volunteer, ResultEvent> Create(
+    public static Result<Volunteer, Error> Create(
         string name,
         string description,
         int yearsExperience,
