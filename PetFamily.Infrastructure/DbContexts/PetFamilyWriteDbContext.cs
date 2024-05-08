@@ -19,6 +19,7 @@ public class PetFamilyWriteDbContext : DbContext, IPetFamilyWriteDbContext
     public DbSet<Pet> Pets => Set<Pet>();
     public DbSet<SocialMedia> SocialMedias => Set<SocialMedia>();
     public DbSet<Vaccination> Vaccinations => Set<Vaccination>();
+    public DbSet<Photo> Photos => Set<Photo>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
