@@ -58,7 +58,7 @@ namespace PetFamily.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2024, 4, 30, 10, 3, 30, 823, DateTimeKind.Unspecified).AddTicks(8774), new TimeSpan(0, 0, 0, 0, 0)))
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2024, 5, 8, 20, 53, 22, 613, DateTimeKind.Unspecified).AddTicks(3617), new TimeSpan(0, 0, 0, 0, 0)))
                         .HasColumnName("created_date");
 
                     b.Property<string>("Description")

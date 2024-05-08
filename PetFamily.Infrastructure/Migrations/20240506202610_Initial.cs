@@ -45,7 +45,7 @@ namespace PetFamily.Infrastructure.Migrations
                     on_treatment = table.Column<bool>(type: "boolean", nullable: false),
                     height = table.Column<int>(type: "integer", nullable: true),
                     birth_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    created_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTimeOffset(new DateTime(2024, 4, 30, 10, 3, 30, 823, DateTimeKind.Unspecified).AddTicks(8774), new TimeSpan(0, 0, 0, 0, 0))),
+                    created_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTimeOffset(new DateTime(2024, 5, 6, 20, 26, 10, 661, DateTimeKind.Unspecified).AddTicks(8503), new TimeSpan(0, 0, 0, 0, 0))),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     building = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
