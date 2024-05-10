@@ -33,6 +33,9 @@ public static class Errors
 {
     public static class General
     {
+        public static Error Iternal(string message)
+            => new("iternal", message);
+        
         public static Error Unexpected()
             => new("unexpecret", "unexpecret");
 
@@ -64,6 +67,14 @@ public static class Errors
         {
             var label = name ?? "Value";
             return new("record.save.failure", $"{label} failed to save");
+        }
+    }
+
+    public static class Volunteers
+    {
+        public static Error PhotoCountLimit()
+        {
+            return new("volunteers.photo.limit", "Max photo count limit is 5");
         }
     }
 }

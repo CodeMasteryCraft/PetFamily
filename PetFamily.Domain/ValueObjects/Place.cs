@@ -1,9 +1,10 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using ValueObject = PetFamily.Domain.Common.ValueObject;
 
 namespace PetFamily.Domain.ValueObjects;
 
-public record Place
+public class Place : ValueObject
 {
     public static readonly Place InHospital = new(nameof(InHospital).ToUpper());
     public static readonly Place AtHome = new(nameof(AtHome).ToUpper());
@@ -30,5 +31,10 @@ public record Place
         }
 
         return new Place(place);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }

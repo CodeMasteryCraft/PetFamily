@@ -19,38 +19,38 @@ public class CreatePetRequestValidator : AbstractValidator<CreatePetRequest>
         RuleFor(x => x.Nickname)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.SHORT_TITLE_LENGTH);
-
+        
         RuleFor(x => x.Description)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.LONG_TITLE_LENGTH);
-
+        
         RuleFor(x => x.BirthDate)
             .LessThanWithError(DateTimeOffset.UtcNow);
-
+        
         RuleFor(x => x.Breed)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.SHORT_TITLE_LENGTH);
-
+        
         RuleFor(x => x.Color)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.SHORT_TITLE_LENGTH);
-
+        
         RuleFor(x => x.Place)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.SHORT_TITLE_LENGTH);
-
+        
         RuleFor(x => x.PeopleAttitude)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.LONG_TITLE_LENGTH);
-
+        
         RuleFor(x => x.AnimalAttitude)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.LONG_TITLE_LENGTH);
-
+        
         RuleFor(x => x.Health)
             .NotEmptyWithError()
             .MaximumLengthWithError(Constraints.LONG_TITLE_LENGTH);
-
+        
         RuleFor(x => x.Height).GreaterThanWithError(0);
     }
 }

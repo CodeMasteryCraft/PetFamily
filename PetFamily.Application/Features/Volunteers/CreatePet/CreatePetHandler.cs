@@ -5,11 +5,11 @@ using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
-public class CreatePetService
+public class CreatePetHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
 
-    public CreatePetService(IVolunteersRepository volunteersRepository)
+    public CreatePetHandler(IVolunteersRepository volunteersRepository)
     {
         _volunteersRepository = volunteersRepository;
     }
@@ -43,14 +43,15 @@ public class CreatePetService
             weight,
             contactPhoneNumber,
             volunteerPhoneNumber,
-            request.OnTreatment
-        );
+            request.OnTreatment);
 
         if (pet.IsFailure)
             return pet.Error;
 
         volunteer.Value.PublishPet(pet.Value);
 
-        return await _volunteersRepository.Save(volunteer.Value, ct);
+        await _volunteersRepository.Save(ct);
+
+        return volunteer.Value.Id;
     }
 }

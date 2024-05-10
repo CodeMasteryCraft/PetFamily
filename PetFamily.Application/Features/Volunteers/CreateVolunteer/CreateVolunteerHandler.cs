@@ -5,11 +5,11 @@ using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Application.Features.Volunteers.CreateVolunteer;
 
-public class CreateVolunteerService
+public class CreateVolunteerHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
 
-    public CreateVolunteerService(IVolunteersRepository volunteersRepository)
+    public CreateVolunteerHandler(IVolunteersRepository volunteersRepository)
     {
         _volunteersRepository = volunteersRepository;
     }
@@ -20,7 +20,7 @@ public class CreateVolunteerService
             .Select(s =>
             {
                 var social = Social.Create(s.Social).Value;
-                return new SocialMedia(s.Link, social);
+                return SocialMedia.Create(s.Link, social).Value;
             }) ?? [];
 
         var volunteer = new Volunteer(
@@ -33,6 +33,8 @@ public class CreateVolunteerService
             socialMedias);
 
         await _volunteersRepository.Add(volunteer, ct);
-        return await _volunteersRepository.Save(volunteer, ct);
+        await _volunteersRepository.Save(ct);
+
+        return volunteer.Id;
     }
 }

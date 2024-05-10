@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure();
+    .AddInfrastructure(builder.Configuration);
 
 builder.Services.AddFluentValidationAutoValidation(configuration =>
 {

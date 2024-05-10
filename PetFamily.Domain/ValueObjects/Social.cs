@@ -1,9 +1,10 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using ValueObject = PetFamily.Domain.Common.ValueObject;
 
 namespace PetFamily.Domain.ValueObjects;
 
-public record Social
+public class Social : ValueObject
 {
     public static readonly Social Telegram = new(nameof(Telegram).ToUpper());
     public static readonly Social Whatsapp = new(nameof(Whatsapp).ToUpper());
@@ -39,5 +40,10 @@ public record Social
         }
 
         return new Social(social);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }
