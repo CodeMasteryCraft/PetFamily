@@ -57,8 +57,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired();
 
         builder.Property(p => p.CreatedDate)
-            .IsRequired()
-            .HasDefaultValue(DateTimeOffset.UtcNow);
+            .IsRequired();
 
         builder.ComplexProperty(p => p.Address, b =>
         {
