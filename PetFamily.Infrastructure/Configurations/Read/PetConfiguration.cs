@@ -17,5 +17,6 @@ public class PetConfiguration : IEntityTypeConfiguration<PetDto>
             .HasMany(p => p.Photos)
             .WithOne()
             .HasForeignKey(ph => ph.PetId);
+        
     }
 }

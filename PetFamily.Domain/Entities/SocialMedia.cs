@@ -1,7 +1,6 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
-using Entity = PetFamily.Domain.Common.Entity;
 using ValueObject = PetFamily.Domain.Common.ValueObject;
 
 namespace PetFamily.Domain.Entities;

@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using Hangfire;
 using Hangfire.PostgreSql;
 using PetFamily.API.Middlewares;
