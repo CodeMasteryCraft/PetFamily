@@ -4,8 +4,8 @@ using Minio.DataModel.Args;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
-using PetFamily.Application.Features.Volunteers.GetPhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
+using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 
 namespace PetFamily.API.Controllers;
 

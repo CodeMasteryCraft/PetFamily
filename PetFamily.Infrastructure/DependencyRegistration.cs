@@ -2,11 +2,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetFamily.Application.Abstractions;
+using PetFamily.Application.Dtos;
 using PetFamily.Application.Features.Pets;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Queries.Pets;
+using PetFamily.Infrastructure.Queries.Volunteers;
+using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 using PetFamily.Infrastructure.Repositories;
 using PetFamily.Infrastructure.Services;
 
@@ -44,6 +47,7 @@ public static class DependencyRegistration
     {
         services.AddScoped<GetPetsQuery>();
         services.AddScoped<GetAllPetsQuery>();
+        services.AddScoped<GetAllVolunteerPhotoHandler>();
 
         return services;
     }
@@ -56,7 +60,9 @@ public static class DependencyRegistration
         services.AddSingleton<SqlConnectionFactory>();
         
         services.AddScoped<IPetFamilyWriteDbContext, PetFamilyWriteDbContext>();
-
+        services.AddScoped<IPetFamilyReadDbContext, PetFamilyReadDbContext>();
+        services.AddScoped<IVolunteersQuery, VolunteersQuery>();
+        
         services.AddMinio(options =>
         {
             var minioOptions = configuration.GetSection(MinioOptions.Minio)

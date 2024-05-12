@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Dtos;
 
 namespace PetFamily.Infrastructure.DbContexts;
 
-public class PetFamilyReadDbContext : DbContext
+public class PetFamilyReadDbContext : DbContext, IPetFamilyReadDbContext
 {
     private readonly IConfiguration _configuration;
 
@@ -15,6 +16,8 @@ public class PetFamilyReadDbContext : DbContext
     }
 
     public DbSet<PetDto> Pets => Set<PetDto>();
+    public DbSet<VolunteerDto> Volunteers => Set<VolunteerDto>();
+    
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
