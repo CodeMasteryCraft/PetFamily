@@ -3,6 +3,7 @@ using Minio;
 using Minio.DataModel.Args;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
+using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.GetPhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
 
@@ -57,6 +58,19 @@ public class VolunteerController : ApplicationController
     public async Task<IActionResult> GetPhotos(
         [FromServices] GetAllVolunteerPhotoHandler handler,
         [FromQuery] GetAllVolunteerPhotoRequest request,
+        CancellationToken ct)
+    {
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
+    [HttpDelete("photo")]
+    public async Task<IActionResult> DeletePhoto(
+        [FromServices] DeleteVolunteerPhotoHandler handler,
+        [FromQuery] DeleteVolunteerPhotoRequest request,
         CancellationToken ct)
     {
         var result = await handler.Handle(request, ct);

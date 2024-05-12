@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
+using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.GetPhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
 
@@ -22,6 +23,7 @@ public static class DependencyRegistration
         services.AddScoped<CreateVolunteerHandler>();
         services.AddScoped<UploadVolunteerPhotoHandler>();
         services.AddScoped<GetAllVolunteerPhotoHandler>();
+        services.AddScoped<DeleteVolunteerPhotoHandler>();
         return services;
     }
 }
