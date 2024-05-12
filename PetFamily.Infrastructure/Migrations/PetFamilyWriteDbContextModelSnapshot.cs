@@ -56,9 +56,7 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnName("color");
 
                     b.Property<DateTimeOffset>("CreatedDate")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2024, 5, 6, 16, 15, 7, 972, DateTimeKind.Unspecified).AddTicks(1494), new TimeSpan(0, 0, 0, 0, 0)))
                         .HasColumnName("created_date");
 
                     b.Property<string>("Description")

@@ -56,7 +56,7 @@ public class VolunteerController : ApplicationController
     [HttpGet("photo")]
     public async Task<IActionResult> GetPhotos(
         [FromServices] GetAllVolunteerPhotoHandler handler,
-        [FromForm] GetAllVolunteerPhotoRequest request,
+        [FromQuery] GetAllVolunteerPhotoRequest request,
         CancellationToken ct)
     {
         var result = await handler.Handle(request, ct);
