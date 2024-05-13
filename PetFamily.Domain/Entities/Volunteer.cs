@@ -61,6 +61,16 @@ public class Volunteer : Entity
         _photos.Add(photo);
         return true;
     }
+    
+    public Result<bool, Error> DeletePhoto(string path)
+    {
+        var photo = _photos.FirstOrDefault(p => p.Path.Contains(path));
+        if (photo is null)
+            return Errors.General.NotFound();
+        
+        _photos.Remove(photo);
+        return true;
+    }
 
     public static Result<Volunteer, Error> Create(
         string name,

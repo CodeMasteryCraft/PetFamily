@@ -29,7 +29,13 @@ public class DeleteVolunteerPhotoHandler
         if (isRemove.IsFailure)
             return isRemove.Error;
 
-        // TODO тут нужно удалить фото из БД
+        var isDelete = volunteer.Value.DeletePhoto(request.Path);
+        if (isDelete.IsFailure)
+            return isDelete.Error;
+        
+        var result = await _volunteersRepository.Save(ct);
+        if (result.IsFailure)
+            return result.Error;
         
         return true;
     }
