@@ -6,7 +6,7 @@ using PetFamily.Application.Dtos;
 
 namespace PetFamily.Infrastructure.DbContexts;
 
-public class PetFamilyReadDbContext : DbContext, IPetFamilyReadDbContext
+public class PetFamilyReadDbContext : DbContext
 {
     private readonly IConfiguration _configuration;
 

@@ -1,33 +1,34 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Abstractions;
-using PetFamily.Application.Dtos;
 using PetFamily.Domain.Common;
 using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 
-public class GetAllVolunteerPhotoHandler
+public class GetAllVolunteerPhotosQuery
 {
     private readonly IMinioProvider _minioProvider;
-    private readonly IVolunteersQuery _volunteersQuery;
+    private readonly PetFamilyReadDbContext _readDbContext;
 
-    public GetAllVolunteerPhotoHandler(
+    public GetAllVolunteerPhotosQuery(
         IMinioProvider minioProvider,
-        IVolunteersQuery volunteersQuery)
+        PetFamilyReadDbContext readDbContext)
     {
         _minioProvider = minioProvider;
-        _volunteersQuery = volunteersQuery;
+        _readDbContext = readDbContext;
     }
 
     public async Task<Result<IReadOnlyList<string>, Error>> Handle(
         GetAllVolunteerPhotoRequest request, 
         CancellationToken ct)
     {
-        var volunteerDto = await _volunteersQuery.GetById(request.VolunteerId, ct);
-        if (volunteerDto.IsFailure)
-            return volunteerDto.Error;
+        var volunteerDto = await _readDbContext.Volunteers
+            .FirstOrDefaultAsync(v => v.Id == request.VolunteerId, cancellationToken: ct);
+        if (volunteerDto is null)
+            return Errors.General.NotFound(request.VolunteerId);
 
-        var allPhotosDto = volunteerDto.Value.Photos;
+        var allPhotosDto = volunteerDto.Photos;
         if (allPhotosDto.Count == 0)
             return Errors.General.NotFound();
         

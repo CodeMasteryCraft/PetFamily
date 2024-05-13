@@ -47,7 +47,7 @@ public static class DependencyRegistration
     {
         services.AddScoped<GetPetsQuery>();
         services.AddScoped<GetAllPetsQuery>();
-        services.AddScoped<GetAllVolunteerPhotoHandler>();
+        services.AddScoped<GetAllVolunteerPhotosQuery>();
 
         return services;
     }
@@ -60,8 +60,6 @@ public static class DependencyRegistration
         services.AddSingleton<SqlConnectionFactory>();
         
         services.AddScoped<IPetFamilyWriteDbContext, PetFamilyWriteDbContext>();
-        services.AddScoped<IPetFamilyReadDbContext, PetFamilyReadDbContext>();
-        services.AddScoped<IVolunteersQuery, VolunteersQuery>();
         
         services.AddMinio(options =>
         {
