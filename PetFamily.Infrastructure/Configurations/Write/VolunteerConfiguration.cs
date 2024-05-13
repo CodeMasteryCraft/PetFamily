@@ -45,7 +45,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                     s => Social.Create(s).Value);
         });
 
-        builder.HasMany(v => v.Photos).WithOne();
-        builder.HasMany(v => v.Pets).WithOne();
+        builder.HasMany(v => v.Photos).WithOne().IsRequired();
+        builder.HasMany(v => v.Pets).WithOne().IsRequired();
     }
 }

@@ -77,8 +77,8 @@ public class Pet : Entity
     public IReadOnlyList<Vaccination> Vaccinations => _vaccinations;
     private readonly List<Vaccination> _vaccinations = [];
 
-    public IReadOnlyList<Photo> Photos => _photos;
-    private readonly List<Photo> _photos = [];
+    public IReadOnlyList<PetPhoto> Photos => _photos;
+    private readonly List<PetPhoto> _photos = [];
 
     public static Result<Pet, Error> Create(
         string nickname,

@@ -6,7 +6,7 @@ using Minio.DataModel.Args;
 using PetFamily.Application.Abstractions;
 using PetFamily.Domain.Common;
 
-namespace PetFamily.Infrastructure.Services;
+namespace PetFamily.Infrastructure.Providers;
 
 public class MinioProvider : IMinioProvider
 {
@@ -89,8 +89,29 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public Task<Result<IReadOnlyList<string>, Error>> GetPhotos(List<string> pathes)
+    public async Task<Result<IReadOnlyList<string>, Error>> GetPhotos(IEnumerable<string> paths)
     {
-        throw new NotImplementedException();
+        try
+        {
+            List<string> urls = [];
+
+            foreach (var path in paths)
+            {
+                var presignedGetObjectArgs = new PresignedGetObjectArgs()
+                    .WithBucket(PhotoBucket)
+                    .WithObject(path)
+                    .WithExpiry(60 * 60 * 24);
+
+                var url = await _minioClient.PresignedGetObjectAsync(presignedGetObjectArgs);
+                urls.Add(url);
+            }
+
+            return urls;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return Errors.General.SaveFailure("photo");
+        }
     }
 }

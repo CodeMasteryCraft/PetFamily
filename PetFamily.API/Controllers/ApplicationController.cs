@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Contracts;
-using PetFamily.Domain.Common;
 
 namespace PetFamily.API.Controllers;
 

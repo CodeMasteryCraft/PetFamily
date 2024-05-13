@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
-using PetFamily.API.Contracts;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
+using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
-using PetFamily.Domain.Common;
-using PetFamily.Domain.ValueObjects;
+using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 
 namespace PetFamily.API.Controllers;
 
@@ -56,17 +55,28 @@ public class VolunteerController : ApplicationController
 
 
     [HttpGet("photo")]
-    public async Task<IActionResult> GetPhoto(
-        string photo,
-        [FromServices] IMinioClient client)
+    public async Task<IActionResult> GetPhotos(
+        [FromServices] GetVolunteerByIdQuery handler,
+        [FromQuery] GetVolunteerPhotoRequest request,
+        CancellationToken ct)
     {
-        var presignedGetObjectArgs = new PresignedGetObjectArgs()
-            .WithBucket("images")
-            .WithObject(photo)
-            .WithExpiry(60 * 60 * 24);
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        var url = await client.PresignedGetObjectAsync(presignedGetObjectArgs);
+        return Ok(result.Value);
+    }
 
-        return Ok(url);
+    [HttpDelete("photo")]
+    public async Task<IActionResult> DeletePhoto(
+        [FromServices] DeleteVolunteerPhotoHandler handler,
+        [FromQuery] DeleteVolunteerPhotoRequest request,
+        CancellationToken ct)
+    {
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }

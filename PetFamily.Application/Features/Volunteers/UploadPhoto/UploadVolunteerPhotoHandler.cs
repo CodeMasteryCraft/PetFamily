@@ -27,10 +27,10 @@ public class UploadVolunteerPhotoHandler
         var photoId = Guid.NewGuid();
         var path = photoId + Path.GetExtension(request.File.FileName);
 
-        var photo = Photo.CreateAndActivate(path);
+        var photo = VolunteerPhoto.CreateAndActivate(path);
         if (photo.IsFailure)
             return photo.Error;
-
+        
         var isSuccessUpload = volunteer.Value.AddPhoto(photo.Value);
         if (isSuccessUpload.IsFailure)
             return isSuccessUpload.Error;

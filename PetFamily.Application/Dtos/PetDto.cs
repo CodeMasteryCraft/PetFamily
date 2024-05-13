@@ -11,5 +11,5 @@ public class PetDto
     public string Index { get; init; } = string.Empty;
     public string ContactPhoneNumber { get; init; } = string.Empty;
     public DateTimeOffset CreatedDate { get; init; }
-    public List<PhotoDto> Photos { get; init; } = [];
+    public List<VolunteerPhotoDto> Photos { get; init; } = [];
 }
