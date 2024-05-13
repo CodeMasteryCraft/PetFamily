@@ -4,13 +4,13 @@ using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
 
-public class Photo : Entity
+public class VolunteerPhoto : Entity
 {
-    private Photo()
+    private VolunteerPhoto()
     {
     }
 
-    public Photo(string path, bool isMain)
+    public VolunteerPhoto(string path, bool isMain)
     {
         Path = path;
         IsMain = isMain;
@@ -19,8 +19,8 @@ public class Photo : Entity
     public string Path { get; private set; }
     public bool IsMain { get; private set; }
 
-    public static Result<Photo, Error> CreateAndActivate(string path)
+    public static Result<VolunteerPhoto, Error> CreateAndActivate(string path)
     {
-        return new Photo(path, true);
+        return new VolunteerPhoto(path, true);
     }
 }

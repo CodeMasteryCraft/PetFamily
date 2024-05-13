@@ -113,7 +113,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasMaxLength(Constraints.SHORT_TITLE_LENGTH);
         });
 
-        builder.HasMany(p => p.Photos).WithOne();
+        builder.HasMany(p => p.Photos).WithOne().IsRequired();
         builder.HasMany(p => p.Vaccinations).WithOne();
     }
 }

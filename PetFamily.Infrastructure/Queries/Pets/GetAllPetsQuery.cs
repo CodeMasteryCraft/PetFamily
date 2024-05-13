@@ -30,7 +30,7 @@ public class GetAllPetsQuery
                   """;
 
         Dictionary<Guid, PetDto> petsDictionary = new();
-        await connection.QueryAsync<PetDto, PhotoDto, PetDto>(
+        await connection.QueryAsync<PetDto, VolunteerPhotoDto, PetDto>(
             sql,
             (pet, photo) =>
             {

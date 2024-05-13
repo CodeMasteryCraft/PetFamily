@@ -8,5 +8,5 @@ public interface IMinioProvider
 {
     Task<Result<string, Error>> UploadPhoto(IFormFile photo, string path);
     Task<Result<bool, Error>> RemovePhoto(string path);
-    Task<Result<IReadOnlyList<string>, Error>> GetPhotos(List<string> pathes);
+    Task<Result<IReadOnlyList<string>, Error>> GetPhotos(IEnumerable<string> pathes);
 }

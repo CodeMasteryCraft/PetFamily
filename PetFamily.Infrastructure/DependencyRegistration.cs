@@ -7,11 +7,11 @@ using PetFamily.Application.Features.Pets;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Options;
+using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Pets;
 using PetFamily.Infrastructure.Queries.Volunteers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 using PetFamily.Infrastructure.Repositories;
-using PetFamily.Infrastructure.Services;
 
 namespace PetFamily.Infrastructure;
 
@@ -31,7 +31,6 @@ public static class DependencyRegistration
 
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        services.AddScoped<IPetsRepository, PetsRepository>();
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
 
         return services;
@@ -47,7 +46,7 @@ public static class DependencyRegistration
     {
         services.AddScoped<GetPetsQuery>();
         services.AddScoped<GetAllPetsQuery>();
-        services.AddScoped<GetAllVolunteerPhotosQuery>();
+        services.AddScoped<GetVolunteerByIdQuery>();
 
         return services;
     }

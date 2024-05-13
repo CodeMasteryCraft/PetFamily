@@ -3,6 +3,8 @@
 public class VolunteerDto
 {
     public Guid Id { get; init; }
+
+    public string Name { get; init; } = string.Empty;
     
-    public List<PhotoDto> Photos { get; init; } = [];
+    public IReadOnlyList<VolunteerPhotoDto> Photos { get; init; } = [];
 }
