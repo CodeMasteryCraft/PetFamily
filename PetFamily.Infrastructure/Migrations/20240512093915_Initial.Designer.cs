@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetFamily.Infrastructure.DbContexts;
@@ -12,9 +13,11 @@ using PetFamily.Infrastructure.DbContexts;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(PetFamilyWriteDbContext))]
-    partial class PetFamilyWriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240512093915_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,7 +182,7 @@ namespace PetFamily.Infrastructure.Migrations
                     b.ToTable("pets", (string)null);
                 });
 
-            modelBuilder.Entity("PetFamily.Domain.Entities.PetPhoto", b =>
+            modelBuilder.Entity("PetFamily.Domain.Entities.Photo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -195,17 +198,24 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("path");
 
-                    b.Property<Guid>("PetId")
+                    b.Property<Guid?>("PetId")
                         .HasColumnType("uuid")
                         .HasColumnName("pet_id");
 
+                    b.Property<Guid?>("VolunteerId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("volunteer_id");
+
                     b.HasKey("Id")
-                        .HasName("pk_pet_photos");
+                        .HasName("pk_photos");
 
                     b.HasIndex("PetId")
-                        .HasDatabaseName("ix_pet_photos_pet_id");
+                        .HasDatabaseName("ix_photos_pet_id");
 
-                    b.ToTable("pet_photos", (string)null);
+                    b.HasIndex("VolunteerId")
+                        .HasDatabaseName("ix_photos_volunteer_id");
+
+                    b.ToTable("photos", (string)null);
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Vaccination", b =>
@@ -280,35 +290,6 @@ namespace PetFamily.Infrastructure.Migrations
                     b.ToTable("volunteers", (string)null);
                 });
 
-            modelBuilder.Entity("PetFamily.Domain.Entities.VolunteerPhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_main");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("path");
-
-                    b.Property<Guid>("VolunteerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("volunteer_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_volunteer_photos");
-
-                    b.HasIndex("VolunteerId")
-                        .HasDatabaseName("ix_volunteer_photos_volunteer_id");
-
-                    b.ToTable("volunteer_photos", (string)null);
-                });
-
             modelBuilder.Entity("PetFamily.Domain.Entities.Pet", b =>
                 {
                     b.HasOne("PetFamily.Domain.Entities.Volunteer", null)
@@ -317,14 +298,17 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
                 });
 
-            modelBuilder.Entity("PetFamily.Domain.Entities.PetPhoto", b =>
+            modelBuilder.Entity("PetFamily.Domain.Entities.Photo", b =>
                 {
                     b.HasOne("PetFamily.Domain.Entities.Pet", null)
                         .WithMany("Photos")
                         .HasForeignKey("PetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_pet_photos_pets_pet_id");
+                        .HasConstraintName("fk_photos_pets_pet_id");
+
+                    b.HasOne("PetFamily.Domain.Entities.Volunteer", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("VolunteerId")
+                        .HasConstraintName("fk_photos_volunteers_volunteer_id");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Vaccination", b =>
@@ -366,16 +350,6 @@ namespace PetFamily.Infrastructure.Migrations
                         });
 
                     b.Navigation("SocialMedias");
-                });
-
-            modelBuilder.Entity("PetFamily.Domain.Entities.VolunteerPhoto", b =>
-                {
-                    b.HasOne("PetFamily.Domain.Entities.Volunteer", null)
-                        .WithMany("Photos")
-                        .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_volunteer_photos_volunteers_volunteer_id");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Pet", b =>

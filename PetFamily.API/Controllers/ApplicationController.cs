@@ -14,9 +14,9 @@ public class ApplicationController : ControllerBase
         return base.Ok(envelope);
     }
 
-    protected IActionResult BadRequest(params ErrorInfo[] error)
+    protected IActionResult BadRequest(Error? error)
     {
-        var envelope = Envelope.Error(error);
+        var envelope = Envelope.Ok(error);
 
         return base.BadRequest(envelope);
     }

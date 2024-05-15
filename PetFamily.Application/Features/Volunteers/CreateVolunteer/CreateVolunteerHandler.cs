@@ -20,7 +20,7 @@ public class CreateVolunteerHandler
             .Select(s =>
             {
                 var social = Social.Create(s.Social).Value;
-                return new SocialMedia(s.Link, social);
+                return SocialMedia.Create(s.Link, social).Value;
             }) ?? [];
 
         var volunteer = new Volunteer(
@@ -33,6 +33,8 @@ public class CreateVolunteerHandler
             socialMedias);
 
         await _volunteersRepository.Add(volunteer, ct);
-        return await _volunteersRepository.Save(volunteer, ct);
+        await _volunteersRepository.Save(ct);
+
+        return volunteer.Id;
     }
 }

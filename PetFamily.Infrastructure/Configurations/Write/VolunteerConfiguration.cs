@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
+using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Infrastructure.Configurations.Write;
 
@@ -34,8 +35,17 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.Property(v => v.FromShelter)
             .IsRequired();
 
-        builder.HasMany(v => v.Photos).WithOne();
-        builder.HasMany(v => v.SocialMedias).WithOne();
-        builder.HasMany(v => v.Pets).WithOne();
+        builder.OwnsMany(v => v.SocialMedias, navigationBuilder =>
+        {
+            navigationBuilder.ToJson();
+
+            navigationBuilder.Property(s => s.Social)
+                .HasConversion(
+                    s => s.Value,
+                    s => Social.Create(s).Value);
+        });
+
+        builder.HasMany(v => v.Photos).WithOne().IsRequired();
+        builder.HasMany(v => v.Pets).WithOne().IsRequired();
     }
 }

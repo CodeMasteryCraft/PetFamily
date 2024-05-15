@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Domain.Entities;
 
 namespace PetFamily.Infrastructure.DbContexts;
 
-public class PetFamilyWriteDbContext : DbContext
+public class PetFamilyWriteDbContext : DbContext, IPetFamilyWriteDbContext
 {
     private readonly IConfiguration _configuration;
 
@@ -16,9 +17,7 @@ public class PetFamilyWriteDbContext : DbContext
 
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
     public DbSet<Pet> Pets => Set<Pet>();
-    public DbSet<SocialMedia> SocialMedias => Set<SocialMedia>();
-    public DbSet<Vaccination> Vaccinations => Set<Vaccination>();
-
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PetFamily"));

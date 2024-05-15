@@ -1,9 +1,10 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using ValueObject = PetFamily.Domain.Common.ValueObject;
 
 namespace PetFamily.Domain.ValueObjects;
 
-public record Weight
+public class Weight : ValueObject
 {
     public float Kilograms { get; set; }
 
@@ -18,5 +19,10 @@ public record Weight
             return Errors.General.ValueIsInvalid(nameof(Weight));
 
         return new Weight(kilograms);
+    }
+
+    protected override IEnumerable<IComparable> GetEqualityComponents()
+    {
+        yield return Kilograms;
     }
 }

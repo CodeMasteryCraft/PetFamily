@@ -21,20 +21,21 @@ public class VolunteersRepository : IVolunteersRepository
         await _dbContext.Volunteers.AddAsync(volunteer, ct);
     }
 
-    public async Task<Result<Guid, Error>> Save(Volunteer volunteer, CancellationToken ct)
+    public async Task<Result<int, Error>> Save(CancellationToken ct)
     {
         var result = await _dbContext.SaveChangesAsync(ct);
 
         if (result == 0)
             return Errors.General.SaveFailure("Volunteer");
 
-        return volunteer.Id;
+        return result;
     }
-
+    
     public async Task<Result<Volunteer, Error>> GetById(Guid id, CancellationToken ct)
     {
         var volunteer = await _dbContext.Volunteers
             .Include(v => v.Pets)
+            .Include(v => v.Photos)
             .FirstOrDefaultAsync(v => v.Id == id, cancellationToken: ct);
 
         if (volunteer is null)

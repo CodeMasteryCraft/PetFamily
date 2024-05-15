@@ -1,4 +1,5 @@
 using System.Net;
+using PetFamily.API.Contracts;
 using PetFamily.Domain.Common;
 
 namespace PetFamily.API.Middlewares;
@@ -24,11 +25,12 @@ public class ExceptionMiddleware
         {
             _logger.LogError(ex.Message);
 
-            var error = new Error("server.iternal", ex.Message);
+            var errorInfo = new ErrorInfo(Errors.General.Iternal(ex.Message));
+            var envelope = Envelope.Error([errorInfo]);
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsJsonAsync(error);
+            await context.Response.WriteAsJsonAsync(envelope);
         }
     }
 }

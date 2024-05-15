@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
+using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
 
-public class Pet
+public class Pet : Entity
 {
     private Pet()
     {
@@ -50,8 +51,6 @@ public class Pet
         CreatedDate = createdDate;
     }
 
-    public Guid Id { get; private set; }
-
     public string Nickname { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public string Breed { get; private set; } = null!;
@@ -78,8 +77,8 @@ public class Pet
     public IReadOnlyList<Vaccination> Vaccinations => _vaccinations;
     private readonly List<Vaccination> _vaccinations = [];
 
-    public IReadOnlyList<Photo> Photos => _photos;
-    private readonly List<Photo> _photos = [];
+    public IReadOnlyList<PetPhoto> Photos => _photos;
+    private readonly List<PetPhoto> _photos = [];
 
     public static Result<Pet, Error> Create(
         string nickname,

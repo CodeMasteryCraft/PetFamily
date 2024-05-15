@@ -1,10 +1,13 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
 
-public class Volunteer
+public class Volunteer : Entity
 {
+    public const int PHOTO_COUNT_LIMIT = 5;
+
     private Volunteer()
     {
     }
@@ -27,7 +30,6 @@ public class Volunteer
         _socialMedias = socialMedias.ToList();
     }
 
-    public Guid Id { get; private set; }
     public string Name { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public int YearsExperience { get; private set; }
@@ -35,14 +37,40 @@ public class Volunteer
     public string? DonationInfo { get; private set; }
     public bool FromShelter { get; private set; }
 
-    public IReadOnlyList<Photo> Photos => _photos;
-    private readonly List<Photo> _photos = [];
+    public IReadOnlyList<VolunteerPhoto> Photos => _photos;
+    private readonly List<VolunteerPhoto> _photos = [];
 
     public IReadOnlyList<SocialMedia> SocialMedias => _socialMedias;
     private readonly List<SocialMedia> _socialMedias = [];
 
     public IReadOnlyList<Pet> Pets => _pets;
     private readonly List<Pet> _pets = [];
+
+    public void PublishPet(Pet pet)
+    {
+        _pets.Add(pet);
+    }
+
+    public Result<bool, Error> AddPhoto(VolunteerPhoto volunteerPhoto)
+    {
+        if (_photos.Count >= PHOTO_COUNT_LIMIT)
+        {
+            return Errors.Volunteers.PhotoCountLimit();
+        }
+
+        _photos.Add(volunteerPhoto);
+        return true;
+    }
+    
+    public Result<bool, Error> DeletePhoto(string path)
+    {
+        var photo = _photos.FirstOrDefault(p => p.Path.Contains(path));
+        if (photo is null)
+            return Errors.General.NotFound();
+        
+        _photos.Remove(photo);
+        return true;
+    }
 
     public static Result<Volunteer, Error> Create(
         string name,
@@ -76,10 +104,5 @@ public class Volunteer
             donationInfo,
             fromShelter,
             socialMedias);
-    }
-
-    public void PublishPet(Pet pet)
-    {
-        _pets.Add(pet);
     }
 }

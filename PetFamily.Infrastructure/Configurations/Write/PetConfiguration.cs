@@ -57,8 +57,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
             .IsRequired();
 
         builder.Property(p => p.CreatedDate)
-            .IsRequired()
-            .HasDefaultValue(DateTimeOffset.UtcNow);
+            .IsRequired();
 
         builder.ComplexProperty(p => p.Address, b =>
         {
@@ -114,7 +113,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .HasMaxLength(Constraints.SHORT_TITLE_LENGTH);
         });
 
-        builder.HasMany(p => p.Photos).WithOne();
+        builder.HasMany(p => p.Photos).WithOne().IsRequired();
         builder.HasMany(p => p.Vaccinations).WithOne();
     }
 }
