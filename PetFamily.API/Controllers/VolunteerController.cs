@@ -9,7 +9,6 @@ using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 
 namespace PetFamily.API.Controllers;
 
-[Route("[controller]")]
 public class VolunteerController : ApplicationController
 {
     [HttpPost]

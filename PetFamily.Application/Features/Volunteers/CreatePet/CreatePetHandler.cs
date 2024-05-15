@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Application.DataAccess;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
@@ -8,10 +9,12 @@ namespace PetFamily.Application.Features.Volunteers.CreatePet;
 public class CreatePetHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly IPetFamilyWriteDbContext _dbContext;
 
-    public CreatePetHandler(IVolunteersRepository volunteersRepository)
+    public CreatePetHandler(IVolunteersRepository volunteersRepository, IPetFamilyWriteDbContext dbContext)
     {
         _volunteersRepository = volunteersRepository;
+        _dbContext = dbContext;
     }
 
     public async Task<Result<Guid, Error>> Handle(CreatePetRequest request, CancellationToken ct)
@@ -50,8 +53,7 @@ public class CreatePetHandler
 
         volunteer.Value.PublishPet(pet.Value);
 
-        await _volunteersRepository.Save(ct);
-
+        await _dbContext.SaveChangesAsync(ct);
         return volunteer.Value.Id;
     }
 }

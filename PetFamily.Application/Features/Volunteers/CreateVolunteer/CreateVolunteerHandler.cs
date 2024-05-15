@@ -23,8 +23,11 @@ public class CreateVolunteerHandler
                 return SocialMedia.Create(s.Link, social).Value;
             }) ?? [];
 
+        var fullName = FullName.Create(
+            request.FirstName, request.LastName, request.Patronymic).Value;
+
         var volunteer = new Volunteer(
-            request.Name,
+            fullName,
             request.Description,
             request.YearsExperience,
             request.NumberOfPetsFoundHome,

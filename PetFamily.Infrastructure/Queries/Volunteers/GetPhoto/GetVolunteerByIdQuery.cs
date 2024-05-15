@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Abstractions;
 using PetFamily.Application.Dtos;
+using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Infrastructure.DbContexts;
 
@@ -39,17 +39,15 @@ public class GetVolunteerByIdQuery
         if (photoUrls.IsFailure)
             return photoUrls.Error;
 
-        var volunteerDto = new VolunteerDto
-        {
-            Name = volunteer.Name,
-            Photos = volunteer.Photos.Select(p => new VolunteerPhotoDto
+        var volunteerDto = new VolunteerDto(
+            volunteer.Id,
+            volunteer.Name,
+            volunteer.Photos.Select(p => new VolunteerPhotoDto
             {
                 Id = p.Id,
                 Path = p.Path,
-                VolunteerId = volunteer.Id,
                 IsMain = p.IsMain
-            }).ToList()
-        };
+            }).ToList());
 
         return new GetVolunteerByIdResponse(volunteerDto);
     }

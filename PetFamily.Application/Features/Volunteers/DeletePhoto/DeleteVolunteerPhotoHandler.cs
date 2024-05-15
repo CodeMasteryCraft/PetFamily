@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.Abstractions;
+using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 
 namespace PetFamily.Application.Features.Volunteers.DeletePhoto;

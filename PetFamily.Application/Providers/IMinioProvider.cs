@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Http;
 using PetFamily.Domain.Common;
 
-namespace PetFamily.Application.Abstractions;
+namespace PetFamily.Application.Providers;
 
 public interface IMinioProvider
 {

@@ -10,6 +10,6 @@ public class VolunteerReadModel
     public string DonationInfo { get; init; } = string.Empty;
     public bool FromShelter { get; init; }
     public List<VolunteerPhotoReadModel> Photos { get; init; } = [];
-    public List<SocialMediaReadModel> SocialMedias { get; init; } = [];
-    public List<PetReadModel> Pets { get; init; } = [];
+    public ICollection<SocialMediaReadModel> SocialMedias { get; init; } = [];
+    public ICollection<PetReadModel> Pets { get; init; } = [];
 }

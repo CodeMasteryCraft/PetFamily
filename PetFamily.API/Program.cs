@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
+using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Repositories;
@@ -43,6 +44,12 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
     await dbContext.Database.MigrateAsync();
+
+
+    var admin = new User("admin", "admin", Role.Admin);
+
+    await dbContext.Users.AddAsync(admin);
+    await dbContext.SaveChangesAsync();
 }
 
 app.UseMiddleware<ExceptionMiddleware>();

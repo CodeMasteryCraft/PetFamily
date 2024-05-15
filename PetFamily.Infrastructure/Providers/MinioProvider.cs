@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
-using PetFamily.Application.Abstractions;
+using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 
 namespace PetFamily.Infrastructure.Providers;

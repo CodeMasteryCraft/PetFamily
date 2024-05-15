@@ -3,7 +3,9 @@ using PetFamily.Application.Dtos;
 namespace PetFamily.Application.Features.Volunteers.CreateVolunteer;
 
 public record CreateVolunteerRequest(
-    string Name,
+    string FirstName,
+    string LastName,
+    string? Patronymic,
     string Description,
     int YearsExperience,
     int? NumberOfPetsFoundHome,

@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using PetFamily.Domain.ValueObjects;
 using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
@@ -13,7 +14,7 @@ public class Volunteer : Entity
     }
 
     public Volunteer(
-        string name,
+        FullName fullName,
         string description,
         int yearsExperience,
         int? numberOfPetsFoundHome,
@@ -21,7 +22,7 @@ public class Volunteer : Entity
         bool fromShelter,
         IEnumerable<SocialMedia> socialMedias)
     {
-        Name = name;
+        FullName = fullName;
         Description = description;
         YearsExperience = yearsExperience;
         NumberOfPetsFoundHome = numberOfPetsFoundHome;
@@ -30,7 +31,7 @@ public class Volunteer : Entity
         _socialMedias = socialMedias.ToList();
     }
 
-    public string Name { get; private set; } = null!;
+    public FullName FullName { get; private set; } = null!;
     public string Description { get; private set; } = null!;
     public int YearsExperience { get; private set; }
     public int? NumberOfPetsFoundHome { get; private set; }
@@ -61,19 +62,19 @@ public class Volunteer : Entity
         _photos.Add(volunteerPhoto);
         return true;
     }
-    
+
     public Result<bool, Error> DeletePhoto(string path)
     {
         var photo = _photos.FirstOrDefault(p => p.Path.Contains(path));
         if (photo is null)
             return Errors.General.NotFound();
-        
+
         _photos.Remove(photo);
         return true;
     }
 
     public static Result<Volunteer, Error> Create(
-        string name,
+        FullName name,
         string description,
         int yearsExperience,
         int? numberOfPetsFoundHome,
@@ -81,9 +82,6 @@ public class Volunteer : Entity
         bool fromShelter,
         IEnumerable<SocialMedia> socialMedias)
     {
-        if (name.IsEmpty() || name.Length > Constraints.SHORT_TITLE_LENGTH)
-            return Errors.General.InvalidLength(nameof(name));
-
         if (description.IsEmpty() || description.Length > Constraints.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength(nameof(description));
 

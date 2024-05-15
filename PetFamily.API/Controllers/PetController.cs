@@ -4,7 +4,6 @@ using PetFamily.Infrastructure.Queries.Pets;
 
 namespace PetFamily.API.Controllers;
 
-[Route("[controller]")]
 public class PetController : ApplicationController
 {
     // [HttpGet("ef-core")]

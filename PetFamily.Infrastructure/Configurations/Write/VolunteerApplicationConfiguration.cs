@@ -2,15 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
-using PetFamily.Domain.ValueObjects;
 
 namespace PetFamily.Infrastructure.Configurations.Write;
 
-public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
+public class VolunteerApplicationConfiguration : IEntityTypeConfiguration<VolunteerApplication>
 {
-    public void Configure(EntityTypeBuilder<Volunteer> builder)
+    public void Configure(EntityTypeBuilder<VolunteerApplication> builder)
     {
-        builder.ToTable("volunteers");
+        builder.ToTable("volunteer_applications");
 
         builder.HasKey(v => v.Id);
 
@@ -20,6 +19,8 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
             b.Property(f => f.LastName).HasColumnName("last_name");
             b.Property(f => f.Patronymic).HasColumnName("patronymic").IsRequired(false);
         });
+
+        builder.ComplexProperty(v => v.Status, b => { b.Property(f => f.Status).HasColumnName("status"); });
 
         builder.Property(v => v.Description)
             .IsRequired()
@@ -31,24 +32,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
         builder.Property(v => v.NumberOfPetsFoundHome)
             .IsRequired(false);
 
-        builder.Property(v => v.DonationInfo)
-            .IsRequired(false)
-            .HasMaxLength(Constraints.LONG_TITLE_LENGTH);
-
         builder.Property(v => v.FromShelter)
             .IsRequired();
-
-        builder.OwnsMany(v => v.SocialMedias, navigationBuilder =>
-        {
-            navigationBuilder.ToJson();
-
-            navigationBuilder.Property(s => s.Social)
-                .HasConversion(
-                    s => s.Value,
-                    s => Social.Create(s).Value);
-        });
-
-        builder.HasMany(v => v.Photos).WithOne().IsRequired();
-        builder.HasMany(v => v.Pets).WithOne().IsRequired();
     }
 }

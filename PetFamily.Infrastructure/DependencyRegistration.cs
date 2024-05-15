@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
-using PetFamily.Application.Abstractions;
+using PetFamily.Application.DataAccess;
 using PetFamily.Application.Dtos;
 using PetFamily.Application.Features.Pets;
 using PetFamily.Application.Features.Volunteers;
+using PetFamily.Application.Providers;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
@@ -54,12 +55,11 @@ public static class DependencyRegistration
     private static IServiceCollection AddDataStorages(
         this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IPetFamilyWriteDbContext, PetFamilyWriteDbContext>();
         services.AddScoped<PetFamilyWriteDbContext>();
         services.AddScoped<PetFamilyReadDbContext>();
         services.AddSingleton<SqlConnectionFactory>();
-        
-        services.AddScoped<IPetFamilyWriteDbContext, PetFamilyWriteDbContext>();
-        
+
         services.AddMinio(options =>
         {
             var minioOptions = configuration.GetSection(MinioOptions.Minio)

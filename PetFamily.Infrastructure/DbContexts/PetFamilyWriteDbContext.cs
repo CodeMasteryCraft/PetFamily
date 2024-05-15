@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.Abstractions;
+using PetFamily.Application.DataAccess;
 using PetFamily.Domain.Entities;
 
 namespace PetFamily.Infrastructure.DbContexts;
@@ -16,8 +16,9 @@ public class PetFamilyWriteDbContext : DbContext, IPetFamilyWriteDbContext
     }
 
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
-    public DbSet<Pet> Pets => Set<Pet>();
-    
+    public DbSet<VolunteerApplication> VolunteersApplications => Set<VolunteerApplication>();
+    public DbSet<User> Users => Set<User>();
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PetFamily"));

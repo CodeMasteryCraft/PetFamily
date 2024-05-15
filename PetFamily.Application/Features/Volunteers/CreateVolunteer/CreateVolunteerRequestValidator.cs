@@ -18,10 +18,8 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
             s.RuleFor(x => x.Social).MustBeValueObject(Social.Create);
         }).When(x => x.SocialMedias != null);
 
-        RuleFor(v => v.Name)
-            .NotEmptyWithError()
-            .MaximumLengthWithError(Constraints.SHORT_TITLE_LENGTH)
-            .WithError(Errors.General.InvalidLength());
+        RuleFor(v => new { v.FirstName, v.LastName, v.Patronymic })
+            .MustBeValueObject(v => FullName.Create(v.FirstName, v.LastName, v.Patronymic));
 
         RuleFor(v => v.Description)
             .NotEmptyWithError()
