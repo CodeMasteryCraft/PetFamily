@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
@@ -40,12 +42,22 @@ public class VolunteerController : ApplicationController
         return Ok(idResult.Value);
     }
 
-    // [HttpPost("photo")]
-    // public async Task<IActionResult> UploadPhoto(
-    //     [FromForm] UploadVolunteerPhotoRequest request)
-    // {
-    // }
-    //
+    [HttpPost("photo")]
+    public async Task<IActionResult> UploadPhoto(
+        [FromServices] UploadVolunteerPhotoHandler handler,
+        [FromForm] UploadVolunteerPhotoRequest request,
+        CancellationToken ct)
+    {
+        var validator = new UploadPhotoValidator();
+        var validate = await validator.ValidateAsync(request, ct);
+        if(!validate.IsValid)
+            return BadRequest(validate.Errors);
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        return Ok(result.Value);
+    }
+
 
     [HttpGet("photo")]
     public async Task<IActionResult> GetPhoto(
@@ -55,7 +67,7 @@ public class VolunteerController : ApplicationController
         var presignedGetObjectArgs = new PresignedGetObjectArgs()
             .WithBucket("images")
             .WithObject(photo)
-            .WithExpiry(60*60*24);
+            .WithExpiry(60 * 60 * 24);
 
         var url = await client.PresignedGetObjectAsync(presignedGetObjectArgs);
 

@@ -1,19 +1,30 @@
+using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Http;
+using PetFamily.Domain.Common;
+using Entity = PetFamily.Domain.Common.Entity;
+
 namespace PetFamily.Domain.Entities;
 
-public class Photo
+public class Photo : Entity
 {
     private Photo()
     {
     }
 
-    public Photo(Guid id, string path, bool isMain)
+    public Photo(string path, bool isMain)
     {
-        Id = id;
         Path = path;
         IsMain = isMain;
     }
 
-    public Guid Id { get; private set; }
     public string Path { get; private set; }
     public bool IsMain { get; private set; }
+
+    public static Result<Photo, Error> CreateAndActivate(string path, string contentType)
+    {
+        string[] allowedContentTypes = { "image/jpeg", "image/png", "image/png" };
+        if (!allowedContentTypes.Contains(contentType))
+            return Errors.Volunteers.FileTypeInvalid(contentType);
+        return new Photo(path, true);
+    }
 }

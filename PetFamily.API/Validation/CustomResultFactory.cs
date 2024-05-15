@@ -27,7 +27,7 @@ public class CustomResultFactory : IFluentValidationAutoValidationResultFactory
             errorInfos.AddRange(errors);
         }
 
-        var envelope = Envelope.Error(errorInfos);
+        var envelope = Envelope.Error(errorInfos.ToArray());
 
         return new BadRequestObjectResult(envelope);
     }
