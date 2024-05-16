@@ -1,10 +1,13 @@
 using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
+using ValueObject = PetFamily.Domain.Common.ValueObject;
 
 namespace PetFamily.Domain.ValueObjects;
 
-public record Address
+public class Address : ValueObject
 {
+    public const int INDEX_TITLE_LENGTH = 6;
+
     private Address(string city, string street, string building, string index)
     {
         City = city;
@@ -20,18 +23,29 @@ public record Address
 
     public static Result<Address, Error> Create(string city, string street, string building, string index)
     {
-        if (city.IsEmpty())
-            return Errors.General.ValueIsRequried();
+        city = city.Trim();
+        building = building.Trim();
+        index = index.Trim();
 
-        if (street.IsEmpty())
-            return Errors.General.ValueIsRequried();
+        if (city.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.SHORT_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(city));
 
-        if (building.IsEmpty())
-            return Errors.General.ValueIsRequried();
+        if (street.Length is < Constraints.MINIMUM_TITLE_LENGTH or > Constraints.MEDIUM_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(street));
 
-        if (index.IsEmpty())
-            return Errors.General.ValueIsRequried();
+        if (building.IsEmpty() || building.Length > Constraints.SHORT_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(building));
+
+        if (index.Length != INDEX_TITLE_LENGTH)
+            return Errors.General.InvalidLength(nameof(index));
 
         return new Address(city, street, building, index);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return City;
+        yield return Street;
+        yield return Building;
     }
 }
