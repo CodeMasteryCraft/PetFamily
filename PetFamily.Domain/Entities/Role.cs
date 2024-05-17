@@ -4,30 +4,28 @@ namespace PetFamily.Domain.Entities;
 
 public class Role : Entity
 {
-    public static Role Admin = new(
+    public static readonly Role Admin = new(
         nameof(Admin).ToUpper(),
         [
-            "volunteer.applications.read",
-            "volunteer.applications.update",
+            Common.Permissions.VolunteerApplications.Update,
 
-            "volunteers.create",
+            Common.Permissions.Pets.Read,
+            Common.Permissions.Pets.Delete,
 
-            "pets.read",
-            "pets.delete",
-
-            "volunteers.read",
-            "volunteers.delete"
+            Common.Permissions.Volunteers.Create,
+            Common.Permissions.Volunteers.Delete,
+            Common.Permissions.Volunteers.Read,
         ]);
 
-    public static Role Volunteer = new(
+    public static readonly Role Volunteer = new(
         nameof(Volunteer).ToUpper(),
         [
-            "pets.read",
-            "pets.create",
-            "pets.update",
-            "pets.delete",
+            Common.Permissions.Pets.Read,
+            Common.Permissions.Pets.Create,
+            Common.Permissions.Pets.Update,
+            Common.Permissions.Pets.Delete,
 
-            "volunteers.read"
+            Common.Permissions.Volunteers.Read,
         ]);
 
     private Role()

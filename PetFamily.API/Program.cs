@@ -44,12 +44,12 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
     await dbContext.Database.MigrateAsync();
-
-
-    var admin = new User("admin", "admin", Role.Admin);
-
-    await dbContext.Users.AddAsync(admin);
-    await dbContext.SaveChangesAsync();
+    //
+    //
+    // var admin = new User("admin", "admin", Role.Admin);
+    //
+    // await dbContext.Users.AddAsync(admin);
+    // await dbContext.SaveChangesAsync();
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
