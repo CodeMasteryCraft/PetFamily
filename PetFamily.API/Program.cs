@@ -1,6 +1,9 @@
+using System.Text;
 using Hangfire;
 using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
@@ -26,6 +29,23 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
 
 builder.Services.AddHttpLogging(options => { });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var key = "key18key18key18key18key18key18key18key18key18key18";
+
+        var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            IssuerSigningKey = symmetricKey
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 // add hangfire client
 // builder.Services.AddHangfire(configuration => configuration
 //     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
@@ -44,9 +64,10 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
     await dbContext.Database.MigrateAsync();
+
+    // var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword("admin");
     //
-    //
-    // var admin = new User("admin", "admin", Role.Admin);
+    // var admin = new User("admin", passwordHash, Role.Admin);
     //
     // await dbContext.Users.AddAsync(admin);
     // await dbContext.SaveChangesAsync();
@@ -57,6 +78,9 @@ app.UseHttpLogging();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

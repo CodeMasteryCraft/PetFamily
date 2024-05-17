@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PetFamily.Application.Features.Accounts.Login;
 
 namespace PetFamily.API.Controllers;
 
@@ -6,11 +7,14 @@ public class AccountController : ApplicationController
 {
     [HttpPost]
     public async Task<IActionResult> Login(
-        string email,
-        string password)
+        [FromBody] LoginRequest request,
+        [FromServices] LoginHandler handler,
+        CancellationToken ct)
     {
-        
-        
-        return Ok("token");
+        var token = await handler.Handle(request, ct);
+        if (token.IsFailure)
+            return BadRequest(token.Error);
+
+        return Ok(token.Value);
     }
 }
