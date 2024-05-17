@@ -1,8 +1,11 @@
 using System.Text;
+using System.Text.Encodings.Web;
 using Hangfire;
 using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;

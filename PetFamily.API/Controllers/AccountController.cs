@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Accounts.Login;
 
@@ -16,5 +17,12 @@ public class AccountController : ApplicationController
             return BadRequest(token.Error);
 
         return Ok(token.Value);
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        return Ok(HttpContext.User.Claims.Select(x => x.Value));
     }
 }
