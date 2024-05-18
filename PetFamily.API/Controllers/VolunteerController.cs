@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
@@ -9,6 +10,7 @@ using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 
 namespace PetFamily.API.Controllers;
 
+[Authorize]
 public class VolunteerController : ApplicationController
 {
     [HttpPost]
@@ -51,7 +53,6 @@ public class VolunteerController : ApplicationController
 
         return Ok(result.Value);
     }
-
 
     [HttpGet("photo")]
     public async Task<IActionResult> GetPhotos(

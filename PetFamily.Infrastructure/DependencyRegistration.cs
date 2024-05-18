@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetFamily.Application.DataAccess;
 using PetFamily.Application.Dtos;
+using PetFamily.Application.Features.Accounts;
 using PetFamily.Application.Features.Pets;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.Providers;
@@ -33,6 +34,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
 
         return services;
     }

@@ -77,4 +77,12 @@ public static class Errors
             return new("volunteers.photo.limit", "Max photo count limit is 5");
         }
     }
+
+    public static class Users
+    {
+        public static Error InvalidCredentials()
+        {
+            return new("users.invalid.credentials", "User's credentials is invalid");
+        }
+    }
 }
