@@ -40,6 +40,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
         services.AddScoped<IMinioProvider, MinioProvider>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
         return services;
     }
 

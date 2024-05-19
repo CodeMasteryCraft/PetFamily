@@ -7,6 +7,7 @@ using PetFamily.Application;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.DbContexts;
+using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Repositories;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
@@ -14,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 
 builder.Services
     .AddApplication()

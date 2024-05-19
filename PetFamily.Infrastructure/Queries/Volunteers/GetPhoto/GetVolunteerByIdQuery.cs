@@ -33,9 +33,9 @@ public class GetVolunteerByIdQuery
             return Errors.General.NotFound(request.VolunteerId);
         }
 
-        var photoPathes = volunteer.Photos.Select(p => p.Path);
+        var photoPaths = volunteer.Photos.Select(p => p.Path);
 
-        var photoUrls = await _minioProvider.GetPhotos(photoPathes);
+        var photoUrls = await _minioProvider.GetPhotos(photoPaths);
         if (photoUrls.IsFailure)
             return photoUrls.Error;
 
