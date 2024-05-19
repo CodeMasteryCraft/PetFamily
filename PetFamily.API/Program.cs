@@ -68,12 +68,12 @@ if (app.Environment.IsDevelopment())
     var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
     await dbContext.Database.MigrateAsync();
 
-    // var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword("admin");
-    //
-    // var admin = new User("admin", passwordHash, Role.Admin);
-    //
-    // await dbContext.Users.AddAsync(admin);
-    // await dbContext.SaveChangesAsync();
+    /*var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword("admin");
+    
+    var admin = new User("admin", passwordHash, Role.Admin);
+    
+    await dbContext.Users.AddAsync(admin);
+    await dbContext.SaveChangesAsync();*/
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
