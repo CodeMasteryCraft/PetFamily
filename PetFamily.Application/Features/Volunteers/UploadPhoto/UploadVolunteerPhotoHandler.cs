@@ -27,7 +27,12 @@ public class UploadVolunteerPhotoHandler
         var photoId = Guid.NewGuid();
         var path = photoId + Path.GetExtension(request.File.FileName);
 
+<<<<<<< Updated upstream
         var photo = VolunteerPhoto.CreateAndActivate(path);
+=======
+        var photo = VolunteerPhoto.CreateAndActivate(path, request.File.ContentType,
+            request.File.Length, request.IsMain);
+>>>>>>> Stashed changes
         if (photo.IsFailure)
             return photo.Error;
         

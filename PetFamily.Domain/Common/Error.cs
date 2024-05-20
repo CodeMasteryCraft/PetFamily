@@ -76,5 +76,15 @@ public static class Errors
         {
             return new("volunteers.photo.limit", "Max photo count limit is 5");
         }
+<<<<<<< Updated upstream
+=======
+        public static Error FileTypeInvalid(string? fileType)
+        {
+            return new("invalid.file.type", $"This {fileType}: file type is invalid");
+        }public static Error FileLengthInvalid(long? length)
+        {
+            return new("invalid.file.length", $"This {length}: file length is invalid");
+        }
+>>>>>>> Stashed changes
     }
 }

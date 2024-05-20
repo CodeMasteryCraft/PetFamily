@@ -43,4 +43,27 @@ public class VolunteersRepository : IVolunteersRepository
 
         return volunteer;
     }
+
+    public async Task<Result<List<Volunteer>, Error>> GetAll(int size, int page, CancellationToken ct)
+    {
+        var volunteers = await _dbContext.Volunteers
+            .Include(v => v.Pets)
+            .Include(v => v.Photos).AsNoTracking().ToListAsync(cancellationToken: ct);
+        if (volunteers.Count == 0)
+            return Errors.General.NotFound();
+        if (size != 0 && page != 0)
+        {
+            var volunteersWithPagination = await _dbContext.Volunteers
+                .Include(v => v.Pets)
+                .Include(v => v.Photos)
+                .Skip(size*page)
+                .Take(size)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken: ct);
+            if (volunteers.Count == 0)
+                return Errors.General.NotFound();
+            return volunteersWithPagination;
+        }
+        return volunteers;
+    }
 }

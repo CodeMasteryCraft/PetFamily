@@ -18,9 +18,15 @@ public class VolunteerPhoto : Entity
 
     public string Path { get; private set; }
     public bool IsMain { get; private set; }
-
-    public static Result<VolunteerPhoto, Error> CreateAndActivate(string path)
+    
+    public static Result<VolunteerPhoto, Error> CreateAndActivate(string path, string contentType, long length, bool isMain)
     {
-        return new VolunteerPhoto(path, true);
+        // много параметров, что можно сделать?
+         string[] allowedContentTypes = ["image/jpeg", "image/png", "image/png"];
+         if (!allowedContentTypes.Contains(contentType))
+             return Errors.Volunteers.FileTypeInvalid(contentType);
+         if (length > 10000)
+             return Errors.Volunteers.FileLengthInvalid(length);
+        return new VolunteerPhoto(path, isMain);
     }
 }

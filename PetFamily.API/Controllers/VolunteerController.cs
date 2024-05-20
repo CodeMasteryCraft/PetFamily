@@ -1,11 +1,28 @@
+<<<<<<< Updated upstream
 using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
+=======
+using CSharpFunctionalExtensions;
+using FluentValidation;
+using FluentValidation.Results;
+using Hangfire;
+using Microsoft.AspNetCore.Mvc;
+using Minio;
+using Minio.DataModel.Args;
+using PetFamily.API.Contracts;
+using PetFamily.Application.Features.Volunteers;
+>>>>>>> Stashed changes
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
+<<<<<<< Updated upstream
 using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
+=======
+using PetFamily.Domain.Common;
+using PetFamily.Domain.Entities;
+>>>>>>> Stashed changes
 
 namespace PetFamily.API.Controllers;
 
@@ -77,5 +94,25 @@ public class VolunteerController : ApplicationController
             return BadRequest(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromServices] IVolunteersRepository repository,
+        CancellationToken ct, int size = 0, int page = 0)
+    {
+        var idResult = await repository.GetAll(size, page, ct);
+        if (idResult.IsFailure)
+            return BadRequest(idResult.Error);
+        return Ok(idResult.Value);
+    }
+    
+    [HttpGet("GetById")]
+    public async Task<IActionResult> GetById(Guid id, [FromServices] IVolunteersRepository repository,
+        CancellationToken ct)
+    {
+        var idResult = await repository.GetById(id, ct);
+        if (idResult.IsFailure)
+            return BadRequest(idResult.Error);
+        return Ok(idResult.Value);
     }
 }

@@ -10,11 +10,11 @@ using PetFamily.Infrastructure.DbContexts;
 
 #nullable disable
 
-namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
+namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(PetFamilyWriteDbContext))]
-    [Migration("20240513162135_PhotosSegregation")]
-    partial class PhotosSegregation
+    [Migration("20240515151026_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,7 +98,7 @@ namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
                         .HasColumnType("character varying(5000)")
                         .HasColumnName("people_attitude");
 
-                    b.Property<Guid?>("VolunteerId")
+                    b.Property<Guid>("VolunteerId")
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
 
@@ -317,6 +317,8 @@ namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
                     b.HasOne("PetFamily.Domain.Entities.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("VolunteerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
                 });
 
