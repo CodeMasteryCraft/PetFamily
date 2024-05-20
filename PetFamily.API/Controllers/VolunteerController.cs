@@ -2,18 +2,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Minio;
 using Minio.DataModel.Args;
+using PetFamily.API.Attributes;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
-using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
+using PetFamily.Domain.Common;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
 
 namespace PetFamily.API.Controllers;
 
-[Authorize]
 public class VolunteerController : ApplicationController
 {
     [HttpPost]
+    [HasPermission(Permissions.Volunteers.Create)]
     public async Task<IActionResult> Create(
         [FromServices] CreateVolunteerHandler handler,
         [FromBody] CreateVolunteerRequest request,
@@ -28,6 +30,7 @@ public class VolunteerController : ApplicationController
     }
 
     [HttpPost("pet")]
+    [HasPermission(Permissions.Pets.Create)]
     public async Task<IActionResult> Create(
         [FromServices] CreatePetHandler handler,
         [FromBody] CreatePetRequest request,

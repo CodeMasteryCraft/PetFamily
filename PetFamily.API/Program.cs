@@ -3,22 +3,55 @@ using System.Text.Encodings.Web;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using PetFamily.API.Attributes;
+using PetFamily.API.Authorization;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
+using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.DbContexts;
+using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Repositories;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new()
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new()
+    {
+        {
+            new()
+            {
+                Reference = new()
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            []
+        }
+    });
+});
+
 builder.Services.AddControllers();
 
 builder.Services
@@ -35,9 +68,10 @@ builder.Services.AddHttpLogging(options => { });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        var key = "key18key18key18key18key18key18key18key18key18key18";
+        var key = builder.Configuration.GetSection(JwtOptions.Jwt).Get<JwtOptions>()
+                  ?? throw new ApplicationException("Wrong configuration");
 
-        var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key.SecretKey));
 
         options.TokenValidationParameters = new()
         {
@@ -48,6 +82,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionsAuthorizationsHandler>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
 // add hangfire client
 // builder.Services.AddHangfire(configuration => configuration
@@ -69,9 +106,9 @@ if (app.Environment.IsDevelopment())
     await dbContext.Database.MigrateAsync();
 
     /*var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword("admin");
-    
+
     var admin = new User("admin", passwordHash, Role.Admin);
-    
+
     await dbContext.Users.AddAsync(admin);
     await dbContext.SaveChangesAsync();*/
 }
@@ -91,3 +128,7 @@ app.MapControllers();
 // app.MapHangfireDashboard("/dashboard");
 
 app.Run();
+
+public class AuthOptions : AuthenticationSchemeOptions
+{
+}

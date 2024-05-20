@@ -7,24 +7,25 @@ using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure.Options;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using PetFamily.Application.Providers;
 
 namespace PetFamily.Infrastructure.Providers;
 
 public class JwtProvider : IJwtProvider
 {
-    private readonly IOptions<JwtOptions> _options;
+    private readonly JwtOptions _jwtOptions;
 
-    public JwtProvider(IOptions<JwtOptions> options)
+    public JwtProvider(IOptions<JwtOptions> jwtOptions)
     {
-        _options = options;
+        _jwtOptions = jwtOptions.Value;
     }
 
     public Result<string, Error> Generate(User user)
     {
         var jwtHandler = new JsonWebTokenHandler();
 
-        var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Value.SecretKey));
+        var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey));
 
         var permissionClaims = user.Role.Permissions
             .Select(p => new Claim(Constants.Constants.Authentication.Permissions, p));
@@ -39,7 +40,7 @@ public class JwtProvider : IJwtProvider
         {
             Subject = new(claims),
             SigningCredentials = new(symmetricKey, SecurityAlgorithms.HmacSha256),
-            Expires = DateTime.UtcNow.AddHours(_options.Value.Expires)
+            Expires = DateTime.UtcNow.AddHours(_jwtOptions.Expires)
         };
 
         var token = jwtHandler.CreateToken(tokenDescriptor);

@@ -13,7 +13,7 @@ using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Pets;
 using PetFamily.Infrastructure.Queries.Volunteers;
-using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
 using PetFamily.Infrastructure.Repositories;
 
 namespace PetFamily.Infrastructure;

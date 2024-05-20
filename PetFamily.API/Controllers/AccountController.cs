@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Accounts.Login;
 
@@ -19,7 +18,6 @@ public class AccountController : ApplicationController
         return Ok(token.Value);
     }
 
-    [Authorize]
     [HttpGet]
     public async Task<IActionResult> Get()
     {
