@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Minio;
 using PetFamily.Application.DataAccess;
 using PetFamily.Application.Dtos;
@@ -42,6 +43,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
         services.AddScoped<IMinioProvider, MinioProvider>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
         return services;
     }
 
@@ -71,6 +73,8 @@ public static class DependencyRegistration
             options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
             options.WithSSL(false);
         });
+
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Jwt));
 
         return services;
     }
