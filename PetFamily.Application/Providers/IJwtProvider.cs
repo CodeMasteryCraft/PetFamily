@@ -2,10 +2,10 @@
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 
-namespace PetFamily.Infrastructure.Providers
+namespace PetFamily.Application.Providers
 {
     public interface IJwtProvider
     {
-        Result<string, Error> Create(string password, User user);
+        Result<string, Error> Generate(User user);
     }
 }

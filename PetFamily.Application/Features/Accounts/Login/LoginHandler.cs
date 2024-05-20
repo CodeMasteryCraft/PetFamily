@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
+using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
-using PetFamily.Infrastructure.Providers;
 
 namespace PetFamily.Application.Features.Accounts.Login;
 
@@ -21,8 +21,12 @@ public class LoginHandler
 
         if (user.IsFailure)
             return user.Error;
+        
+        var isVerified = BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.Value.PasswordHash);
+        if (isVerified == false)
+            return Errors.Users.InvalidCredentials();
 
-        var token = _jwtProvider.Create(request.Password, user.Value); 
+        var token = _jwtProvider.Generate(user.Value); 
 
         return token;
     }

@@ -2,12 +2,12 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using PetFamily.Application.Constants;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure.Options;
 using System.Security.Claims;
 using System.Text;
+using PetFamily.Application.Providers;
 
 namespace PetFamily.Infrastructure.Providers;
 
@@ -20,23 +20,19 @@ public class JwtProvider : IJwtProvider
         _options = options;
     }
 
-    public Result<string, Error> Create(string password, User user)
+    public Result<string, Error> Generate(User user)
     {
-        var isVerified = BCrypt.Net.BCrypt.EnhancedVerify(password, user.PasswordHash);
-        if (isVerified == false)
-            return Errors.Users.InvalidCredentials();
-
-        var handler = new JsonWebTokenHandler();
+        var jwtHandler = new JsonWebTokenHandler();
 
         var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Value.SecretKey));
 
         var permissionClaims = user.Role.Permissions
-            .Select(p => new Claim(Constants.Authentication.Permissions, p));
+            .Select(p => new Claim(Constants.Constants.Authentication.Permissions, p));
 
         var claims = permissionClaims.Concat(
         [
-            new(Constants.Authentication.UserId, user.Id.ToString()),
-            new(Constants.Authentication.Role, user.Role.Name)
+            new(Constants.Constants.Authentication.UserId, user.Id.ToString()),
+            new(Constants.Constants.Authentication.Role, user.Role.Name)
         ]);
 
         var tokenDescriptor = new SecurityTokenDescriptor
@@ -46,7 +42,7 @@ public class JwtProvider : IJwtProvider
             Expires = DateTime.UtcNow.AddHours(_options.Value.Expires)
         };
 
-        var token = handler.CreateToken(tokenDescriptor);
+        var token = jwtHandler.CreateToken(tokenDescriptor);
 
         return token;
     }

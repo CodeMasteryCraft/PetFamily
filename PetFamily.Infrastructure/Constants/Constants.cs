@@ -1,4 +1,4 @@
-namespace PetFamily.Application.Constants;
+namespace PetFamily.Infrastructure.Constants;
 
 public static class Constants
 {
