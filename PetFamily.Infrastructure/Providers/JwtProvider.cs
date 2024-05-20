@@ -31,12 +31,12 @@ public class JwtProvider : IJwtProvider
         var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Value.SecretKey));
 
         var permissionClaims = user.Role.Permissions
-            .Select(p => new Claim(nameof(Permissions), p));
+            .Select(p => new Claim(Constants.Authentication.Permissions, p));
 
         var claims = permissionClaims.Concat(
         [
-            new(Constants.UserId, user.Id.ToString()),
-            new(Constants.Role, user.Role.Name)
+            new(Constants.Authentication.UserId, user.Id.ToString()),
+            new(Constants.Authentication.Role, user.Role.Name)
         ]);
 
         var tokenDescriptor = new SecurityTokenDescriptor
