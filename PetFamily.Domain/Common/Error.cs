@@ -2,6 +2,8 @@ namespace PetFamily.Domain.Common;
 
 public class Error
 {
+    public static readonly Error None = new(string.Empty, string.Empty);
+
     private const string Separator = "||";
 
     public string Code { get; }
@@ -35,7 +37,7 @@ public static class Errors
     {
         public static Error Iternal(string message)
             => new("iternal", message);
-        
+
         public static Error Unexpected()
             => new("unexpecret", "unexpecret");
 

@@ -1,7 +1,7 @@
-using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
 using Entity = PetFamily.Domain.Common.Entity;
+using Result = PetFamily.Domain.Common.Result;
 
 namespace PetFamily.Domain.Entities;
 
@@ -52,7 +52,7 @@ public class Volunteer : Entity
         _pets.Add(pet);
     }
 
-    public Result<bool, Error> AddPhoto(VolunteerPhoto volunteerPhoto)
+    public Result AddPhoto(VolunteerPhoto volunteerPhoto)
     {
         if (_photos.Count >= PHOTO_COUNT_LIMIT)
         {
@@ -60,20 +60,20 @@ public class Volunteer : Entity
         }
 
         _photos.Add(volunteerPhoto);
-        return true;
+        return Result.Success();
     }
 
-    public Result<bool, Error> DeletePhoto(string path)
+    public Result DeletePhoto(string path)
     {
         var photo = _photos.FirstOrDefault(p => p.Path.Contains(path));
         if (photo is null)
             return Errors.General.NotFound();
 
         _photos.Remove(photo);
-        return true;
+        return Result.Success();
     }
 
-    public static Result<Volunteer, Error> Create(
+    public static Result<Volunteer> Create(
         FullName name,
         string description,
         int yearsExperience,
@@ -85,7 +85,7 @@ public class Volunteer : Entity
         if (description.IsEmpty() || description.Length > Constraints.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength(nameof(description));
 
-        if (yearsExperience < 0)
+        if (yearsExperience is < 0 or > 100)
             return Errors.General.ValueIsInvalid(nameof(yearsExperience));
 
         if (numberOfPetsFoundHome < 0)

@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
@@ -18,7 +17,7 @@ public class UploadVolunteerPhotoHandler
         _volunteersRepository = volunteersRepository;
     }
 
-    public async Task<Result<string, Error>> Handle(UploadVolunteerPhotoRequest request, CancellationToken ct)
+    public async Task<Result<string>> Handle(UploadVolunteerPhotoRequest request, CancellationToken ct)
     {
         var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if (volunteer.IsFailure)
@@ -30,7 +29,7 @@ public class UploadVolunteerPhotoHandler
         var photo = VolunteerPhoto.CreateAndActivate(path);
         if (photo.IsFailure)
             return photo.Error;
-        
+
         var isSuccessUpload = volunteer.Value.AddPhoto(photo.Value);
         if (isSuccessUpload.IsFailure)
             return isSuccessUpload.Error;

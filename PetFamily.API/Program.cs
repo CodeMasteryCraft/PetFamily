@@ -1,26 +1,17 @@
 using System.Text;
-using System.Text.Encodings.Web;
-using Hangfire;
-using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using PetFamily.API.Attributes;
 using PetFamily.API.Authorization;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
-using PetFamily.Domain.Common;
-using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Options;
-using PetFamily.Infrastructure.Repositories;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -129,6 +120,9 @@ app.MapControllers();
 
 app.Run();
 
-public class AuthOptions : AuthenticationSchemeOptions
+namespace PetFamily.API
 {
+    public class AuthOptions : AuthenticationSchemeOptions
+    {
+    }
 }
