@@ -5,7 +5,7 @@ using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Infrastructure.DbContexts;
 
-namespace PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
+namespace PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
 
 public class GetVolunteerByIdQuery
 {

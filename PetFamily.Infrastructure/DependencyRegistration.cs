@@ -1,8 +1,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Minio;
 using PetFamily.Application.DataAccess;
 using PetFamily.Application.Dtos;
+using PetFamily.Application.Features.Accounts;
 using PetFamily.Application.Features.Pets;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.Providers;
@@ -11,7 +13,7 @@ using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Pets;
 using PetFamily.Infrastructure.Queries.Volunteers;
-using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
 using PetFamily.Infrastructure.Repositories;
 
 namespace PetFamily.Infrastructure;
@@ -33,6 +35,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
 
         return services;
     }
@@ -40,6 +43,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
         services.AddScoped<IMinioProvider, MinioProvider>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
         return services;
     }
 
@@ -69,6 +73,8 @@ public static class DependencyRegistration
             options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
             options.WithSSL(false);
         });
+
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Jwt));
 
         return services;
     }
