@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Minio;
-using Minio.DataModel.Args;
+using PetFamily.Application.Providers;
 using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.BackgroundServices;
@@ -20,7 +19,7 @@ public class ImageCleanupService : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var scope = _provider.CreateScope();
-        var minioClient = scope.ServiceProvider.GetRequiredService<IMinioClient>();
+        var minioProvider = scope.ServiceProvider.GetRequiredService<IMinioProvider>();
         var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyReadDbContext>();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<ImageCleanupService>>();
         
@@ -31,9 +30,7 @@ public class ImageCleanupService : BackgroundService
 
             try
             {
-                var listObjectArgs = new ListObjectsArgs().WithBucket("images");
-
-                var objectList = minioClient.ListObjectsAsync(listObjectArgs, stoppingToken);
+                var objectList = minioProvider.GetObjectsList(stoppingToken);
                 var volunteerReadModels = dbContext.Volunteers
                     .Include(p => p.Photos);
                 var paths = volunteerReadModels.Select(p => p.Photos.Select(ph => ph.Path));
@@ -43,9 +40,7 @@ public class ImageCleanupService : BackgroundService
                     {
                         try
                         {
-                            var removeObjectArgs = new RemoveObjectArgs().WithBucket("images").WithObject(obj.Key);
-
-                            await minioClient.RemoveObjectAsync(removeObjectArgs, stoppingToken);
+                            await minioProvider.RemovePhoto(obj.Key, stoppingToken);
                             logger.LogInformation($"Image {obj.Key} has been deleted from MinIO storage.");
                         }
                         catch (Exception ex)

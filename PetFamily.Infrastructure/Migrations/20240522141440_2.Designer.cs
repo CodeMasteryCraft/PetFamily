@@ -10,11 +10,11 @@ using PetFamily.Infrastructure.DbContexts;
 
 #nullable disable
 
-namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
+namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(PetFamilyWriteDbContext))]
-    [Migration("20240515165223_AddVolunteerApplication")]
-    partial class AddVolunteerApplication
+    [Migration("20240522141440_2")]
+    partial class _2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -211,6 +211,63 @@ namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
                     b.ToTable("pet_photos", (string)null);
                 });
 
+            modelBuilder.Entity("PetFamily.Domain.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string[]>("Permissions")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("permissions");
+
+                    b.HasKey("Id")
+                        .HasName("pk_roles");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_roles_name");
+
+                    b.ToTable("roles", (string)null);
+                });
+
+            modelBuilder.Entity("PetFamily.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_users_role_id");
+
+                    b.ToTable("users", (string)null);
+                });
+
             modelBuilder.Entity("PetFamily.Domain.Entities.Vaccination", b =>
                 {
                     b.Property<Guid>("Id")
@@ -309,6 +366,11 @@ namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
                         .HasColumnType("character varying(5000)")
                         .HasColumnName("description");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
                     b.Property<bool>("FromShelter")
                         .HasColumnType("boolean")
                         .HasColumnName("from_shelter");
@@ -403,6 +465,18 @@ namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_pet_photos_pets_pet_id");
+                });
+
+            modelBuilder.Entity("PetFamily.Domain.Entities.User", b =>
+                {
+                    b.HasOne("PetFamily.Domain.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_users_roles_role_id");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.Vaccination", b =>

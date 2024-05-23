@@ -2,6 +2,7 @@ using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Minio;
+using Minio.DataModel;
 using Minio.DataModel.Args;
 using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
@@ -21,7 +22,7 @@ public class MinioProvider : IMinioProvider
         _logger = logger;
     }
 
-    public async Task<Result<string, Error>> UploadPhoto(IFormFile photo, string path)
+    public async Task<Result<string, Error>> UploadPhoto(IFormFile photo, string path, CancellationToken ct)
     {
         try
         {
@@ -58,7 +59,7 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<bool, Error>> RemovePhoto(string path)
+    public async Task<Result<bool, Error>> RemovePhoto(string path, CancellationToken ct)
     {
         try
         {
@@ -89,7 +90,7 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<IReadOnlyList<string>, Error>> GetPhotos(IEnumerable<string> paths)
+    public async Task<Result<IReadOnlyList<string>, Error>> GetPhotos(IEnumerable<string> paths, CancellationToken ct)
     {
         try
         {
@@ -114,4 +115,18 @@ public class MinioProvider : IMinioProvider
             return Errors.General.SaveFailure("photo");
         }
     }
+
+    public IObservable<Item> GetObjectsList (CancellationToken ct)
+    {
+        var listObjectArgs = new ListObjectsArgs().WithBucket(PhotoBucket);
+
+        return _minioClient.ListObjectsAsync(listObjectArgs, ct);
+    }
+
+    // public Task RemoveObject(Item obj, string bucket, CancellationToken ct)
+    // {
+    //     var removeObjectArgs = new RemoveObjectArgs().WithBucket(bucket).WithObject(obj.Key);
+    //
+    //     return _minioClient.RemoveObjectAsync(removeObjectArgs, ct);
+    // }
 }

@@ -26,7 +26,7 @@ public static class CustomValidators
     {
         return ruleBuilder
             .NotEmpty()
-            .WithError(Errors.General.ValueIsRequried());
+            .WithError(Errors.General.ValueIsRequired());
     }
 
     public static IRuleBuilderOptions<T, string> MaximumLengthWithError<T>(

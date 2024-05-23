@@ -4,23 +4,18 @@ using Entity = PetFamily.Domain.Common.Entity;
 
 namespace PetFamily.Domain.Entities;
 
-public class PetPhoto : Entity
+public class PetPhoto : Photo
 {
-    private PetPhoto()
+    public PetPhoto(string path, bool isMain) : base(path, isMain)
     {
     }
-
-    public PetPhoto(string path, bool isMain)
+    public static Result<PetPhoto, Error> CreateAndActivate(string path, string contentType, long length, bool isMain)
     {
-        Path = path;
-        IsMain = isMain;
-    }
-
-    public string Path { get; private set; }
-    public bool IsMain { get; private set; }
-
-    public static Result<PetPhoto, Error> CreateAndActivate(string path)
-    {
-        return new PetPhoto(path, true);
+        string[] allowedContentTypes = ["image/jpeg", "image/png", "image/png"];
+        if (!allowedContentTypes.Contains(contentType))
+            return Errors.Volunteers.FileTypeInvalid(contentType);
+        if (length > 10000)
+            return Errors.Volunteers.FileLengthInvalid(length);
+        return new PetPhoto(path, isMain);
     }
 }

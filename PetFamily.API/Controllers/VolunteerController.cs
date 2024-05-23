@@ -1,28 +1,12 @@
-<<<<<<< Updated upstream
 using Microsoft.AspNetCore.Mvc;
-using Minio;
-using Minio.DataModel.Args;
-=======
-using CSharpFunctionalExtensions;
-using FluentValidation;
-using FluentValidation.Results;
-using Hangfire;
-using Microsoft.AspNetCore.Mvc;
-using Minio;
-using Minio.DataModel.Args;
-using PetFamily.API.Contracts;
-using PetFamily.Application.Features.Volunteers;
->>>>>>> Stashed changes
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
-<<<<<<< Updated upstream
+using PetFamily.Infrastructure.Queries.Volunteers.GetAllVolunteers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
-=======
-using PetFamily.Domain.Common;
-using PetFamily.Domain.Entities;
->>>>>>> Stashed changes
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
+
 
 namespace PetFamily.API.Controllers;
 
@@ -72,7 +56,7 @@ public class VolunteerController : ApplicationController
 
     [HttpGet("photo")]
     public async Task<IActionResult> GetPhotos(
-        [FromServices] GetVolunteerByIdQuery handler,
+        [FromServices] GetVolunteerPhotoQuery handler,
         [FromQuery] GetVolunteerPhotoRequest request,
         CancellationToken ct)
     {
@@ -96,21 +80,22 @@ public class VolunteerController : ApplicationController
         return Ok(result.Value);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll([FromServices] IVolunteersRepository repository,
+    [HttpGet("GetAll")]
+    public async Task<IActionResult> GetAll([FromServices] GetVolunteersQuery query,
         CancellationToken ct, int size = 0, int page = 0)
     {
-        var idResult = await repository.GetAll(size, page, ct);
+        var idResult = await query.Handle(size, page, ct);
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
         return Ok(idResult.Value);
     }
-    
+
     [HttpGet("GetById")]
-    public async Task<IActionResult> GetById(Guid id, [FromServices] IVolunteersRepository repository,
+    public async Task<IActionResult> GetById([FromQuery]GetVolunteerRequest request, 
+       [FromServices]GetVolunteerQuery query,
         CancellationToken ct)
     {
-        var idResult = await repository.GetById(id, ct);
+        var idResult = await query.Handle(request, ct);
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
         return Ok(idResult.Value);

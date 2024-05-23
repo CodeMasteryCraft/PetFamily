@@ -25,7 +25,7 @@ public class DeleteVolunteerPhotoHandler
         if (volunteer.IsFailure)
             return volunteer.Error;
 
-        var isRemove =  await _minioProvider.RemovePhoto(request.Path);
+        var isRemove =  await _minioProvider.RemovePhoto(request.Path, ct);
         if (isRemove.IsFailure)
             return isRemove.Error;
 

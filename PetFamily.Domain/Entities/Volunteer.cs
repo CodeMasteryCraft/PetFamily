@@ -74,7 +74,7 @@ public class Volunteer : Entity
     }
 
     public static Result<Volunteer, Error> Create(
-        FullName name,
+        FullName fullname,
         string description,
         int yearsExperience,
         int? numberOfPetsFoundHome,
@@ -95,7 +95,7 @@ public class Volunteer : Entity
             return Errors.General.InvalidLength(nameof(donationInfo));
 
         return new Volunteer(
-            name,
+            fullname,
             description,
             yearsExperience,
             numberOfPetsFoundHome,

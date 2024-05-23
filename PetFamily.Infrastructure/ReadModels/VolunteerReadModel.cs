@@ -1,9 +1,11 @@
+using PetFamily.Domain.ValueObjects;
+
 namespace PetFamily.Infrastructure.ReadModels;
 
 public class VolunteerReadModel
 {
     public Guid Id { get; init; }
-    public string Name { get; init; } = string.Empty;
+    public FullName FullName { get;  init; }
     public string Description { get; init; } = string.Empty;
     public int YearsExperience { get; init; }
     public int? NumberOfPetsFoundHome { get; init; }

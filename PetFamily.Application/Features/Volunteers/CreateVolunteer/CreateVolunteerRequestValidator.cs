@@ -9,6 +9,8 @@ public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteer
 {
     public CreateVolunteerRequestValidator()
     {
+        RuleFor(x => x.FirstName).NotEmptyWithError();
+        RuleFor(x => x.LastName).NotEmptyWithError();
         RuleForEach(x => x.SocialMedias).ChildRules(s =>
         {
             s.RuleFor(x => x.Link)

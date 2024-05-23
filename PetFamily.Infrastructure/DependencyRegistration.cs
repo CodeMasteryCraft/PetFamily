@@ -2,16 +2,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetFamily.Application.DataAccess;
-using PetFamily.Application.Dtos;
-using PetFamily.Application.Features.Pets;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.Providers;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Pets;
-using PetFamily.Infrastructure.Queries.Volunteers;
+using PetFamily.Infrastructure.Queries.Volunteers.GetAllVolunteers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
 using PetFamily.Infrastructure.Repositories;
 
 namespace PetFamily.Infrastructure;
@@ -47,7 +46,9 @@ public static class DependencyRegistration
     {
         services.AddScoped<GetPetsQuery>();
         services.AddScoped<GetAllPetsQuery>();
-        services.AddScoped<GetVolunteerByIdQuery>();
+        services.AddScoped<GetVolunteerPhotoQuery>();
+        services.AddScoped<GetVolunteerQuery>();
+        services.AddScoped<GetVolunteersQuery>();
 
         return services;
     }

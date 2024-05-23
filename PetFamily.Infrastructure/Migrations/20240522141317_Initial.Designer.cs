@@ -10,11 +10,11 @@ using PetFamily.Infrastructure.DbContexts;
 
 #nullable disable
 
-namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
+namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(PetFamilyWriteDbContext))]
-    [Migration("20240515171859_AddUsers")]
-    partial class AddUsers
+    [Migration("20240522141317_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -230,6 +230,10 @@ namespace PetFamily.Infrastructure.Migrations.PetFamilyWriteDb
 
                     b.HasKey("Id")
                         .HasName("pk_roles");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_roles_name");
 
                     b.ToTable("roles", (string)null);
                 });

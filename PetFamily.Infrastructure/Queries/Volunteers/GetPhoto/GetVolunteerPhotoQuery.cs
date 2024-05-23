@@ -7,12 +7,12 @@ using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 
-public class GetVolunteerByIdQuery
+public class GetVolunteerPhotoQuery
 {
     private readonly IMinioProvider _minioProvider;
     private readonly PetFamilyReadDbContext _readDbContext;
 
-    public GetVolunteerByIdQuery(
+    public GetVolunteerPhotoQuery(
         IMinioProvider minioProvider,
         PetFamilyReadDbContext readDbContext)
     {
@@ -25,7 +25,7 @@ public class GetVolunteerByIdQuery
         CancellationToken ct)
     {
         var volunteer = await _readDbContext.Volunteers
-            .Include(v => v.Photos)
+            .Include(v => v.Photos).Include(volunteerReadModel => volunteerReadModel.FullName)
             .FirstOrDefaultAsync(v => v.Id == request.VolunteerId, cancellationToken: ct);
 
         if (volunteer is null)
@@ -35,13 +35,13 @@ public class GetVolunteerByIdQuery
 
         var photoPathes = volunteer.Photos.Select(p => p.Path);
 
-        var photoUrls = await _minioProvider.GetPhotos(photoPathes);
+        var photoUrls = await _minioProvider.GetPhotos(photoPathes, ct);
         if (photoUrls.IsFailure)
             return photoUrls.Error;
 
         var volunteerDto = new VolunteerDto(
             volunteer.Id,
-            volunteer.Name,
+            volunteer.FullName.FirstName,
             volunteer.Photos.Select(p => new VolunteerPhotoDto
             {
                 Id = p.Id,
