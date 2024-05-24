@@ -9,9 +9,9 @@ namespace PetFamily.Application.Features.Volunteers.CreatePet;
 public class CreatePetHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IPetFamilyWriteDbContext _dbContext;
+    private readonly IUnitOfWork _dbContext;
 
-    public CreatePetHandler(IVolunteersRepository volunteersRepository, IPetFamilyWriteDbContext dbContext)
+    public CreatePetHandler(IVolunteersRepository volunteersRepository, IUnitOfWork dbContext)
     {
         _volunteersRepository = volunteersRepository;
         _dbContext = dbContext;

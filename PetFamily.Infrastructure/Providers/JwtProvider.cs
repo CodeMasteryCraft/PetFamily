@@ -7,7 +7,6 @@ using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure.Options;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 using PetFamily.Application.Providers;
 
 namespace PetFamily.Infrastructure.Providers;

@@ -1,3 +1,4 @@
+using PetFamily.Application.DataAccess;
 using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
@@ -8,13 +9,16 @@ public class UploadVolunteerPhotoHandler
 {
     private readonly IMinioProvider _minioProvider;
     private readonly IVolunteersRepository _volunteersRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     public UploadVolunteerPhotoHandler(
         IMinioProvider minioProvider,
-        IVolunteersRepository volunteersRepository)
+        IVolunteersRepository volunteersRepository,
+        IUnitOfWork unitOfWork)
     {
         _minioProvider = minioProvider;
         _volunteersRepository = volunteersRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<string>> Handle(UploadVolunteerPhotoRequest request, CancellationToken ct)
@@ -38,11 +42,7 @@ public class UploadVolunteerPhotoHandler
         if (objectName.IsFailure)
             return objectName.Error;
 
-        var result = await _volunteersRepository.Save(ct);
-        if (result.IsFailure)
-        {
-            return result.Error;
-        }
+        await _unitOfWork.SaveChangesAsync(ct);
 
         return path;
     }

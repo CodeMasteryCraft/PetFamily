@@ -12,7 +12,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(u => u.Id);
 
-        builder.Property(u => u.Email).IsRequired();
+        builder.ComplexProperty(u => u.Email,
+            emailBuilder => { emailBuilder.Property(e => e.Value).HasColumnName("email"); });
 
         builder.Property(u => u.PasswordHash).IsRequired();
 

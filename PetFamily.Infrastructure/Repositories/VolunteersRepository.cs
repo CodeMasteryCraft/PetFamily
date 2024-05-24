@@ -20,16 +20,6 @@ public class VolunteersRepository : IVolunteersRepository
         await _dbContext.Volunteers.AddAsync(volunteer, ct);
     }
 
-    public async Task<Result<int>> Save(CancellationToken ct)
-    {
-        var result = await _dbContext.SaveChangesAsync(ct);
-
-        if (result == 0)
-            return Errors.General.SaveFailure("Volunteer");
-
-        return result;
-    }
-    
     public async Task<Result<Volunteer>> GetById(Guid id, CancellationToken ct)
     {
         var volunteer = await _dbContext.Volunteers

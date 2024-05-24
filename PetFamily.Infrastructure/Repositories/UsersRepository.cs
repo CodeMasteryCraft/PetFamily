@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.Features.Accounts;
+using PetFamily.Application.Features.Users;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure.DbContexts;
@@ -20,7 +20,7 @@ public class UsersRepository : IUsersRepository
     {
         var user = await _dbContext.Users
             .Include(u => u.Role)
-            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken: ct);
+            .FirstOrDefaultAsync(u => u.Email.Value == email, cancellationToken: ct);
 
         if (user is null)
             return Errors.General.NotFound();

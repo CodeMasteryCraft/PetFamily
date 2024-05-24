@@ -6,7 +6,7 @@ using PetFamily.Domain.Entities;
 
 namespace PetFamily.Infrastructure.DbContexts;
 
-public class PetFamilyWriteDbContext : DbContext, IPetFamilyWriteDbContext
+public class PetFamilyWriteDbContext : DbContext, IUnitOfWork
 {
     private readonly IConfiguration _configuration;
 

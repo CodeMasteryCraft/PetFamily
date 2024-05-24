@@ -41,8 +41,8 @@ namespace PetFamily.Infrastructure.Migrations
 
                     b.Property<string>("Breed")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("breed");
 
                     b.Property<bool>("Castration")
@@ -51,8 +51,8 @@ namespace PetFamily.Infrastructure.Migrations
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("color");
 
                     b.Property<DateTimeOffset>("CreatedDate")
@@ -77,8 +77,8 @@ namespace PetFamily.Infrastructure.Migrations
 
                     b.Property<string>("Nickname")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
                         .HasColumnName("nickname");
 
                     b.Property<bool>("OnTreatment")
@@ -105,14 +105,14 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.Property<string>("Building")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasMaxLength(150)
+                                .HasColumnType("character varying(150)")
                                 .HasColumnName("building");
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasMaxLength(150)
+                                .HasColumnType("character varying(150)")
                                 .HasColumnName("city");
 
                             b1.Property<string>("Index")
@@ -134,8 +134,8 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.Property<string>("Number")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasMaxLength(150)
+                                .HasColumnType("character varying(150)")
                                 .HasColumnName("contact_phone_number");
                         });
 
@@ -145,8 +145,8 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasMaxLength(150)
+                                .HasColumnType("character varying(150)")
                                 .HasColumnName("place");
                         });
 
@@ -156,8 +156,8 @@ namespace PetFamily.Infrastructure.Migrations
 
                             b1.Property<string>("Number")
                                 .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
+                                .HasMaxLength(150)
+                                .HasColumnType("character varying(150)")
                                 .HasColumnName("volunteer_phone_number");
                         });
 
@@ -233,6 +233,20 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasDatabaseName("ix_roles_name");
 
                     b.ToTable("roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e9d2d1fa-1a46-40cf-8c1a-835eebd2f1d6"),
+                            Name = "ADMIN",
+                            Permissions = new[] { "volunteer.applacations.update", "pets.read", "pets.delete", "volunteers.create", "volunteers.delete", "volunteers.read" }
+                        },
+                        new
+                        {
+                            Id = new Guid("7cb4e79b-30cf-4b2e-b4f4-0aee22e0f439"),
+                            Name = "VOLUNTEER",
+                            Permissions = new[] { "pets.read", "pets.create", "pets.update", "pets.delete", "volunteers.read" }
+                        });
                 });
 
             modelBuilder.Entity("PetFamily.Domain.Entities.User", b =>
@@ -242,11 +256,6 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text")
@@ -255,6 +264,16 @@ namespace PetFamily.Infrastructure.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uuid")
                         .HasColumnName("role_id");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Email", "PetFamily.Domain.Entities.User.Email#Email", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("email");
+                        });
 
                     b.HasKey("Id")
                         .HasName("pk_users");

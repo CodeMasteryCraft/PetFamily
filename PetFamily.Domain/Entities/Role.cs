@@ -5,6 +5,7 @@ namespace PetFamily.Domain.Entities;
 public class Role : Entity
 {
     public static readonly Role Admin = new(
+        Guid.NewGuid(),
         nameof(Admin).ToUpper(),
         [
             Common.Permissions.VolunteerApplications.Update,
@@ -18,6 +19,7 @@ public class Role : Entity
         ]);
 
     public static readonly Role Volunteer = new(
+        Guid.NewGuid(),
         nameof(Volunteer).ToUpper(),
         [
             Common.Permissions.Pets.Read,
@@ -32,7 +34,8 @@ public class Role : Entity
     {
     }
 
-    private Role(string name, string[] permissions)
+    private Role(Guid id, string name, string[] permissions)
+        : base(id)
     {
         Name = name;
         Permissions = permissions;

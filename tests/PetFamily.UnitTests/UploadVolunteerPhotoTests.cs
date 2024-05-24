@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using PetFamily.Application.DataAccess;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
 using PetFamily.Application.Providers;
@@ -14,6 +15,7 @@ public class UploadVolunteerPhotoTests
 {
     private readonly Mock<IMinioProvider> _minioProviderMock = new();
     private readonly Mock<IVolunteersRepository> _volunteersRepositoryMock = new();
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock = new();
     private readonly Mock<IFormFile> _formFileMock = new();
 
     public UploadVolunteerPhotoTests()
@@ -43,7 +45,7 @@ public class UploadVolunteerPhotoTests
         _volunteersRepositoryMock.Setup(x => x.GetById(volunteerId, ct))
             .ReturnsAsync(volunteer);
 
-        _volunteersRepositoryMock.Setup(x => x.Save(ct))
+        _unitOfWorkMock.Setup(x => x.SaveChangesAsync(ct))
             .ReturnsAsync(1);
 
         _minioProviderMock
@@ -52,14 +54,15 @@ public class UploadVolunteerPhotoTests
 
         var sut = new UploadVolunteerPhotoHandler(
             _minioProviderMock.Object,
-            _volunteersRepositoryMock.Object);
+            _volunteersRepositoryMock.Object,
+            _unitOfWorkMock.Object);
 
         //act
         var result = await sut.Handle(request, ct);
 
         //assert
         _volunteersRepositoryMock.Verify(x => x.GetById(volunteerId, ct), Times.Once);
-        _volunteersRepositoryMock.Verify(x => x.Save(ct), Times.Once);
+        _unitOfWorkMock.Verify(x => x.SaveChangesAsync(ct), Times.Once);
         _minioProviderMock
             .Verify(x => x.UploadPhoto(_formFileMock.Object, It.IsAny<string>()), Times.Once);
 

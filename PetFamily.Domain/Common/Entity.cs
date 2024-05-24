@@ -4,6 +4,15 @@ public abstract class Entity
 {
     public Guid Id { get; } = Guid.Empty;
 
+    protected Entity()
+    {
+    }
+
+    protected Entity(Guid id)
+    {
+        Id = id;
+    }
+
     public static bool operator ==(Entity? first, Entity? second)
     {
         if (ReferenceEquals(first, null) && ReferenceEquals(second, null))

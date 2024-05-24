@@ -1,8 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using Minio;
-using Minio.DataModel.Args;
 using PetFamily.API.Attributes;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
@@ -11,28 +7,22 @@ using PetFamily.Application.Features.Volunteers.UploadPhoto;
 using PetFamily.Domain.Common;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
+using Serilog;
 
 namespace PetFamily.API.Controllers;
 
 public class VolunteerController : ApplicationController
 {
-    private readonly CacheProvider _cacheProvider;
-
-    public VolunteerController(CacheProvider cacheProvider)
-    {
-        _cacheProvider = cacheProvider;
-    }
-    
     [HttpPost]
-    [HasPermission(Permissions.Volunteers.Create)]
+    // [HasPermission(Permissions.Volunteers.Create)]
     public async Task<IActionResult> Create(
         [FromServices] CreateVolunteerHandler handler,
         [FromBody] CreateVolunteerRequest request,
         CancellationToken ct)
     {
-        var idResult = await _cacheProvider
-            .GetOrCreateAsync("key", _ => handler.Handle(request, ct), cancellationToken: ct);
-        
+        var idResult = await handler.Handle(request, ct);
+
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
 
@@ -40,7 +30,7 @@ public class VolunteerController : ApplicationController
     }
 
     [HttpPost("pet")]
-    [HasPermission(Permissions.Pets.Create)]
+    // [HasPermission(Permissions.Pets.Create)]
     public async Task<IActionResult> Create(
         [FromServices] CreatePetHandler handler,
         [FromBody] CreatePetRequest request,
@@ -65,6 +55,15 @@ public class VolunteerController : ApplicationController
             return BadRequest(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<GetVolunteersResponse>> GetVolunteers(
+        [FromServices] GetVolunteersQuery query)
+    {
+        var response = await query.Handle();
+
+        return Ok(response);
     }
 
     [HttpGet("photo")]
