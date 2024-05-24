@@ -1,58 +1,27 @@
-using System.Text;
-using System.Text.Encodings.Web;
-using Hangfire;
-using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using PetFamily.API.Attributes;
 using PetFamily.API.Authorization;
+using PetFamily.API.Extensions;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
-using PetFamily.Domain.Common;
-using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure;
-using PetFamily.Infrastructure.DbContexts;
-using PetFamily.Infrastructure.Options;
-using PetFamily.Infrastructure.Repositories;
+using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new()
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter a valid token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "Bearer"
-    });
-    options.AddSecurityRequirement(new()
-    {
-        {
-            new()
-            {
-                Reference = new()
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            []
-        }
-    });
-});
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.Debug()
+    .WriteTo.Seq(builder.Configuration.GetSection("Seq").Value
+                 ?? throw new ApplicationException("Seq configuration is empty"))
+    .CreateLogger();
 
+builder.Services.AddSwagger();
 builder.Services.AddControllers();
+
+builder.Services.AddSerilog();
 
 builder.Services
     .AddApplication()
@@ -63,25 +32,7 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
     configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
 });
 
-builder.Services.AddHttpLogging(options => { });
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        var key = builder.Configuration.GetSection(JwtOptions.Jwt).Get<JwtOptions>()
-                  ?? throw new ApplicationException("Wrong configuration");
-
-        var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key.SecretKey));
-
-        options.TokenValidationParameters = new()
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            IssuerSigningKey = symmetricKey
-        };
-    });
-
-builder.Services.AddAuthorization();
+builder.Services.AddAuth(builder.Configuration);
 
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionsAuthorizationsHandler>();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
@@ -101,9 +52,9 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    using var scope = app.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
-    await dbContext.Database.MigrateAsync();
+    // using var scope = app.Services.CreateScope();
+    // var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
+    // await dbContext.Database.MigrateAsync();
 
     /*var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword("admin");
 
@@ -114,7 +65,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseHttpLogging();
+app.UseSerilogRequestLogging();
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -129,6 +80,9 @@ app.MapControllers();
 
 app.Run();
 
-public class AuthOptions : AuthenticationSchemeOptions
+namespace PetFamily.API
 {
+    public class AuthOptions : AuthenticationSchemeOptions
+    {
+    }
 }

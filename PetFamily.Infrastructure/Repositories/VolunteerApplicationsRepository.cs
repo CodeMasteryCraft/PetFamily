@@ -26,4 +26,9 @@ public class VolunteerApplicationsRepository : IVolunteerApplicationsRepository
 
         return application;
     }
+
+    public async Task Add(VolunteerApplication application, CancellationToken ct)
+    {
+        await _dbContext.VolunteersApplications.AddAsync(application, ct);
+    }
 }

@@ -3,7 +3,9 @@ namespace PetFamily.Infrastructure.ReadModels;
 public class VolunteerReadModel
 {
     public Guid Id { get; init; }
-    public string Name { get; init; } = string.Empty;
+    public string FirstName { get; init; } = string.Empty;
+    public string LastName { get; init; } = string.Empty;
+    public string? Patronymic { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
     public int YearsExperience { get; init; }
     public int? NumberOfPetsFoundHome { get; init; }

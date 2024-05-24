@@ -15,5 +15,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.HasIndex(r => r.Name).IsUnique();
 
         builder.Property(r => r.Permissions);
+
+        builder.HasData(Role.Admin, Role.Volunteer);
     }
 }

@@ -1,21 +1,21 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Minio;
-using Minio.DataModel.Args;
 using PetFamily.API.Attributes;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
 using PetFamily.Domain.Common;
+using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
+using Serilog;
 
 namespace PetFamily.API.Controllers;
 
 public class VolunteerController : ApplicationController
 {
     [HttpPost]
-    [HasPermission(Permissions.Volunteers.Create)]
+    // [HasPermission(Permissions.Volunteers.Create)]
     public async Task<IActionResult> Create(
         [FromServices] CreateVolunteerHandler handler,
         [FromBody] CreateVolunteerRequest request,
@@ -30,7 +30,7 @@ public class VolunteerController : ApplicationController
     }
 
     [HttpPost("pet")]
-    [HasPermission(Permissions.Pets.Create)]
+    // [HasPermission(Permissions.Pets.Create)]
     public async Task<IActionResult> Create(
         [FromServices] CreatePetHandler handler,
         [FromBody] CreatePetRequest request,
@@ -55,6 +55,15 @@ public class VolunteerController : ApplicationController
             return BadRequest(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<GetVolunteersResponse>> GetVolunteers(
+        [FromServices] GetVolunteersQuery query)
+    {
+        var response = await query.Handle();
+
+        return Ok(response);
     }
 
     [HttpGet("photo")]

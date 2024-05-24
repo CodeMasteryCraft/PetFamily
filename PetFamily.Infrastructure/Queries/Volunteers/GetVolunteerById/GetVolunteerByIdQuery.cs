@@ -41,7 +41,9 @@ public class GetVolunteerByIdQuery
 
         var volunteerDto = new VolunteerDto(
             volunteer.Id,
-            volunteer.Name,
+            volunteer.FirstName,
+            volunteer.LastName,
+            volunteer.Patronymic,
             volunteer.Photos.Select(p => new VolunteerPhotoDto
             {
                 Id = p.Id,

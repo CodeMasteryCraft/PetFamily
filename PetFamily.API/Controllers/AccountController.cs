@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PetFamily.Application.Features.Accounts.Login;
+using PetFamily.Application.Features.Users.Login;
 
 namespace PetFamily.API.Controllers;
 

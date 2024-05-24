@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.DataAccess;
+using PetFamily.Application.Features.Volunteers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
@@ -9,14 +10,17 @@ namespace PetFamily.Application.Features.VolunteerApplications.ApplyVolunteerApp
 
 public class ApplyVolunteerApplicationHandler
 {
-    private readonly IPetFamilyWriteDbContext _dbContext;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVolunteerApplicationsRepository _volunteerApplicationsRepository;
     private readonly ILogger<ApplyVolunteerApplicationHandler> _logger;
 
     public ApplyVolunteerApplicationHandler(
-        IPetFamilyWriteDbContext dbContext,
+        IUnitOfWork unitOfWork,
+        IVolunteerApplicationsRepository volunteerApplicationsRepository,
         ILogger<ApplyVolunteerApplicationHandler> logger)
     {
-        _dbContext = dbContext;
+        _unitOfWork = unitOfWork;
+        _volunteerApplicationsRepository = volunteerApplicationsRepository;
         _logger = logger;
     }
 
@@ -33,8 +37,8 @@ public class ApplyVolunteerApplicationHandler
             request.NumberOfPetsFoundHome,
             request.FromShelter);
 
-        await _dbContext.VolunteersApplications.AddAsync(application, ct);
-        await _dbContext.SaveChangesAsync(ct);
+        await _volunteerApplicationsRepository.Add(application, ct);
+        await _unitOfWork.SaveChangesAsync(ct);
 
         _logger.LogInformation("Volunteer application has been created {id}", application.Id);
 
