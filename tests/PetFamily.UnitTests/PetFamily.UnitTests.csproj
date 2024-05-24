@@ -29,10 +29,4 @@
       <ProjectReference Include="..\..\PetFamily.Infrastructure\PetFamily.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Update="UploadVolunteerPhotoTests.cs">
-        <DependentUpon>Features.cs</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
 </Project>
