@@ -42,12 +42,7 @@ public class GetVolunteerByIdQuery
         var volunteerDto = new VolunteerDto(
             volunteer.Id,
             volunteer.Name,
-            volunteer.Photos.Select(p => new VolunteerPhotoDto
-            {
-                Id = p.Id,
-                Path = p.Path,
-                IsMain = p.IsMain
-            }).ToList());
+            volunteer.Photos.Select(p => new VolunteerPhotoDto(p.Id, p.Path, p.IsMain)).ToList());
 
         return new GetVolunteerByIdResponse(volunteerDto);
     }

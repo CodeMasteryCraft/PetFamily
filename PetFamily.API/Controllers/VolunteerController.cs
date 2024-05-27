@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Minio;
-using Minio.DataModel.Args;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;

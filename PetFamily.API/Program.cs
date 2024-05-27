@@ -7,7 +7,6 @@ using PetFamily.Application;
 using PetFamily.Domain.Entities;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.DbContexts;
-using PetFamily.Infrastructure.Repositories;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,15 +26,15 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
 builder.Services.AddHttpLogging(options => { });
 
 // add hangfire client
-// builder.Services.AddHangfire(configuration => configuration
-//     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-//     .UseSimpleAssemblyNameTypeSerializer()
-//     .UseRecommendedSerializerSettings()
-//     .UsePostgreSqlStorage(c => c
-//         .UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangFire"))));
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(c => c
+        .UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangFire"))));
 
 // add hangfire server
-// builder.Services.AddHangfireServer();
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -60,7 +59,7 @@ app.UseSwaggerUI();
 
 app.MapControllers();
 
-// app.UseHangfireDashboard();
-// app.MapHangfireDashboard("/dashboard");
+app.UseHangfireDashboard();
+app.MapHangfireDashboard("/dashboard");
 
 app.Run();
