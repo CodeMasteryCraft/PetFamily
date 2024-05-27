@@ -21,7 +21,6 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
 
 builder.Services.AddHttpLogging(options => { });
 
-
 // builder.Services.AddHangfire(configuration => configuration
 //     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
 //     .UseSimpleAssemblyNameTypeSerializer()

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Dtos;
 using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
+using PetFamily.Domain.ValueObjects;
 using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
@@ -25,7 +26,7 @@ public class GetVolunteerPhotoQuery
         CancellationToken ct)
     {
         var volunteer = await _readDbContext.Volunteers
-            .Include(v => v.Photos).Include(volunteerReadModel => volunteerReadModel.FullName)
+            .Include(v => v.Photos)
             .FirstOrDefaultAsync(v => v.Id == request.VolunteerId, cancellationToken: ct);
 
         if (volunteer is null)
@@ -40,8 +41,9 @@ public class GetVolunteerPhotoQuery
             return photoUrls.Error;
 
         var volunteerDto = new VolunteerDto(
-            volunteer.Id,
-            volunteer.FullName.FirstName,
+            volunteer.Id,volunteer.FirstName, 
+                volunteer.LastName,
+                volunteer?.Patronymic,
             volunteer.Photos.Select(p => new VolunteerPhotoDto
             {
                 Id = p.Id,

@@ -29,14 +29,14 @@ public class MinioProvider : IMinioProvider
             var bucketExistArgs = new BucketExistsArgs()
                 .WithBucket(PhotoBucket);
 
-            var bucketExist = await _minioClient.BucketExistsAsync(bucketExistArgs);
+            var bucketExist = await _minioClient.BucketExistsAsync(bucketExistArgs, ct);
 
             if (bucketExist == false)
             {
                 var makeBucketArgs = new MakeBucketArgs()
                     .WithBucket(PhotoBucket);
 
-                await _minioClient.MakeBucketAsync(makeBucketArgs);
+                await _minioClient.MakeBucketAsync(makeBucketArgs, ct);
             }
 
             await using (var stream = photo.OpenReadStream())
@@ -47,7 +47,7 @@ public class MinioProvider : IMinioProvider
                     .WithObjectSize(stream.Length)
                     .WithObject(path);
 
-                var response = await _minioClient.PutObjectAsync(putObjectArgs);
+                var response = await _minioClient.PutObjectAsync(putObjectArgs, ct);
 
                 return response.ObjectName;
             }
@@ -66,21 +66,21 @@ public class MinioProvider : IMinioProvider
             var bucketExistArgs = new BucketExistsArgs()
                 .WithBucket(PhotoBucket);
 
-            var bucketExist = await _minioClient.BucketExistsAsync(bucketExistArgs);
+            var bucketExist = await _minioClient.BucketExistsAsync(bucketExistArgs, ct);
 
             if (bucketExist == false)
             {
                 var makeBucketArgs = new MakeBucketArgs()
                     .WithBucket(PhotoBucket);
 
-                await _minioClient.MakeBucketAsync(makeBucketArgs);
+                await _minioClient.MakeBucketAsync(makeBucketArgs, ct);
             }
 
             var removeObjectArgs = new RemoveObjectArgs()
                 .WithBucket(PhotoBucket)
                 .WithObject(path);
 
-            await _minioClient.RemoveObjectAsync(removeObjectArgs);
+            await _minioClient.RemoveObjectAsync(removeObjectArgs, ct);
             return true;
         }
         catch (Exception e)

@@ -80,11 +80,12 @@ public class VolunteerController : ApplicationController
         return Ok(result.Value);
     }
 
-    [HttpGet("GetAll")]
+    [HttpGet]
     public async Task<IActionResult> GetAll([FromServices] GetVolunteersQuery query,
-        CancellationToken ct, int size = 0, int page = 0)
+        [FromQuery]GetVolunteersRequest request,
+        CancellationToken ct)
     {
-        var idResult = await query.Handle(size, page, ct);
+        var idResult = await query.Handle(request, ct);
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
         return Ok(idResult.Value);

@@ -1,5 +1,5 @@
-﻿using PetFamily.Infrastructure.ReadModels;
+﻿using PetFamily.Application.Dtos;
+using PetFamily.Infrastructure.ReadModels;
 
 namespace PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
-
-public record GetVolunteerResponse(VolunteerReadModel Volunteer);
+public record GetVolunteerResponse(VolunteerDto Volunteer);
