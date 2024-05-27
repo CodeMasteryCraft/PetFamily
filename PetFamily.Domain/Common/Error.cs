@@ -80,6 +80,12 @@ public static class Errors
         }
     }
 
+    public static class VolunteersApplications
+    {
+        public static Error AlreadyApproved() =>
+            new("volunteers.applications.already.approved", "Volunteer application has already been approved");
+    }
+
     public static class Users
     {
         public static Error InvalidCredentials()

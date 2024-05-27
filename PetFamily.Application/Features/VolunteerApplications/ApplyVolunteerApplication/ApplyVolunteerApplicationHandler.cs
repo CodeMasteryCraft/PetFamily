@@ -1,7 +1,6 @@
 using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.DataAccess;
-using PetFamily.Application.Features.Volunteers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
@@ -29,9 +28,11 @@ public class ApplyVolunteerApplicationHandler
         var fullName = FullName.Create(
             request.FirstName, request.LastName, request.Patronymic).Value;
 
+        var email = Email.Create(request.Email).Value;
+
         var application = new VolunteerApplication(
             fullName,
-            request.Email,
+            email,
             request.Description,
             request.YearsExperience,
             request.NumberOfPetsFoundHome,

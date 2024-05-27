@@ -14,13 +14,14 @@ public class Volunteer : Entity
     }
 
     public Volunteer(
+        Guid id,
         FullName fullName,
         string description,
         int yearsExperience,
         int? numberOfPetsFoundHome,
         string? donationInfo,
         bool fromShelter,
-        IEnumerable<SocialMedia> socialMedias)
+        IEnumerable<SocialMedia> socialMedias) : base(id)
     {
         FullName = fullName;
         Description = description;
@@ -74,6 +75,7 @@ public class Volunteer : Entity
     }
 
     public static Result<Volunteer> Create(
+        Guid userId,
         FullName name,
         string description,
         int yearsExperience,
@@ -82,6 +84,9 @@ public class Volunteer : Entity
         bool fromShelter,
         IEnumerable<SocialMedia> socialMedias)
     {
+        if (userId == Guid.Empty)
+            return Errors.General.ValueIsInvalid(nameof(userId));
+
         if (description.IsEmpty() || description.Length > Constraints.LONG_TITLE_LENGTH)
             return Errors.General.InvalidLength(nameof(description));
 
@@ -95,6 +100,7 @@ public class Volunteer : Entity
             return Errors.General.InvalidLength(nameof(donationInfo));
 
         return new Volunteer(
+            userId,
             name,
             description,
             yearsExperience,

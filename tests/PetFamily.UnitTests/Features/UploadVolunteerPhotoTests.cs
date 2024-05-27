@@ -9,7 +9,7 @@ using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.UnitTests;
+namespace PetFamily.UnitTests.Features;
 
 public class UploadVolunteerPhotoTests
 {

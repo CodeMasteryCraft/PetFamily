@@ -22,6 +22,8 @@ public class VolunteerApplicationConfiguration : IEntityTypeConfiguration<Volunt
 
         builder.ComplexProperty(v => v.Status, b => { b.Property(f => f.Status).HasColumnName("status"); });
 
+        builder.ComplexProperty(v => v.Email, b => { b.Property(v => v.Value).HasColumnName("email"); });
+
         builder.Property(v => v.Description)
             .IsRequired()
             .HasMaxLength(Constraints.LONG_TITLE_LENGTH);

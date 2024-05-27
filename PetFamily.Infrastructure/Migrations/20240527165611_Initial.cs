@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace PetFamily.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -14,16 +12,18 @@ namespace PetFamily.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "roles",
+                name: "users",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
+                    password_hash = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
+                    role = table.Column<string>(type: "text", nullable: false),
                     permissions = table.Column<string[]>(type: "text[]", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_roles", x => x.id);
+                    table.PrimaryKey("pk_users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,11 +31,11 @@ namespace PetFamily.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "character varying(5000)", maxLength: 5000, nullable: false),
                     years_experience = table.Column<int>(type: "integer", nullable: false),
                     number_of_pets_found_home = table.Column<int>(type: "integer", nullable: true),
                     from_shelter = table.Column<bool>(type: "boolean", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     last_name = table.Column<string>(type: "text", nullable: false),
                     patronymic = table.Column<string>(type: "text", nullable: true),
@@ -44,6 +44,40 @@ namespace PetFamily.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_volunteer_applications", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "admins",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_admins", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_admins_users_id",
+                        column: x => x.id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "regular_users",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_regular_users", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_regular_users_users_id",
+                        column: x => x.id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,24 +98,10 @@ namespace PetFamily.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_volunteers", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "users",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    password_hash = table.Column<string>(type: "text", nullable: false),
-                    role_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_users", x => x.id);
                     table.ForeignKey(
-                        name: "fk_users_roles_role_id",
-                        column: x => x.role_id,
-                        principalTable: "roles",
+                        name: "fk_volunteers_users_id",
+                        column: x => x.id,
+                        principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -184,15 +204,6 @@ namespace PetFamily.Infrastructure.Migrations
                         principalColumn: "id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "roles",
-                columns: new[] { "id", "name", "permissions" },
-                values: new object[,]
-                {
-                    { new Guid("7cb4e79b-30cf-4b2e-b4f4-0aee22e0f439"), "VOLUNTEER", new[] { "pets.read", "pets.create", "pets.update", "pets.delete", "volunteers.read" } },
-                    { new Guid("e9d2d1fa-1a46-40cf-8c1a-835eebd2f1d6"), "ADMIN", new[] { "volunteer.applacations.update", "pets.read", "pets.delete", "volunteers.create", "volunteers.delete", "volunteers.read" } }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "ix_pet_photos_pet_id",
                 table: "pet_photos",
@@ -202,17 +213,6 @@ namespace PetFamily.Infrastructure.Migrations
                 name: "ix_pets_volunteer_id",
                 table: "pets",
                 column: "volunteer_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_roles_name",
-                table: "roles",
-                column: "name",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "ix_users_role_id",
-                table: "users",
-                column: "role_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_vaccinations_pet_id",
@@ -229,10 +229,13 @@ namespace PetFamily.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "admins");
+
+            migrationBuilder.DropTable(
                 name: "pet_photos");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "regular_users");
 
             migrationBuilder.DropTable(
                 name: "vaccinations");
@@ -244,13 +247,13 @@ namespace PetFamily.Infrastructure.Migrations
                 name: "volunteer_photos");
 
             migrationBuilder.DropTable(
-                name: "roles");
-
-            migrationBuilder.DropTable(
                 name: "pets");
 
             migrationBuilder.DropTable(
                 name: "volunteers");
+
+            migrationBuilder.DropTable(
+                name: "users");
         }
     }
 }

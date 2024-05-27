@@ -1,34 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using PetFamily.API.Attributes;
 using PetFamily.Application.Features.Volunteers.CreatePet;
-using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
-using PetFamily.Domain.Common;
-using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
-using Serilog;
 
 namespace PetFamily.API.Controllers;
 
 public class VolunteerController : ApplicationController
 {
-    [HttpPost]
-    // [HasPermission(Permissions.Volunteers.Create)]
-    public async Task<IActionResult> Create(
-        [FromServices] CreateVolunteerHandler handler,
-        [FromBody] CreateVolunteerRequest request,
-        CancellationToken ct)
-    {
-        var idResult = await handler.Handle(request, ct);
-
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
-
-        return Ok(idResult.Value);
-    }
-
     [HttpPost("pet")]
     // [HasPermission(Permissions.Pets.Create)]
     public async Task<IActionResult> Create(

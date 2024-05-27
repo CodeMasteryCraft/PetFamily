@@ -2,11 +2,10 @@ using PetFamily.Domain.Common;
 
 namespace PetFamily.Domain.Entities;
 
-public class Role : Entity
+public class Role : ValueObject
 {
     public static readonly Role Admin = new(
-        Guid.NewGuid(),
-        nameof(Admin).ToUpper(),
+        "ADMIN",
         [
             Common.Permissions.VolunteerApplications.Update,
 
@@ -19,8 +18,7 @@ public class Role : Entity
         ]);
 
     public static readonly Role Volunteer = new(
-        Guid.NewGuid(),
-        nameof(Volunteer).ToUpper(),
+        "VOLUNTEER",
         [
             Common.Permissions.Pets.Read,
             Common.Permissions.Pets.Create,
@@ -30,18 +28,24 @@ public class Role : Entity
             Common.Permissions.Volunteers.Read,
         ]);
 
-    private Role()
-    {
-    }
+    public static readonly Role RegularUser = new(
+        "REGULARUSER",
+        [
+            Common.Permissions.Pets.Read,
+            Common.Permissions.Volunteers.Read,
+        ]);
 
-    private Role(Guid id, string name, string[] permissions)
-        : base(id)
+    private Role(string name, string[] permissions)
     {
         Name = name;
         Permissions = permissions;
     }
 
-    public string Name { get; private set; }
+    public string Name { get; }
+    public string[] Permissions { get; }
 
-    public string[] Permissions { get; private set; }
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Name;
+    }
 }

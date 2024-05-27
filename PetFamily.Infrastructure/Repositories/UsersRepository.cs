@@ -16,6 +16,11 @@ public class UsersRepository : IUsersRepository
         _dbContext = dbContext;
     }
 
+    public async Task Add(User user, CancellationToken ct)
+    {
+        await _dbContext.AddAsync(user, ct);
+    }
+
     public async Task<Result<User, Error>> GetByEmail(string email, CancellationToken ct)
     {
         var user = await _dbContext.Users
