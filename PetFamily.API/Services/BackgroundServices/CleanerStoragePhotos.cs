@@ -8,20 +8,23 @@ namespace PetFamily.API.Services.BackgroundServices;
 public class CleanerStoragePhotos : BackgroundService
 {
     private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly PetFamilyReadDbContext _context;
     private readonly IMinioProvider _minioProvider;
 
     public CleanerStoragePhotos(
         IServiceScopeFactory serviceScopeFactory, 
+        PetFamilyReadDbContext context,
         IMinioProvider minioProvider)
     {
         _serviceScopeFactory = serviceScopeFactory;
+        _context = context;
         _minioProvider = minioProvider;
     }
-    
 
-    public async Task DeletePhotos(PetFamilyReadDbContext context)
+
+    private async Task DeletePhotos()
     {
-        var photoDb = context.Volunteers
+        var photoDb = _context.Volunteers
             .Include(v => v.Photos)
             .SelectMany(r => r.Photos)
             .Select(p => p.Path).Where(s => s.Trim().Length > 0).ToList();
@@ -41,21 +44,11 @@ public class CleanerStoragePhotos : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         using var scope = _serviceScopeFactory.CreateScope();
-
-        var dbContext = scope
-            .ServiceProvider
-            .GetRequiredService<PetFamilyReadDbContext>();
-
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            await Task.Delay(10000, stoppingToken);
-            
-            RecurringJob.AddOrUpdate(
-                "cleaner",
-                () => DeletePhotos(dbContext),
-                Cron.Daily);
-            
-        }
+        var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyReadDbContext>();
+         RecurringJob.AddOrUpdate(
+            "cleaner",
+            () => DeletePhotos(),
+            Cron.Daily);
     }
 }
 

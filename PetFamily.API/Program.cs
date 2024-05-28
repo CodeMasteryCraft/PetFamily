@@ -38,9 +38,9 @@ builder.Services.AddHangfire(configuration => configuration
 // add hangfire server
 builder.Services.AddHangfireServer();
 
-builder.Services.AddHostedService<CleanerStoragePhotos>();
 
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
