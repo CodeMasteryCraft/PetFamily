@@ -2,6 +2,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using PetFamily.API.Middlewares;
+using PetFamily.API.Services.BackgroundServices;
 using PetFamily.API.Validation;
 using PetFamily.Application;
 using PetFamily.Domain.Entities;
@@ -33,8 +34,11 @@ builder.Services.AddHangfire(configuration => configuration
     .UsePostgreSqlStorage(c => c
         .UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangFire"))));
 
+
 // add hangfire server
 builder.Services.AddHangfireServer();
+
+builder.Services.AddHostedService<CleanerStoragePhotos>();
 
 var app = builder.Build();
 
@@ -43,12 +47,11 @@ if (app.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
     await dbContext.Database.MigrateAsync();
-
-
-    var admin = new User("admin", "admin", Role.Admin);
-
-    await dbContext.Users.AddAsync(admin);
-    await dbContext.SaveChangesAsync();
+    
+    // var admin = new User("admin", "admin", Role.Admin);
+    //
+    // await dbContext.Users.AddAsync(admin);
+    // await dbContext.SaveChangesAsync();
 }
 
 app.UseMiddleware<ExceptionMiddleware>();

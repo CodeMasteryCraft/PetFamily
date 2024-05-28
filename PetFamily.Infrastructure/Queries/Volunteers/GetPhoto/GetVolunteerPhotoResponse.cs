@@ -2,4 +2,4 @@
 
 namespace PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 
-public record GetVolunteerPhotoResponse(VolunteerPhotoDto PhotoDto);
+public record GetVolunteerPhotoResponse(IEnumerable<VolunteerPhotoDto> PhotoDto);

@@ -159,15 +159,15 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    private async Task<Result<bool, Error>> MakeBucket(string bucketName)
+    private async Task<Result<string, Error>> MakeBucket(string bucketName)
     {
         try
         {
             var found = BucketExist(bucketName).Result.Value;
-            if (found) return false;
+            if (found) return bucketName;
             var args = new MakeBucketArgs().WithBucket(bucketName);
             await _minioClient.MakeBucketAsync(args);
-            return true;
+            return bucketName;
 
         }
         catch (Exception e)
