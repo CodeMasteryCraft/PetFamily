@@ -50,7 +50,10 @@ public class CleanerStoragePhotos : BackgroundService
         {
             await Task.Delay(10000, stoppingToken);
             
-            BackgroundJob.Enqueue(() => DeletePhotos(dbContext));
+            RecurringJob.AddOrUpdate(
+                "cleaner",
+                () => DeletePhotos(dbContext),
+                Cron.Daily);
             
         }
     }
