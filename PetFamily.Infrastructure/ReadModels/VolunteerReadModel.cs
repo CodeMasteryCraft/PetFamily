@@ -9,7 +9,7 @@ public class VolunteerReadModel
     public string Description { get; init; } = string.Empty;
     public int YearsExperience { get; init; }
     public int? NumberOfPetsFoundHome { get; init; }
-    public string DonationInfo { get; init; } = string.Empty;
+    public string? DonationInfo { get; init; } = string.Empty;
     public bool FromShelter { get; init; }
     public List<VolunteerPhotoReadModel> Photos { get; init; } = [];
     public ICollection<SocialMediaReadModel> SocialMedias { get; init; } = [];

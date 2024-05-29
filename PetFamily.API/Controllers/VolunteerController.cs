@@ -1,7 +1,12 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
+using PetFamily.Application.Providers;
+using PetFamily.Infrastructure.Queries.Volunteers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
 
@@ -9,6 +14,13 @@ namespace PetFamily.API.Controllers;
 
 public class VolunteerController : ApplicationController
 {
+    private readonly ICacheProvider _cache;
+
+    public VolunteerController(ICacheProvider cache)
+    {
+        _cache = cache;
+    }
+
     [HttpPost("pet")]
     // [HasPermission(Permissions.Pets.Create)]
     public async Task<IActionResult> Create(
@@ -39,10 +51,10 @@ public class VolunteerController : ApplicationController
 
     [HttpGet]
     public async Task<ActionResult<GetVolunteersResponse>> GetVolunteers(
-        [FromServices] GetVolunteersQuery query)
+        [FromServices] GetVolunteersQuery query,
+        CancellationToken ct)
     {
-        var response = await query.Handle();
-
+        var response = await query.Handle(ct);
         return Ok(response);
     }
 

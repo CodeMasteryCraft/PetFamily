@@ -23,6 +23,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddSerilog();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);

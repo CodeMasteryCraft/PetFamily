@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetFamily.Infrastructure.Interseptors;
 using PetFamily.Infrastructure.ReadModels;
 
 namespace PetFamily.Infrastructure.DbContexts;
@@ -8,6 +9,7 @@ namespace PetFamily.Infrastructure.DbContexts;
 public class PetFamilyReadDbContext : DbContext
 {
     private readonly IConfiguration _configuration;
+    
 
     public PetFamilyReadDbContext(IConfiguration configuration)
     {

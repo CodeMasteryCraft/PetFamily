@@ -7,6 +7,7 @@ using PetFamily.Application.Features.VolunteerApplications;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.Providers;
 using PetFamily.Infrastructure.DbContexts;
+using PetFamily.Infrastructure.Interseptors;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Pets;
@@ -25,7 +26,8 @@ public static class DependencyRegistration
             .AddDataStorages(configuration)
             .AddRepositories()
             .AddQueries()
-            .AddProviders();
+            .AddProviders()
+            .AddInterseptors();
 
         return services;
     }
@@ -38,11 +40,18 @@ public static class DependencyRegistration
 
         return services;
     }
+    
+    private static IServiceCollection AddInterseptors(this IServiceCollection services)
+    {
+        services.AddScoped<CacheInvalidationInterceptor>();
+        return services;
+    }
 
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
         services.AddScoped<IMinioProvider, MinioProvider>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddSingleton<ICacheProvider, CacheProvider>();
         return services;
     }
 
