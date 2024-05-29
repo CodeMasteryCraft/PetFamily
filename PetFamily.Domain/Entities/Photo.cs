@@ -6,6 +6,9 @@ namespace PetFamily.Domain.Entities;
 
 public abstract class Photo : Entity
 {
+    private const string JPEG = "image/jpeg";
+    private const string JPG = "image/jpg";
+    private const string PNG = "image/png";
     protected Photo(string path, bool isMain)
     {
         Path = path;
@@ -16,8 +19,7 @@ public abstract class Photo : Entity
     public bool IsMain { get; protected set; }
     public static Result<VolunteerPhoto, Error> CreateAndActivate(string path, string contentType, long length, bool isMain)
     {
-        string[] allowedContentTypes = ["image/jpeg", "image/png", "image/png"];
-        if (!allowedContentTypes.Contains(contentType))
+        if (contentType != JPG && contentType != JPEG && contentType != PNG)
             return Errors.Volunteers.FileTypeInvalid(contentType);
         if (length > 10000)
             return Errors.Volunteers.FileLengthInvalid(length);

@@ -25,14 +25,14 @@ namespace PetFamily.Infrastructure.Queries.Volunteers.GetAllVolunteers
                 .ToListAsync(cancellationToken: ct);
 
 
-            List<VolunteerDto> dtoList = [];
-            dtoList.AddRange(volunteers.Select(v => new VolunteerDto(
-                v.Id, 
-                v.FirstName, 
-                v.LastName, 
-                v.Patronymic, 
+            var dtoList = volunteers.Select(v => new VolunteerDto(
+                v.Id,
+                v.FirstName,
+                v.LastName,
+                v.Patronymic,
                 v.Photos.Select(x => new VolunteerPhotoDto { Id = x.Id, Path = x.Path, IsMain = x.IsMain })
-                .ToList())));
+                    .ToList())).ToList();
+
             return new GetVolunteersResponse(dtoList);
         }
     }

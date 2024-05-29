@@ -122,11 +122,4 @@ public class MinioProvider : IMinioProvider
 
         return _minioClient.ListObjectsAsync(listObjectArgs, ct);
     }
-
-    // public Task RemoveObject(Item obj, string bucket, CancellationToken ct)
-    // {
-    //     var removeObjectArgs = new RemoveObjectArgs().WithBucket(bucket).WithObject(obj.Key);
-    //
-    //     return _minioClient.RemoveObjectAsync(removeObjectArgs, ct);
-    // }
 }
