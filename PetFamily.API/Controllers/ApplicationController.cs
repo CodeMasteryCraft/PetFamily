@@ -6,9 +6,9 @@ namespace PetFamily.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class ApplicationController : ControllerBase
+public abstract class ApplicationController : ControllerBase
 {
-    protected new IActionResult Ok(object? result = null)
+    protected new ActionResult Ok(object? result = null)
     {
         var envelope = Envelope.Ok(result);
 

@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Minio;
@@ -22,7 +21,7 @@ public class MinioProvider : IMinioProvider
         _logger = logger;
     }
 
-    public async Task<Result<string, Error>> UploadPhoto(IFormFile photo, string path, CancellationToken ct)
+    public async Task<Result<string>> UploadPhoto(IFormFile photo, string path, CancellationToken ct)
     {
         try
         {
@@ -59,7 +58,7 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<bool, Error>> RemovePhoto(string path, CancellationToken ct)
+    public async Task<Result<bool>> RemovePhoto(string path, CancellationToken ct)
     {
         try
         {
@@ -90,7 +89,7 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<IReadOnlyList<string>, Error>> GetPhotos(IEnumerable<string> paths, CancellationToken ct)
+    public async Task<Result<IReadOnlyList<string>>> GetPhotos(IEnumerable<string> paths, CancellationToken ct)
     {
         try
         {

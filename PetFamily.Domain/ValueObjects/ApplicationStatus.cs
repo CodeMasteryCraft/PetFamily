@@ -1,5 +1,3 @@
-using CSharpFunctionalExtensions;
-using PetFamily.Domain.Common;
 using ValueObject = PetFamily.Domain.Common.ValueObject;
 
 namespace PetFamily.Domain.ValueObjects;

@@ -14,6 +14,10 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
 
         builder.HasKey(v => v.Id);
 
+        builder.HasOne<User>()
+            .WithOne()
+            .HasForeignKey<Volunteer>(v => v.Id);
+
         builder.ComplexProperty(v => v.FullName, b =>
         {
             b.Property(f => f.FirstName).HasColumnName("first_name");

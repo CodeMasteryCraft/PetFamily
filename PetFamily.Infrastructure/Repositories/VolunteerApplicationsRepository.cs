@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Features.VolunteerApplications;
 using PetFamily.Domain.Common;
@@ -16,7 +15,7 @@ public class VolunteerApplicationsRepository : IVolunteerApplicationsRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Result<VolunteerApplication, Error>> GetById(Guid id, CancellationToken ct)
+    public async Task<Result<VolunteerApplication>> GetById(Guid id, CancellationToken ct)
     {
         var application = await _dbContext.VolunteersApplications
             .FirstOrDefaultAsync(v => v.Id == id, cancellationToken: ct);
@@ -25,5 +24,10 @@ public class VolunteerApplicationsRepository : IVolunteerApplicationsRepository
             return Errors.General.NotFound(id);
 
         return application;
+    }
+
+    public async Task Add(VolunteerApplication application, CancellationToken ct)
+    {
+        await _dbContext.VolunteersApplications.AddAsync(application, ct);
     }
 }

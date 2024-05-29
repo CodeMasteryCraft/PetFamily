@@ -2,37 +2,38 @@ using PetFamily.Domain.Common;
 
 namespace PetFamily.Domain.Entities;
 
-public class Role : Entity
+public class Role : ValueObject
 {
-    public static Role Admin = new(
-        nameof(Admin).ToUpper(),
+    public static readonly Role Admin = new(
+        "ADMIN",
         [
-            "volunteer.applications.read",
-            "volunteer.applications.update",
+            Common.Permissions.VolunteerApplications.Update,
 
-            "volunteers.create",
+            Common.Permissions.Pets.Read,
+            Common.Permissions.Pets.Delete,
 
-            "pets.read",
-            "pets.delete",
-
-            "volunteers.read",
-            "volunteers.delete"
+            Common.Permissions.Volunteers.Create,
+            Common.Permissions.Volunteers.Delete,
+            Common.Permissions.Volunteers.Read,
         ]);
 
-    public static Role Volunteer = new(
-        nameof(Volunteer).ToUpper(),
+    public static readonly Role Volunteer = new(
+        "VOLUNTEER",
         [
-            "pets.read",
-            "pets.create",
-            "pets.update",
-            "pets.delete",
+            Common.Permissions.Pets.Read,
+            Common.Permissions.Pets.Create,
+            Common.Permissions.Pets.Update,
+            Common.Permissions.Pets.Delete,
 
-            "volunteers.read"
+            Common.Permissions.Volunteers.Read,
         ]);
 
-    private Role()
-    {
-    }
+    public static readonly Role RegularUser = new(
+        "REGULARUSER",
+        [
+            Common.Permissions.Pets.Read,
+            Common.Permissions.Volunteers.Read,
+        ]);
 
     private Role(string name, string[] permissions)
     {
@@ -40,7 +41,11 @@ public class Role : Entity
         Permissions = permissions;
     }
 
-    public string Name { get; private set; }
+    public string Name { get; }
+    public string[] Permissions { get; }
 
-    public string[] Permissions { get; private set; }
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Name;
+    }
 }

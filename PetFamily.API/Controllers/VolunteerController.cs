@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Volunteers.CreatePet;
-using PetFamily.Application.Features.Volunteers.CreateVolunteer;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
-using PetFamily.Infrastructure.Queries.Volunteers.GetAllVolunteers;
+using PetFamily.Application.Providers;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
 
@@ -12,21 +12,15 @@ namespace PetFamily.API.Controllers;
 
 public class VolunteerController : ApplicationController
 {
-    [HttpPost]
-    public async Task<IActionResult> Create(
-        [FromServices] CreateVolunteerHandler handler,
-        [FromBody] CreateVolunteerRequest request,
-        CancellationToken ct)
+    private readonly ICacheProvider _cache;
+
+    public VolunteerController(ICacheProvider cache)
     {
-        var idResult = await handler.Handle(request, ct);
-
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
-
-        return Ok(idResult.Value);
+        _cache = cache;
     }
 
     [HttpPost("pet")]
+    // [HasPermission(Permissions.Pets.Create)]
     public async Task<IActionResult> Create(
         [FromServices] CreatePetHandler handler,
         [FromBody] CreatePetRequest request,
@@ -52,7 +46,6 @@ public class VolunteerController : ApplicationController
 
         return Ok(result.Value);
     }
-
 
     [HttpGet("photo")]
     public async Task<IActionResult> GetPhotos(
@@ -81,7 +74,7 @@ public class VolunteerController : ApplicationController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromServices] GetVolunteersQuery query,
+    public async Task<IActionResult> GetVolunteers([FromServices] GetVolunteersQuery query,
         [FromQuery]GetVolunteersRequest request,
         CancellationToken ct)
     {

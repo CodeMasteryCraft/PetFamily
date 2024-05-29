@@ -1,15 +1,35 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using PetFamily.API.Authorization;
+using PetFamily.API.Extensions;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
 using PetFamily.Infrastructure;
+using Serilog;
 using PetFamily.Infrastructure.BackgroundServices;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSwaggerGen();
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.Debug()
+    .WriteTo.Seq(builder.Configuration.GetSection("Seq").Value
+                 ?? throw new ApplicationException("Seq configuration is empty"))
+    .CreateLogger();
+
+builder.Services.AddSwagger();
 builder.Services.AddControllers();
 builder.Services.AddHostedService<ImageCleanupService>();
+
+builder.Services.AddSerilog();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
@@ -19,16 +39,20 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
     configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
 });
 
-builder.Services.AddHttpLogging(options => { });
+builder.Services.AddAuth(builder.Configuration);
 
+builder.Services.AddSingleton<IAuthorizationHandler, PermissionsAuthorizationsHandler>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+
+// add hangfire client
 // builder.Services.AddHangfire(configuration => configuration
 //     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
 //     .UseSimpleAssemblyNameTypeSerializer()
 //     .UseRecommendedSerializerSettings()
 //     .UsePostgreSqlStorage(c => c
-//         .UseNpgsqlConnection(builder.Configuration.GetConnectionString("PetFamily"))));
+//         .UseNpgsqlConnection(builder.Configuration.GetConnectionString("HangFire"))));
 
-
+// add hangfire server
 // builder.Services.AddHangfireServer();
 
 var app = builder.Build();
@@ -47,10 +71,13 @@ var app = builder.Build();
 // }
 
 app.UseMiddleware<ExceptionMiddleware>();
-app.UseHttpLogging();
+app.UseSerilogRequestLogging();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
@@ -58,3 +85,10 @@ app.MapControllers();
 // app.MapHangfireDashboard("/dashboard");
 
 app.Run();
+
+namespace PetFamily.API
+{
+    public class AuthOptions : AuthenticationSchemeOptions
+    {
+    }
+}

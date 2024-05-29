@@ -12,10 +12,15 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasKey(u => u.Id);
 
-        builder.Property(u => u.Email).IsRequired();
+        builder.ComplexProperty(u => u.Email,
+            emailBuilder => { emailBuilder.Property(e => e.Value).HasColumnName("email"); });
+
+        builder.ComplexProperty(u => u.Role, roleBuilder =>
+        {
+            roleBuilder.Property(r => r.Name).HasColumnName("role");
+            roleBuilder.Property(r => r.Permissions).HasColumnName("permissions");
+        });
 
         builder.Property(u => u.PasswordHash).IsRequired();
-
-        builder.HasOne(u => u.Role).WithMany();
     }
 }

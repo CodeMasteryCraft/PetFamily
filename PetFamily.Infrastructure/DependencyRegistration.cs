@@ -2,15 +2,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetFamily.Application.DataAccess;
+using PetFamily.Application.Features.Users;
+using PetFamily.Application.Features.VolunteerApplications;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.Providers;
 using PetFamily.Infrastructure.DbContexts;
+using PetFamily.Infrastructure.Interseptors;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Pets;
-using PetFamily.Infrastructure.Queries.Volunteers.GetAllVolunteers;
-using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
 using PetFamily.Infrastructure.Repositories;
 
 namespace PetFamily.Infrastructure;
@@ -24,7 +26,8 @@ public static class DependencyRegistration
             .AddDataStorages(configuration)
             .AddRepositories()
             .AddQueries()
-            .AddProviders();
+            .AddProviders()
+            .AddInterseptors();
 
         return services;
     }
@@ -32,13 +35,23 @@ public static class DependencyRegistration
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
+        services.AddScoped<IVolunteerApplicationsRepository, VolunteerApplicationsRepository>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
 
+        return services;
+    }
+    
+    private static IServiceCollection AddInterseptors(this IServiceCollection services)
+    {
+        services.AddScoped<CacheInvalidationInterceptor>();
         return services;
     }
 
     private static IServiceCollection AddProviders(this IServiceCollection services)
     {
         services.AddScoped<IMinioProvider, MinioProvider>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddSingleton<ICacheProvider, CacheProvider>();
         return services;
     }
 
@@ -46,7 +59,7 @@ public static class DependencyRegistration
     {
         services.AddScoped<GetPetsQuery>();
         services.AddScoped<GetAllPetsQuery>();
-        services.AddScoped<GetVolunteerPhotoQuery>();
+        // services.AddScoped<GetVolunteerQuery>();
         services.AddScoped<GetVolunteerQuery>();
         services.AddScoped<GetVolunteersQuery>();
 
@@ -56,7 +69,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddDataStorages(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IPetFamilyWriteDbContext, PetFamilyWriteDbContext>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<PetFamilyWriteDbContext>();
         services.AddScoped<PetFamilyReadDbContext>();
         services.AddSingleton<SqlConnectionFactory>();
@@ -70,6 +83,8 @@ public static class DependencyRegistration
             options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
             options.WithSSL(false);
         });
+
+        services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Jwt));
 
         return services;
     }

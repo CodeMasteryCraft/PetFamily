@@ -1,0 +1,3 @@
+namespace PetFamily.Application.Features.VolunteerApplications.ApproveVolunteerApplication;
+
+public record ApproveVolunteerApplicationRequest(Guid Id);

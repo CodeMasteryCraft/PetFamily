@@ -1,9 +1,7 @@
-﻿using CSharpFunctionalExtensions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Dtos;
 using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
-using PetFamily.Domain.ValueObjects;
 using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
@@ -21,7 +19,7 @@ public class GetVolunteerPhotoQuery
         _readDbContext = readDbContext;
     }
 
-    public async Task<Result<GetVolunteerByIdResponse, Error>> Handle(
+    public async Task<Result<GetVolunteerPhotoResponse>> Handle(
         GetVolunteerPhotoRequest request,
         CancellationToken ct)
     {
@@ -41,9 +39,9 @@ public class GetVolunteerPhotoQuery
             return photoUrls.Error;
 
         var volunteerDto = new VolunteerDto(
-            volunteer.Id,volunteer.FirstName, 
-                volunteer.LastName,
-                volunteer?.Patronymic,
+            volunteer.Id, volunteer.FirstName,
+            volunteer.LastName,
+            volunteer?.Patronymic,
             volunteer.Photos.Select(p => new VolunteerPhotoDto
             {
                 Id = p.Id,
@@ -51,6 +49,6 @@ public class GetVolunteerPhotoQuery
                 IsMain = p.IsMain
             }).ToList());
 
-        return new GetVolunteerByIdResponse(volunteerDto);
+        return new GetVolunteerPhotoResponse(volunteerDto);
     }
 }
