@@ -76,7 +76,7 @@ public class Volunteer : Entity
 
     public static Result<Volunteer> Create(
         Guid userId,
-        FullName name,
+        FullName fullname,
         string description,
         int yearsExperience,
         int? numberOfPetsFoundHome,
@@ -101,7 +101,7 @@ public class Volunteer : Entity
 
         return new Volunteer(
             userId,
-            name,
+            fullname,
             description,
             yearsExperience,
             numberOfPetsFoundHome,

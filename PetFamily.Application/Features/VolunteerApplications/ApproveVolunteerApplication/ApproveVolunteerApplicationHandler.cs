@@ -41,7 +41,7 @@ public class ApproveVolunteerApplicationHandler
         if (approvedResult.IsFailure)
             return approvedResult.Error;
 
-        //TODO: рандомно сгенерировать пароль
+        //TOO: рандомно сгенерировать пароль
         var user = User.CreateVolunteer(volunteerApplication.Email, "gsdflkjgldksjg");
         if (user.IsFailure)
             return user.Error;

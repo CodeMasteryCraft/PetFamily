@@ -9,7 +9,7 @@ public class FullName : ValueObject
     public string FirstName { get; }
     public string LastName { get; }
     public string? Patronymic { get; }
-
+    
     private FullName(string firstName, string lastName, string? patronymic)
     {
         FirstName = firstName;
@@ -23,6 +23,12 @@ public class FullName : ValueObject
         lastName = lastName.Trim();
         patronymic = patronymic?.Trim();
 
+        if(firstName.IsEmpty())
+            return Errors.General.ValueIsRequired(nameof(firstName));
+        
+        if(lastName.IsEmpty())
+            return Errors.General.ValueIsRequired(nameof(lastName));
+        
         if (firstName.Length is < 1 or > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();
 

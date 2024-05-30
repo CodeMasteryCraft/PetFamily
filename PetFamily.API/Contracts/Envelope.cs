@@ -19,7 +19,7 @@ public class Envelope
     {
         return new(result, null);
     }
-    
+
     public static Envelope Error(params ErrorInfo[] errors)
     {
         return new(null, errors);

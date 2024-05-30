@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
+using PetFamily.Application.Features.Volunteers.UploadPhoto;
 using PetFamily.Domain.Common;
 
 namespace PetFamily.Application.CommonValidators;
@@ -26,7 +27,7 @@ public static class CustomValidators
     {
         return ruleBuilder
             .NotEmpty()
-            .WithError(Errors.General.ValueIsRequried());
+            .WithError(Errors.General.ValueIsRequired());
     }
 
     public static IRuleBuilderOptions<T, string> MaximumLengthWithError<T>(
@@ -64,7 +65,18 @@ public static class CustomValidators
             .LessThan(valueToCompare)
             .WithError(Errors.General.InvalidLength());
     }
-
+    // public static IRuleBuilderOptions<T, TProperty> MustBePhoto<T, TProperty>(
+    //     this IRuleBuilder<T, TProperty> ruleBuilder, UploadVolunteerPhotoRequest file )
+    //     where TProperty : IComparable<TProperty>, IComparable
+    // {
+    //     string[] allowedContentTypes = { "image/jpeg", "image/png", "image/png" };
+    //
+    //     var res = allowedContentTypes.Contains(file.File.ContentType);
+    //     return ruleBuilder
+    //         .Must(p => res)
+    //         .WithError(Errors.General.ValueIsInvalid());
+    //     
+    // }
     public static IRuleBuilderOptions<T, TProperty> WithError<T, TProperty>(
         this IRuleBuilderOptions<T, TProperty> rule, Error error)
     {

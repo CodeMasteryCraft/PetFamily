@@ -7,6 +7,7 @@ using PetFamily.API.Validation;
 using PetFamily.Application;
 using PetFamily.Infrastructure;
 using Serilog;
+using PetFamily.Infrastructure.BackgroundServices;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,7 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Services.AddSwagger();
 builder.Services.AddControllers();
+builder.Services.AddHostedService<ImageCleanupService>();
 
 builder.Services.AddSerilog();
 
@@ -55,19 +57,18 @@ builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProv
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    // using var scope = app.Services.CreateScope();
-    // var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
-    // await dbContext.Database.MigrateAsync();
-
-    /*var passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword("admin");
-
-    var admin = new User("admin", passwordHash, Role.Admin);
-
-    await dbContext.Users.AddAsync(admin);
-    await dbContext.SaveChangesAsync();*/
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     using var scope = app.Services.CreateScope();
+//     var dbContext = scope.ServiceProvider.GetRequiredService<PetFamilyWriteDbContext>();
+//     await dbContext.Database.MigrateAsync();
+//
+//
+//     var admin = new User("admin", "admin", Role.Admin);
+//
+//     await dbContext.Users.AddAsync(admin);
+//     await dbContext.SaveChangesAsync();
+// }
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseSerilogRequestLogging();

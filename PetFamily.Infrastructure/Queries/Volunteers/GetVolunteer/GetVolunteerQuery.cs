@@ -5,27 +5,25 @@ using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Infrastructure.DbContexts;
 
-namespace PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
+namespace PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
 
-public class GetVolunteerByIdQuery
+public class GetVolunteerQuery
 {
-    private readonly IMinioProvider _minioProvider;
+    private IMinioProvider _minioProvider;
     private readonly PetFamilyReadDbContext _readDbContext;
 
-    public GetVolunteerByIdQuery(
-        IMinioProvider minioProvider,
-        PetFamilyReadDbContext readDbContext)
+    public GetVolunteerQuery(PetFamilyReadDbContext readDbContext, IMinioProvider minioProvider)
     {
         _minioProvider = minioProvider;
         _readDbContext = readDbContext;
     }
-
-    public async Task<Result<GetVolunteerByIdResponse, Error>> Handle(
-        GetVolunteerPhotoRequest request,
+    public async Task<Result<GetVolunteerResponse, Error>> Handle(
+        GetVolunteerRequest request,
         CancellationToken ct)
     {
         var volunteer = await _readDbContext.Volunteers
             .Include(v => v.Photos)
+            .Include(p => p.Pets)
             .FirstOrDefaultAsync(v => v.Id == request.VolunteerId, cancellationToken: ct);
 
         if (volunteer is null)
@@ -33,9 +31,9 @@ public class GetVolunteerByIdQuery
             return Errors.General.NotFound(request.VolunteerId);
         }
 
-        var photoPathes = volunteer.Photos.Select(p => p.Path);
+        var photoPaths = volunteer.Photos.Select(p => p.Path);
 
-        var photoUrls = await _minioProvider.GetPhotos(photoPathes);
+        var photoUrls = await _minioProvider.GetPhotos(photoPaths, ct);
         if (photoUrls.IsFailure)
             return photoUrls.Error;
 
@@ -51,6 +49,6 @@ public class GetVolunteerByIdQuery
                 IsMain = p.IsMain
             }).ToList());
 
-        return new GetVolunteerByIdResponse(volunteerDto);
+        return new GetVolunteerResponse(volunteerDto);
     }
 }

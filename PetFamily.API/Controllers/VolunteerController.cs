@@ -1,14 +1,12 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
 using PetFamily.Application.Providers;
-using PetFamily.Infrastructure.Queries.Volunteers;
-using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteerById;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
+using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
+using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
+
 
 namespace PetFamily.API.Controllers;
 
@@ -49,18 +47,9 @@ public class VolunteerController : ApplicationController
         return Ok(result.Value);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<GetVolunteersResponse>> GetVolunteers(
-        [FromServices] GetVolunteersQuery query,
-        CancellationToken ct)
-    {
-        var response = await query.Handle(ct);
-        return Ok(response);
-    }
-
     [HttpGet("photo")]
     public async Task<IActionResult> GetPhotos(
-        [FromServices] GetVolunteerByIdQuery handler,
+        [FromServices] GetVolunteerPhotoQuery handler,
         [FromQuery] GetVolunteerPhotoRequest request,
         CancellationToken ct)
     {
@@ -82,5 +71,27 @@ public class VolunteerController : ApplicationController
             return BadRequest(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetVolunteers([FromServices] GetVolunteersQuery query,
+        [FromQuery]GetVolunteersRequest request,
+        CancellationToken ct)
+    {
+        var idResult = await query.Handle(request, ct);
+        if (idResult.IsFailure)
+            return BadRequest(idResult.Error);
+        return Ok(idResult.Value);
+    }
+
+    [HttpGet("GetById")]
+    public async Task<IActionResult> GetById([FromQuery]GetVolunteerRequest request, 
+       [FromServices]GetVolunteerQuery query,
+        CancellationToken ct)
+    {
+        var idResult = await query.Handle(request, ct);
+        if (idResult.IsFailure)
+            return BadRequest(idResult.Error);
+        return Ok(idResult.Value);
     }
 }

@@ -25,11 +25,11 @@ public class DeleteVolunteerPhotoHandler
         DeleteVolunteerPhotoRequest request,
         CancellationToken ct)
     {
-        var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
+        var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);   
         if (volunteer.IsFailure)
             return volunteer.Error;
 
-        var isRemove = await _minioProvider.RemovePhoto(request.Path);
+        var isRemove =  await _minioProvider.RemovePhoto(request.Path, ct);
         if (isRemove.IsFailure)
             return isRemove.Error;
 

@@ -30,7 +30,9 @@ public class UploadVolunteerPhotoHandler
         var photoId = Guid.NewGuid();
         var path = photoId + Path.GetExtension(request.File.FileName);
 
-        var photo = VolunteerPhoto.CreateAndActivate(path);
+        var photo = VolunteerPhoto.CreateAndActivate(path, request.File.ContentType,
+            request.File.Length, request.IsMain);
+
         if (photo.IsFailure)
             return photo.Error;
 
@@ -38,7 +40,7 @@ public class UploadVolunteerPhotoHandler
         if (isSuccessUpload.IsFailure)
             return isSuccessUpload.Error;
 
-        var objectName = await _minioProvider.UploadPhoto(request.File, path);
+        var objectName = await _minioProvider.UploadPhoto(request.File, path, ct);
         if (objectName.IsFailure)
             return objectName.Error;
 
