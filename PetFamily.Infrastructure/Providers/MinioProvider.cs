@@ -58,7 +58,7 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public async Task<Result<bool>> RemovePhoto(string path, CancellationToken ct)
+    public async Task<Result> RemovePhoto(string path, CancellationToken ct)
     {
         try
         {
@@ -80,7 +80,40 @@ public class MinioProvider : IMinioProvider
                 .WithObject(path);
 
             await _minioClient.RemoveObjectAsync(removeObjectArgs, ct);
-            return true;
+
+            return Result.Success();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e.Message);
+            return Errors.General.SaveFailure("photo");
+        }
+    }
+
+    public async Task<Result> RemovePhotos(List<string> paths, CancellationToken ct)
+    {
+        try
+        {
+            var bucketExistArgs = new BucketExistsArgs()
+                .WithBucket(PhotoBucket);
+
+            var bucketExist = await _minioClient.BucketExistsAsync(bucketExistArgs, ct);
+
+            if (bucketExist == false)
+            {
+                var makeBucketArgs = new MakeBucketArgs()
+                    .WithBucket(PhotoBucket);
+
+                await _minioClient.MakeBucketAsync(makeBucketArgs, ct);
+            }
+
+            var removeObjectsArgs = new RemoveObjectsArgs()
+                .WithBucket(PhotoBucket)
+                .WithObjects(paths);
+
+            await _minioClient.RemoveObjectsAsync(removeObjectsArgs, ct);
+
+            return Result.Success();
         }
         catch (Exception e)
         {
@@ -115,7 +148,7 @@ public class MinioProvider : IMinioProvider
         }
     }
 
-    public IObservable<Item> GetObjectsList (CancellationToken ct)
+    public IObservable<Item> GetObjectsList(CancellationToken ct)
     {
         var listObjectArgs = new ListObjectsArgs().WithBucket(PhotoBucket);
 

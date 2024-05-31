@@ -3,7 +3,7 @@ using PetFamily.Application.Features.Users.Login;
 
 namespace PetFamily.API.Controllers;
 
-public class AccountController : ApplicationController
+public class UserController : ApplicationController
 {
     [HttpPost]
     public async Task<IActionResult> Login(

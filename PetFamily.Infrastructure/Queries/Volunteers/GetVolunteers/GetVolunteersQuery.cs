@@ -3,7 +3,6 @@ using PetFamily.Application.Dtos;
 using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Infrastructure.DbContexts;
-using PetFamily.Infrastructure.Queries.Volunteers.GetAllVolunteers;
 
 namespace PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
 

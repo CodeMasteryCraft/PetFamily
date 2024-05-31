@@ -75,7 +75,7 @@ public class VolunteerController : ApplicationController
 
     [HttpGet]
     public async Task<IActionResult> GetVolunteers([FromServices] GetVolunteersQuery query,
-        [FromQuery]GetVolunteersRequest request,
+        [FromQuery] GetVolunteersRequest request,
         CancellationToken ct)
     {
         var idResult = await query.Handle(request, ct);
@@ -85,13 +85,21 @@ public class VolunteerController : ApplicationController
     }
 
     [HttpGet("GetById")]
-    public async Task<IActionResult> GetById([FromQuery]GetVolunteerRequest request, 
-       [FromServices]GetVolunteerQuery query,
+    public async Task<IActionResult> GetById([FromQuery] GetVolunteerRequest request,
+        [FromServices] GetVolunteerQuery query,
         CancellationToken ct)
     {
         var idResult = await query.Handle(request, ct);
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
         return Ok(idResult.Value);
+    }
+
+    [HttpPost("mail")]
+    public async Task<IActionResult> GetById([FromServices] IMailProvider mailProvider)
+    {
+        await mailProvider.SendMessage("Привет", Guid.Empty);
+
+        return Ok();
     }
 }

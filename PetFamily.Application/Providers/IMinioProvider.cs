@@ -7,7 +7,8 @@ namespace PetFamily.Application.Providers;
 public interface IMinioProvider
 {
     Task<Result<string>> UploadPhoto(IFormFile photo, string path, CancellationToken ct);
-    Task<Result<bool>> RemovePhoto(string path, CancellationToken ct);
+    Task<Result> RemovePhoto(string path, CancellationToken ct);
     Task<Result<IReadOnlyList<string>>> GetPhotos(IEnumerable<string> pathes, CancellationToken ct);
     IObservable<Item> GetObjectsList(CancellationToken ct);
+    Task<Result> RemovePhotos(List<string> paths, CancellationToken ct);
 }
