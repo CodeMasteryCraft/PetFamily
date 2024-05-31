@@ -20,6 +20,15 @@ public class VolunteersRepository : IVolunteersRepository
         await _dbContext.Volunteers.AddAsync(volunteer, ct);
     }
 
+    public async Task<IReadOnlyList<Volunteer>> GetAllWithPhotos(CancellationToken ct)
+    {
+        var volunteers = await _dbContext.Volunteers
+            .Include(v => v.Photos)
+            .ToListAsync(cancellationToken: ct);
+
+        return volunteers;
+    }
+
     public async Task<Result<Volunteer>> GetById(Guid id, CancellationToken ct)
     {
         var volunteer = await _dbContext.Volunteers

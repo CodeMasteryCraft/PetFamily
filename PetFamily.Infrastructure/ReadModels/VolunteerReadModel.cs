@@ -1,5 +1,3 @@
-using PetFamily.Domain.ValueObjects;
-
 namespace PetFamily.Infrastructure.ReadModels;
 
 public class VolunteerReadModel

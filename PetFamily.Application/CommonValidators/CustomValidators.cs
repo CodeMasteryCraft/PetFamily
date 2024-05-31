@@ -1,6 +1,5 @@
 using CSharpFunctionalExtensions;
 using FluentValidation;
-using PetFamily.Application.Features.Volunteers.UploadPhoto;
 using PetFamily.Domain.Common;
 
 namespace PetFamily.Application.CommonValidators;

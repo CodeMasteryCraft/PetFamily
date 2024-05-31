@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
@@ -8,6 +10,7 @@ using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.Providers;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Interseptors;
+using PetFamily.Infrastructure.Jobs;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Pets;
@@ -27,7 +30,10 @@ public static class DependencyRegistration
             .AddRepositories()
             .AddQueries()
             .AddProviders()
-            .AddInterseptors();
+            .AddInterseptors()
+            .AddHangfire(configuration)
+            .AddJobs()
+            .RegisterOptions(configuration);
 
         return services;
     }
@@ -40,7 +46,7 @@ public static class DependencyRegistration
 
         return services;
     }
-    
+
     private static IServiceCollection AddInterseptors(this IServiceCollection services)
     {
         services.AddScoped<CacheInvalidationInterceptor>();
@@ -52,6 +58,7 @@ public static class DependencyRegistration
         services.AddScoped<IMinioProvider, MinioProvider>();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddSingleton<ICacheProvider, CacheProvider>();
+        services.AddScoped<IMailProvider, MailProvider>();
         return services;
     }
 
@@ -62,6 +69,27 @@ public static class DependencyRegistration
         // services.AddScoped<GetVolunteerQuery>();
         services.AddScoped<GetVolunteerQuery>();
         services.AddScoped<GetVolunteersQuery>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddJobs(this IServiceCollection services)
+    {
+        services.AddScoped<IImageCleanupJob, ImageCleanupJob>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddHangfire(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHangfire(config => config
+            .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+            .UseSimpleAssemblyNameTypeSerializer()
+            .UseRecommendedSerializerSettings()
+            .UsePostgreSqlStorage(c => c
+                .UseNpgsqlConnection(configuration.GetConnectionString("PetFamily"))));
+
+        services.AddHangfireServer(options => options.SchedulePollingInterval = TimeSpan.FromSeconds(5));
 
         return services;
     }
@@ -84,7 +112,14 @@ public static class DependencyRegistration
             options.WithSSL(false);
         });
 
+        return services;
+    }
+
+    private static IServiceCollection RegisterOptions(
+        this IServiceCollection services, IConfiguration configuration)
+    {
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.Jwt));
+        services.Configure<MailOptions>(configuration.GetSection(MailOptions.Mail));
 
         return services;
     }
