@@ -2,26 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
-using PetFamily.Application.Providers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
-
 
 namespace PetFamily.API.Controllers;
 
 public class VolunteerController : ApplicationController
 {
-    private readonly ICacheProvider _cache;
-
-    public VolunteerController(ICacheProvider cache)
-    {
-        _cache = cache;
-    }
-
     [HttpPost("pet")]
     // [HasPermission(Permissions.Pets.Create)]
-    public async Task<IActionResult> Create(
+    public async Task<IActionResult> CreatePet(
         [FromServices] CreatePetHandler handler,
         [FromBody] CreatePetRequest request,
         CancellationToken ct)
@@ -93,13 +84,5 @@ public class VolunteerController : ApplicationController
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
         return Ok(idResult.Value);
-    }
-
-    [HttpPost("mail")]
-    public async Task<IActionResult> GetById([FromServices] IMailProvider mailProvider)
-    {
-        await mailProvider.SendMessage("Привет", Guid.Empty);
-
-        return Ok();
     }
 }

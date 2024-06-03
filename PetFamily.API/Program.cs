@@ -23,11 +23,6 @@ builder.Services.AddSwagger();
 builder.Services.AddControllers();
 builder.Services.AddSerilog();
 
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
-});
-
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
@@ -38,9 +33,6 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
 });
 
 builder.Services.AddAuth(builder.Configuration);
-
-builder.Services.AddSingleton<IAuthorizationHandler, PermissionsAuthorizationsHandler>();
-builder.Services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
 var app = builder.Build();
 

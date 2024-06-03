@@ -7,10 +7,13 @@ using PetFamily.Application.DataAccess;
 using PetFamily.Application.Features.Users;
 using PetFamily.Application.Features.VolunteerApplications;
 using PetFamily.Application.Features.Volunteers;
+using PetFamily.Application.MessageBus;
 using PetFamily.Application.Providers;
+using PetFamily.Infrastructure.Consumers;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Interseptors;
 using PetFamily.Infrastructure.Jobs;
+using PetFamily.Infrastructure.MessageBuses;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Queries.Pets;
@@ -33,7 +36,10 @@ public static class DependencyRegistration
             .AddInterseptors()
             .AddHangfire(configuration)
             .AddJobs()
-            .RegisterOptions(configuration);
+            .RegisterOptions(configuration)
+            .AddConsumers()
+            .AddChannels()
+            .AddMessageBuses();
 
         return services;
     }
@@ -44,6 +50,18 @@ public static class DependencyRegistration
         services.AddScoped<IVolunteerApplicationsRepository, VolunteerApplicationsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
 
+        return services;
+    }
+
+    private static IServiceCollection AddChannels(this IServiceCollection services)
+    {
+        services.AddSingleton<EmailMessageChannel>();
+        return services;
+    }
+
+    private static IServiceCollection AddMessageBuses(this IServiceCollection services)
+    {
+        services.AddSingleton<IMessageBus, EmailMessageBus>();
         return services;
     }
 
@@ -80,6 +98,13 @@ public static class DependencyRegistration
         return services;
     }
 
+    private static IServiceCollection AddConsumers(this IServiceCollection services)
+    {
+        services.AddHostedService<EmailNotificationConsumer>();
+
+        return services;
+    }
+
     private static IServiceCollection AddHangfire(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHangfire(config => config
@@ -101,6 +126,11 @@ public static class DependencyRegistration
         services.AddScoped<PetFamilyWriteDbContext>();
         services.AddScoped<PetFamilyReadDbContext>();
         services.AddSingleton<SqlConnectionFactory>();
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+        });
 
         services.AddMinio(options =>
         {

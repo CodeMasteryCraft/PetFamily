@@ -2,6 +2,9 @@ using Microsoft.Extensions.Logging;
 using PetFamily.Application.DataAccess;
 using PetFamily.Application.Features.Users;
 using PetFamily.Application.Features.Volunteers;
+using PetFamily.Application.MessageBus;
+using PetFamily.Application.Messages;
+using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 
@@ -14,19 +17,22 @@ public class ApproveVolunteerApplicationHandler
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<ApproveVolunteerApplicationHandler> _logger;
+    private readonly IMessageBus _messageBus;
 
     public ApproveVolunteerApplicationHandler(
         IVolunteerApplicationsRepository volunteerApplicationsRepository,
         IUsersRepository usersRepository,
         IVolunteersRepository volunteersRepository,
         IUnitOfWork unitOfWork,
-        ILogger<ApproveVolunteerApplicationHandler> logger)
+        ILogger<ApproveVolunteerApplicationHandler> logger,
+        IMessageBus messageBus)
     {
         _volunteerApplicationsRepository = volunteerApplicationsRepository;
         _usersRepository = usersRepository;
         _volunteersRepository = volunteersRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _messageBus = messageBus;
     }
 
     public async Task<Result> Handle(ApproveVolunteerApplicationRequest request, CancellationToken ct)
@@ -69,8 +75,11 @@ public class ApproveVolunteerApplicationHandler
             "Volunteer application has been successfully approved and volunteer has been created with id: {id}",
             volunteer.Value.Id);
 
-        // отправить письмо на почту будущего волонтера
-        // отправить уведомление в телеграмм
+        var emailNotification = new EmailNotification(
+            "Вы успешно зарегистрировались",
+            volunteerApplication.Email);
+
+        await _messageBus.PublishAsync(emailNotification, ct);
 
         return Result.Success();
     }

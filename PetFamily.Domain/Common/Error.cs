@@ -72,6 +72,14 @@ public static class Errors
         }
     }
 
+    public static class Email
+    {
+        public static Error FailedToSendEmail()
+        {
+            return new("email.send.fail", "Fail to send email");
+        }
+    }
+
     public static class Volunteers
     {
         public static Error PhotoCountLimit()
@@ -82,7 +90,9 @@ public static class Errors
         public static Error FileTypeInvalid(string? fileType)
         {
             return new("invalid.file.type", $"This {fileType}: file type is invalid");
-        }public static Error FileLengthInvalid(long? length)
+        }
+
+        public static Error FileLengthInvalid(long? length)
         {
             return new("invalid.file.length", $"This {length}: file length is invalid");
         }

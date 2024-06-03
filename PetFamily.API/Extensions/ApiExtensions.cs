@@ -1,7 +1,9 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using PetFamily.API.Authorization;
 using PetFamily.Infrastructure.Options;
 
 namespace PetFamily.API.Extensions;
@@ -10,6 +12,9 @@ public static class ApiExtensions
 {
     public static void AddAuth(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton<IAuthorizationHandler, PermissionsAuthorizationsHandler>();
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {

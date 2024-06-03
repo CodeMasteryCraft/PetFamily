@@ -1,4 +1,18 @@
 ﻿services:
+  api:
+    image: petfamily.api
+    container_name: api
+    build:
+      context: .
+      dockerfile: PetFamily.API/Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - ASPNETCORE_HTTP_PORTS=5000
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
   postgres:
     container_name: postgres
     image: postgres
