@@ -24,4 +24,4 @@ public record CreatePetRequest(
     string ContactPhoneNumber,
     string VolunteerPhoneNumber,
     bool OnTreatment,
-    List<Vaccination> Vaccinations);
+    IEnumerable<Vaccination> Vaccinations);

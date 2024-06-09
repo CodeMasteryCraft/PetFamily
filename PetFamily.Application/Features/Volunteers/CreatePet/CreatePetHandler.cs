@@ -48,7 +48,7 @@ public class CreatePetHandler
             contactPhoneNumber,
             volunteerPhoneNumber,
             request.OnTreatment,
-            []);
+            request.Vaccinations);
 
         if (pet.IsFailure)
             return pet.Error;

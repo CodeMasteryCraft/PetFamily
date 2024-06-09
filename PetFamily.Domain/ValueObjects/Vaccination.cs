@@ -19,6 +19,7 @@ public class Vaccination : ValueObject
     
     public DateTimeOffset? Applied { get; private set; }
 
+    
     public static Result<Vaccination> Create(
         string name,
         DateTimeOffset? applied)
