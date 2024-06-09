@@ -1,5 +1,4 @@
 using Hangfire;
-using Microsoft.AspNetCore.Identity;
 using PetFamily.API.Extensions;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
@@ -32,15 +31,6 @@ builder.Services.AddFluentValidationAutoValidation(configuration =>
 });
 
 builder.Services.AddAuth(builder.Configuration);
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequiredLength = 8;
-    options.Password.RequireDigit = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireLowercase = true;
-});
 
 var app = builder.Build();
 

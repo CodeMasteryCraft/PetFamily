@@ -49,7 +49,8 @@ public class ApproveVolunteerApplicationHandler
             return approvedResult.Error;    
 
         var password = RandomPassword.Generate();
-        var user = User.CreateVolunteer(volunteerApplication.Email, password);
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        var user = User.CreateVolunteer(volunteerApplication.Email, passwordHash);
         if (user.IsFailure)
             return user.Error;
 
