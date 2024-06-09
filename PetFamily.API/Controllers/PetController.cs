@@ -27,4 +27,17 @@ public class PetController : ApplicationController
 
         return Ok(response);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Get(
+        [FromServices] GetPetQuery handler,
+        [FromQuery] GetPetRequest request,
+        CancellationToken ct)
+    {
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
 }

@@ -18,19 +18,19 @@ public class GetAllPetsQuery
         using var connection = _sqlConnectionFactory.CreateConnection();
 
         var sql = """
-                  SELECT p.id,
-                  	p.nickname,
-                  	p.breed,
-                  	p.contact_phone_number,
-                  	ph.id,
-                  	ph.path,
-                  	ph.is_main
-                  FROM pets p
-                  LEFT JOIN photos ph ON p.id = ph.pet_id
-                  """;
+                   SELECT p.id,
+                   	p.nickname,
+                   	p.breed,
+                   	p.contact_phone_number,
+                   	ph.id,
+                   	ph.path,
+                   	ph.is_main
+                   FROM pets p
+                   LEFT JOIN photos ph ON p.id = ph.pet_id
+                   """;
 
         Dictionary<Guid, PetDto> petsDictionary = new();
-        await connection.QueryAsync<PetDto, VolunteerPhotoDto, PetDto>(
+        await connection.QueryAsync<PetDto, PetPhotoDto, PetDto>(
             sql,
             (pet, photo) =>
             {
