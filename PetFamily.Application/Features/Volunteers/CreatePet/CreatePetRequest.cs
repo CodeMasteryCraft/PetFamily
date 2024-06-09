@@ -1,4 +1,6 @@
-﻿namespace PetFamily.Application.Features.Volunteers.CreatePet;
+﻿using PetFamily.Domain.Entities;
+
+namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
 public record CreatePetRequest(
     Guid VolunteerId,

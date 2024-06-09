@@ -7,7 +7,7 @@ namespace PetFamily.Domain.Entities;
 
 public class Volunteer : Entity
 {
-    public const int PHOTO_COUNT_LIMIT = 5;
+    private const int PHOTO_COUNT_LIMIT = 5;
 
     private Volunteer()
     {

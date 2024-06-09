@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.DataAccess;
+﻿using PetFamily.Application.DataAccess;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 using PetFamily.Domain.ValueObjects;
@@ -17,7 +16,7 @@ public class CreatePetHandler
         _dbContext = dbContext;
     }
 
-    public async Task<Result<Guid, Error>> Handle(CreatePetRequest request, CancellationToken ct)
+    public async Task<Result<Guid>> Handle(CreatePetRequest request, CancellationToken ct)
     {
         var volunteer = await _volunteersRepository.GetById(request.VolunteerId, ct);
         if (volunteer.IsFailure)
@@ -52,8 +51,8 @@ public class CreatePetHandler
             return pet.Error;
 
         volunteer.Value.PublishPet(pet.Value);
-
+        
         await _dbContext.SaveChangesAsync(ct);
-        return volunteer.Value.Id;
+        return pet.Value.Id;
     }
 }

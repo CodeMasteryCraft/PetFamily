@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PetFamily.Application.Features.Pets.UploadPhoto;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
@@ -15,12 +16,16 @@ public class VolunteerController : ApplicationController
     public async Task<IActionResult> CreatePet(
         [FromServices] CreatePetHandler handler,
         [FromBody] CreatePetRequest request,
+        [FromServices] UploadPetPhotoHandler photoHandler,
+        [FromForm] UploadPetPhotoRequest photoRequest,
         CancellationToken ct)
     {
         var idResult = await handler.Handle(request, ct);
 
         if (idResult.IsFailure)
             return BadRequest(idResult.Error);
+        
+        
 
         return Ok(idResult.Value);
     }

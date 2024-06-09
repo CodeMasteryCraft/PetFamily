@@ -21,7 +21,7 @@ public abstract class Photo : Entity
     {
         if (contentType != JPG && contentType != JPEG && contentType != PNG)
             return Errors.Volunteers.FileTypeInvalid(contentType);
-        if (length > 10000)
+        if (length > 100000)
             return Errors.Volunteers.FileLengthInvalid(length);
         return new VolunteerPhoto(path, isMain);
     }

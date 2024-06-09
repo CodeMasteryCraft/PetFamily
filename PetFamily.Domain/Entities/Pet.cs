@@ -1,12 +1,13 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Common;
+﻿using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
 using Entity = PetFamily.Domain.Common.Entity;
+using Result = PetFamily.Domain.Common.Result;
 
 namespace PetFamily.Domain.Entities;
 
 public class Pet : Entity
 {
+    private const int PHOTO_COUNT_LIMIT = 15;
     private Pet()
     {
     }
@@ -80,7 +81,18 @@ public class Pet : Entity
     public IReadOnlyList<PetPhoto> Photos => _photos;
     private readonly List<PetPhoto> _photos = [];
 
-    public static Result<Pet, Error> Create(
+    public Result AddPhoto(PetPhoto petPhoto)
+    {
+        if (_photos.Count >= PHOTO_COUNT_LIMIT)
+        {
+            return Errors.Volunteers.PhotoCountLimit();
+        }
+
+        _photos.Add(petPhoto);
+        return Result.Success();
+    }
+    
+    public static Result<Pet> Create(
         string nickname,
         string description,
         DateTimeOffset birthDate,
