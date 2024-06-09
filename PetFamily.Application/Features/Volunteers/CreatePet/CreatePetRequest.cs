@@ -1,4 +1,6 @@
-﻿namespace PetFamily.Application.Features.Volunteers.CreatePet;
+﻿using PetFamily.Domain.ValueObjects;
+
+namespace PetFamily.Application.Features.Volunteers.CreatePet;
 
 public record CreatePetRequest(
     Guid VolunteerId,
@@ -21,4 +23,5 @@ public record CreatePetRequest(
     float Weight,
     string ContactPhoneNumber,
     string VolunteerPhoneNumber,
-    bool OnTreatment);
+    bool OnTreatment,
+    List<Vaccination> Vaccinations);

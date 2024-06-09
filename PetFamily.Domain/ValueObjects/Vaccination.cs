@@ -1,10 +1,9 @@
-using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common;
-using Entity = PetFamily.Domain.Common.Entity;
+using ValueObject = PetFamily.Domain.Common.ValueObject;
 
-namespace PetFamily.Domain.Entities;
+namespace PetFamily.Domain.ValueObjects;
 
-public class Vaccination : Entity
+public class Vaccination : ValueObject
 {
     private Vaccination()
     {
@@ -17,10 +16,10 @@ public class Vaccination : Entity
     }
 
     public string Name { get; private set; } = null!;
-
+    
     public DateTimeOffset? Applied { get; private set; }
 
-    public static Result<Vaccination, Error> Create(
+    public static Result<Vaccination> Create(
         string name,
         DateTimeOffset? applied)
     {
@@ -33,5 +32,10 @@ public class Vaccination : Entity
             return Errors.General.ValueIsInvalid(nameof(Vaccination));
 
         return new Vaccination(name, applied);
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Name;
     }
 }

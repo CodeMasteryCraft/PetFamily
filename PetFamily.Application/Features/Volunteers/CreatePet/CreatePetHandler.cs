@@ -28,7 +28,8 @@ public class CreatePetHandler
         var weight = Weight.Create(request.Weight).Value;
         var contactPhoneNumber = PhoneNumber.Create(request.ContactPhoneNumber).Value;
         var volunteerPhoneNumber = PhoneNumber.Create(request.VolunteerPhoneNumber).Value;
-
+        
+        
         var pet = Pet.Create(
             request.Nickname,
             request.Description,
@@ -46,7 +47,8 @@ public class CreatePetHandler
             weight,
             contactPhoneNumber,
             volunteerPhoneNumber,
-            request.OnTreatment);
+            request.OnTreatment,
+            []);
 
         if (pet.IsFailure)
             return pet.Error;

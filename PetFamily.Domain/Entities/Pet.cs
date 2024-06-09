@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Common;
+﻿using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
 using Entity = PetFamily.Domain.Common.Entity;
 
@@ -29,7 +28,8 @@ public class Pet : Entity
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
         bool onTreatment,
-        DateTimeOffset createdDate)
+        DateTimeOffset createdDate,
+        IEnumerable<Vaccination> vaccinations)
     {
         Nickname = nickname;
         Description = description;
@@ -49,6 +49,7 @@ public class Pet : Entity
         VolunteerPhoneNumber = volunteerPhoneNumber;
         OnTreatment = onTreatment;
         CreatedDate = createdDate;
+        _vaccinations = vaccinations.ToList();
     }
 
     public string Nickname { get; private set; } = null!;
@@ -80,7 +81,7 @@ public class Pet : Entity
     public IReadOnlyList<PetPhoto> Photos => _photos;
     private readonly List<PetPhoto> _photos = [];
 
-    public static Result<Pet, Error> Create(
+    public static Result<Pet> Create(
         string nickname,
         string description,
         DateTimeOffset birthDate,
@@ -97,7 +98,8 @@ public class Pet : Entity
         Weight weight,
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
-        bool onTreatment)
+        bool onTreatment,
+        IEnumerable<Vaccination> vaccinations)
     {
         breed = breed.Trim();
         color = color.Trim();
@@ -149,6 +151,7 @@ public class Pet : Entity
             contactPhoneNumber,
             volunteerPhoneNumber,
             onTreatment,
-            DateTimeOffset.UtcNow);
+            DateTimeOffset.UtcNow,
+            vaccinations);
     }
 }
