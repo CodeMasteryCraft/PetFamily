@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Pets.GetPets;
+using PetFamily.Application.Features.Pets.UploadPhoto;
 using PetFamily.Infrastructure.Queries.Pets;
 
 namespace PetFamily.API.Controllers;
@@ -26,5 +27,18 @@ public class PetController : ApplicationController
         var response = await query.Handle();
 
         return Ok(response);
+    }
+    
+    [HttpPost("photo")]
+    public async Task<IActionResult> UploadPhoto(
+        [FromServices] UploadPetPhotoHandler handler,
+        [FromForm] UploadPetPhotoRequest request,
+        CancellationToken ct)
+    {
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }

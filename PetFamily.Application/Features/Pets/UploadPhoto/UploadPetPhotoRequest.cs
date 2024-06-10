@@ -2,4 +2,4 @@
 
 namespace PetFamily.Application.Features.Pets.UploadPhoto;
 
-public record UploadPetPhotoRequest(IFormFile File, bool IsMain);
+public record UploadPetPhotoRequest(Guid PetId, IFormFile File, bool IsMain);

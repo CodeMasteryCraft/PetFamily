@@ -16,18 +16,14 @@ public class VolunteerController : ApplicationController
     public async Task<IActionResult> CreatePet(
         [FromServices] CreatePetHandler handler,
         [FromBody] CreatePetRequest request,
-        [FromServices] UploadPetPhotoHandler photoHandler,
-        [FromForm] UploadPetPhotoRequest photoRequest,
         CancellationToken ct)
     {
-        var idResult = await handler.Handle(request, ct);
+        var idPet = await handler.Handle(request, ct);
 
-        if (idResult.IsFailure)
-            return BadRequest(idResult.Error);
-        
-        
+        if (idPet.IsFailure)
+            return BadRequest(idPet.Error);
 
-        return Ok(idResult.Value);
+        return Ok(idPet);
     }
 
     [HttpPost("photo")]

@@ -20,6 +20,7 @@ public class PetFamilyWriteDbContext : DbContext, IUnitOfWork
     }
 
     public DbSet<Volunteer> Volunteers => Set<Volunteer>();
+    public DbSet<Pet> Pets => Set<Pet>();
     public DbSet<VolunteerApplication> VolunteersApplications => Set<VolunteerApplication>();
     public DbSet<User> Users => Set<User>();
 

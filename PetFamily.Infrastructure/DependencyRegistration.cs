@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetFamily.Application.DataAccess;
+using PetFamily.Application.Features.Pets;
 using PetFamily.Application.Features.Users;
 using PetFamily.Application.Features.VolunteerApplications;
 using PetFamily.Application.Features.Volunteers;
@@ -49,6 +50,7 @@ public static class DependencyRegistration
         services.AddScoped<IVolunteersRepository, VolunteersRepository>();
         services.AddScoped<IVolunteerApplicationsRepository, VolunteerApplicationsRepository>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IPetsRepository, PetsRepository>();
 
         return services;
     }
