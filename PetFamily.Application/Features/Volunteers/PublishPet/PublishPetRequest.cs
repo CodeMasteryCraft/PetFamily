@@ -1,6 +1,8 @@
-﻿namespace PetFamily.Application.Features.Volunteers.CreatePet;
+﻿using Microsoft.AspNetCore.Http;
 
-public record CreatePetRequest(
+namespace PetFamily.Application.Features.Volunteers.PublishPet;
+
+public record PublishPetRequest(
     Guid VolunteerId,
     string Nickname,
     string Description,
@@ -21,4 +23,5 @@ public record CreatePetRequest(
     float Weight,
     string ContactPhoneNumber,
     string VolunteerPhoneNumber,
-    bool OnTreatment);
+    bool OnTreatment,
+    IFormFileCollection Files);

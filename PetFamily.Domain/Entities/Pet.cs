@@ -7,6 +7,9 @@ namespace PetFamily.Domain.Entities;
 
 public class Pet : Entity
 {
+    public const int PHOTO_COUNT_LIMIT = 25;
+    public const int PHOTO_COUNT_MIN = 1;
+
     private Pet()
     {
     }
@@ -29,7 +32,8 @@ public class Pet : Entity
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
         bool onTreatment,
-        DateTimeOffset createdDate)
+        DateTimeOffset createdDate,
+        List<PetPhoto> photos)
     {
         Nickname = nickname;
         Description = description;
@@ -49,6 +53,7 @@ public class Pet : Entity
         VolunteerPhoneNumber = volunteerPhoneNumber;
         OnTreatment = onTreatment;
         CreatedDate = createdDate;
+        _photos = photos;
     }
 
     public string Nickname { get; private set; } = null!;
@@ -97,12 +102,11 @@ public class Pet : Entity
         Weight weight,
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
-        bool onTreatment)
+        bool onTreatment,
+        IEnumerable<PetPhoto> photos)
     {
         breed = breed.Trim();
         color = color.Trim();
-        peopleAttitude = peopleAttitude.Trim();
-        animalAttitude = animalAttitude.Trim();
 
         if (nickname.IsEmpty() || nickname.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();
@@ -131,6 +135,10 @@ public class Pet : Entity
         if (height <= 0)
             return Errors.General.ValueIsInvalid(nameof(height));
 
+        var photosList = photos.ToList();
+        if (photosList.Count is > PHOTO_COUNT_LIMIT or < PHOTO_COUNT_MIN)
+            return Errors.Pets.PhotoCountLimit();
+
         return new Pet(
             nickname,
             description,
@@ -149,6 +157,7 @@ public class Pet : Entity
             contactPhoneNumber,
             volunteerPhoneNumber,
             onTreatment,
-            DateTimeOffset.UtcNow);
+            DateTimeOffset.UtcNow,
+            photosList);
     }
 }
