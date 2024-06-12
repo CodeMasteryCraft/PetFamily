@@ -3,11 +3,11 @@ using PetFamily.Application.CommonValidators;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
 
-namespace PetFamily.Application.Features.Volunteers.CreatePet;
+namespace PetFamily.Application.Features.Volunteers.PublishPet;
 
-public class CreatePetRequestValidator : AbstractValidator<CreatePetRequest>
+public class PublishPetRequestValidator : AbstractValidator<PublishPetRequest>
 {
-    public CreatePetRequestValidator()
+    public PublishPetRequestValidator()
     {
         RuleFor(x => x.ContactPhoneNumber).MustBeValueObject(PhoneNumber.Create);
         RuleFor(x => x.VolunteerPhoneNumber).MustBeValueObject(PhoneNumber.Create);

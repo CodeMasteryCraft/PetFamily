@@ -10,12 +10,14 @@ public class UploadPhotoValidator : AbstractValidator<UploadVolunteerPhotoReques
      {
          var type = string.Empty;
          long length = 0;
+         
          RuleFor(p => p.File).Must(p =>
              {
                  type = p.ContentType;
                  return CheckTypes(p.ContentType);
              })
              .WithError(Errors.Volunteers.FileTypeInvalid(type));
+         
          RuleFor(p => p.File).Must(p =>
              {
                  length = p.Length;
