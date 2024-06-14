@@ -5,9 +5,10 @@ namespace PetFamily.Domain.Entities;
 
 public abstract class Photo : Entity
 {
-    private const string JPEG = "image/jpeg";
-    private const string JPG = "image/jpg";
-    private const string PNG = "image/png";
+    public const string JPEG = ".jpeg";
+    public const string JPG = ".jpg";
+    public const string PNG = ".png";
+
     protected Photo(string path, bool isMain)
     {
         Path = path;

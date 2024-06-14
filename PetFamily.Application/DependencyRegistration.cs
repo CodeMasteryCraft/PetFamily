@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Features.Users.Login;
 using PetFamily.Application.Features.VolunteerApplications.ApplyVolunteerApplication;
 using PetFamily.Application.Features.VolunteerApplications.ApproveVolunteerApplication;
-using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
+using PetFamily.Application.Features.Volunteers.PublishPet;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
 
 namespace PetFamily.Application;
@@ -20,7 +20,7 @@ public static class DependencyRegistration
 
     private static IServiceCollection AddHandlers(this IServiceCollection services)
     {
-        services.AddScoped<CreatePetHandler>();
+        services.AddScoped<PublishPetHandler>();
 
         services.AddScoped<UploadVolunteerPhotoHandler>();
         services.AddScoped<DeleteVolunteerPhotoHandler>();

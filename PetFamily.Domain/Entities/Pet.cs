@@ -1,4 +1,5 @@
-﻿using PetFamily.Domain.Common;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
 using Entity = PetFamily.Domain.Common.Entity;
 
@@ -6,6 +7,9 @@ namespace PetFamily.Domain.Entities;
 
 public class Pet : Entity
 {
+    public const int PHOTO_COUNT_LIMIT = 25;
+    public const int PHOTO_COUNT_MIN = 1;
+
     private Pet()
     {
     }
@@ -29,7 +33,8 @@ public class Pet : Entity
         PhoneNumber volunteerPhoneNumber,
         bool onTreatment,
         DateTimeOffset createdDate,
-        IEnumerable<Vaccination> vaccinations)
+        IEnumerable<Vaccination> vaccinations,
+        List<PetPhoto> photos)
     {
         Nickname = nickname;
         Description = description;
@@ -50,6 +55,7 @@ public class Pet : Entity
         OnTreatment = onTreatment;
         CreatedDate = createdDate;
         _vaccinations = vaccinations.ToList();
+        _photos = photos;
     }
 
     public string Nickname { get; private set; } = null!;
@@ -81,7 +87,7 @@ public class Pet : Entity
     public IReadOnlyList<PetPhoto> Photos => _photos;
     private readonly List<PetPhoto> _photos = [];
 
-    public static Result<Pet> Create(
+    public static Result<Pet, Error> Create(
         string nickname,
         string description,
         DateTimeOffset birthDate,
@@ -99,7 +105,8 @@ public class Pet : Entity
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
         bool onTreatment,
-        IEnumerable<Vaccination> vaccinations)
+        IEnumerable<Vaccination> vaccinations,
+        IEnumerable<PetPhoto> photos)
     {
         breed = breed.Trim();
         color = color.Trim();
@@ -133,6 +140,10 @@ public class Pet : Entity
         if (height <= 0)
             return Errors.General.ValueIsInvalid(nameof(height));
 
+        var photosList = photos.ToList();
+        if (photosList.Count is > PHOTO_COUNT_LIMIT or < PHOTO_COUNT_MIN)
+            return Errors.Pets.PhotoCountLimit();
+
         return new Pet(
             nickname,
             description,
@@ -152,6 +163,7 @@ public class Pet : Entity
             volunteerPhoneNumber,
             onTreatment,
             DateTimeOffset.UtcNow,
-            vaccinations);
+            vaccinations,
+            photosList);
     }
 }

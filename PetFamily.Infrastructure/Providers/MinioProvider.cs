@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel;
@@ -21,7 +20,7 @@ public class MinioProvider : IMinioProvider
         _logger = logger;
     }
 
-    public async Task<Result<string>> UploadPhoto(IFormFile photo, string path, CancellationToken ct)
+    public async Task<Result<string>> UploadPhoto(Stream stream, string path, CancellationToken ct)
     {
         try
         {
@@ -38,22 +37,19 @@ public class MinioProvider : IMinioProvider
                 await _minioClient.MakeBucketAsync(makeBucketArgs, ct);
             }
 
-            await using (var stream = photo.OpenReadStream())
-            {
-                var putObjectArgs = new PutObjectArgs()
-                    .WithBucket(PhotoBucket)
-                    .WithStreamData(stream)
-                    .WithObjectSize(stream.Length)
-                    .WithObject(path);
+            var putObjectArgs = new PutObjectArgs()
+                .WithBucket(PhotoBucket)
+                .WithStreamData(stream)
+                .WithObjectSize(stream.Length)
+                .WithObject(path);
 
-                var response = await _minioClient.PutObjectAsync(putObjectArgs, ct);
+            var response = await _minioClient.PutObjectAsync(putObjectArgs, ct);
 
-                return response.ObjectName;
-            }
+            return response.ObjectName;
         }
         catch (Exception e)
         {
-            _logger.LogError(e.Message);
+            _logger.LogError("Error while saving file in minio: {message}", e.Message);
             return Errors.General.SaveFailure("photo");
         }
     }

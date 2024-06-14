@@ -1,8 +1,9 @@
-﻿using PetFamily.Domain.ValueObjects;
+using Microsoft.AspNetCore.Http;
+using PetFamily.Application.Dtos;
 
-namespace PetFamily.Application.Features.Volunteers.CreatePet;
+namespace PetFamily.Application.Features.Volunteers.PublishPet;
 
-public record CreatePetRequest(
+public record PublishPetRequest(
     Guid VolunteerId,
     string Nickname,
     string Description,
@@ -24,4 +25,5 @@ public record CreatePetRequest(
     string ContactPhoneNumber,
     string VolunteerPhoneNumber,
     bool OnTreatment,
-    IEnumerable<Vaccination> Vaccinations);
+    IEnumerable<VaccinationDto> Vaccinations,
+    IFormFileCollection Files);
