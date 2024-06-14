@@ -32,6 +32,6 @@ public class User : Entity
 
     public static Result<User> CreateRegularUser(Email email, string passwordHash)
     {
-        return new User(email, passwordHash, Role.Volunteer);
+        return new User(email, passwordHash, Role.RegularUser);
     }
 }

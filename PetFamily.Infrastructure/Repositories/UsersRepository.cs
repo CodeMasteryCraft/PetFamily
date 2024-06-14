@@ -24,7 +24,6 @@ public class UsersRepository : IUsersRepository
     public async Task<Result<User, Error>> GetByEmail(string email, CancellationToken ct)
     {
         var user = await _dbContext.Users
-            .Include(u => u.Role)
             .FirstOrDefaultAsync(u => u.Email.Value == email, cancellationToken: ct);
 
         if (user is null)
