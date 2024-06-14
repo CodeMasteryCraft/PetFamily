@@ -8,7 +8,7 @@ namespace PetFamily.API.Controllers;
 public class PetsController : ApplicationController
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public IActionResult GetAll()
     {
         List<PetDto> petDtos =
         [

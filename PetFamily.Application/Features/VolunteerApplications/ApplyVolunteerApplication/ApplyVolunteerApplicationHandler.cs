@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.DataAccess;
 using PetFamily.Domain.Common;
@@ -23,7 +22,7 @@ public class ApplyVolunteerApplicationHandler
         _logger = logger;
     }
 
-    public async Task<Result<Guid, Error>> Handle(ApplyVolunteerApplicationRequest request, CancellationToken ct)
+    public async Task<Result<Guid>> Handle(ApplyVolunteerApplicationRequest request, CancellationToken ct)
     {
         var fullName = FullName.Create(
             request.FirstName, request.LastName, request.Patronymic).Value;

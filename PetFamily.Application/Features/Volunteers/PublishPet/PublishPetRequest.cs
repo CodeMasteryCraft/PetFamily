@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
+using PetFamily.Application.Dtos;
 
 namespace PetFamily.Application.Features.Volunteers.PublishPet;
 
@@ -24,4 +25,5 @@ public record PublishPetRequest(
     string ContactPhoneNumber,
     string VolunteerPhoneNumber,
     bool OnTreatment,
+    IEnumerable<VaccinationDto> Vaccinations,
     IFormFileCollection Files);

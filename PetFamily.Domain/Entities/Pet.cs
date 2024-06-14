@@ -33,6 +33,7 @@ public class Pet : Entity
         PhoneNumber volunteerPhoneNumber,
         bool onTreatment,
         DateTimeOffset createdDate,
+        IEnumerable<Vaccination> vaccinations,
         List<PetPhoto> photos)
     {
         Nickname = nickname;
@@ -53,6 +54,7 @@ public class Pet : Entity
         VolunteerPhoneNumber = volunteerPhoneNumber;
         OnTreatment = onTreatment;
         CreatedDate = createdDate;
+        _vaccinations = vaccinations.ToList();
         _photos = photos;
     }
 
@@ -103,10 +105,13 @@ public class Pet : Entity
         PhoneNumber contactPhoneNumber,
         PhoneNumber volunteerPhoneNumber,
         bool onTreatment,
+        IEnumerable<Vaccination> vaccinations,
         IEnumerable<PetPhoto> photos)
     {
         breed = breed.Trim();
         color = color.Trim();
+        peopleAttitude = peopleAttitude.Trim();
+        animalAttitude = animalAttitude.Trim();
 
         if (nickname.IsEmpty() || nickname.Length > Constraints.SHORT_TITLE_LENGTH)
             return Errors.General.InvalidLength();
@@ -158,6 +163,7 @@ public class Pet : Entity
             volunteerPhoneNumber,
             onTreatment,
             DateTimeOffset.UtcNow,
+            vaccinations,
             photosList);
     }
 }

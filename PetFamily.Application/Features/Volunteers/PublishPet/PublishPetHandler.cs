@@ -42,6 +42,8 @@ public class PublishPetHandler
 
         var photos = photoFiles.Value.Select(p => p.PetPhoto);
 
+        var vaccinations = request.Vaccinations.Select(v => Vaccination.Create(v.Name, v.Applied).Value);
+
         var pet = Pet.Create(
             request.Nickname,
             request.Description,
@@ -60,6 +62,7 @@ public class PublishPetHandler
             contactPhoneNumber,
             volunteerPhoneNumber,
             request.OnTreatment,
+            vaccinations,
             photos);
 
         if (pet.IsFailure)

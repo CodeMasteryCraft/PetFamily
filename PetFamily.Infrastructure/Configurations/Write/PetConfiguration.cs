@@ -112,8 +112,15 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
                 .IsRequired()
                 .HasMaxLength(Constraints.SHORT_TITLE_LENGTH);
         });
+        
+        builder.OwnsMany(v => v.Vaccinations, navigationBuilder =>
+        {
+            navigationBuilder.ToJson();
+
+            navigationBuilder.Property(s => s.Name);
+            navigationBuilder.Property(s => s.Applied);
+        });
 
         builder.HasMany(p => p.Photos).WithOne().IsRequired();
-        builder.HasMany(p => p.Vaccinations).WithOne();
     }
 }

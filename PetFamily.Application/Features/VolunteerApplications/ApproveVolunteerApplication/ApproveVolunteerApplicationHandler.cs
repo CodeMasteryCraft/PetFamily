@@ -5,9 +5,10 @@ using PetFamily.Application.Features.Users;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.MessageBus;
 using PetFamily.Application.Messages;
-using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
+
+
 
 namespace PetFamily.Application.Features.VolunteerApplications.ApproveVolunteerApplication;
 
@@ -46,10 +47,11 @@ public class ApproveVolunteerApplicationHandler
 
         var approvedResult = volunteerApplication.Approve();
         if (approvedResult.IsFailure)
-            return approvedResult.Error;
+            return approvedResult.Error;    
 
-        //TOO: рандомно сгенерировать пароль
-        var user = User.CreateVolunteer(volunteerApplication.Email, "gsdflkjgldksjg");
+        var password = RandomPassword.Generate();
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        var user = User.CreateVolunteer(volunteerApplication.Email, passwordHash);
         if (user.IsFailure)
             return user.Error;
 
@@ -77,9 +79,9 @@ public class ApproveVolunteerApplicationHandler
             volunteer.Value.Id);
 
         var emailNotification = new EmailNotification(
-            "Вы успешно зарегистрировались",
+            $"Вы успешно зарегистрировались в Pet Family. Логин: {volunteerApplication.Email.Value} , Пароль: {password}",
             volunteerApplication.Email);
-
+        
         await _messageBus.PublishAsync(emailNotification, ct);
 
         return Result.Success();

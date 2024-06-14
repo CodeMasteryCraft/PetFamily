@@ -17,10 +17,4 @@ public class UserController : ApplicationController
 
         return Ok(token.Value);
     }
-
-    [HttpGet]
-    public async Task<IActionResult> Get()
-    {
-        return Ok(HttpContext.User.Claims.Select(x => x.Value));
-    }
 }
