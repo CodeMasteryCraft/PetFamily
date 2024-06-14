@@ -79,7 +79,8 @@ public class ApproveVolunteerApplicationHandler
             volunteer.Value.Id);
 
         var emailNotification = new EmailNotification(
-            $"Вы успешно зарегистрировались в Pet Family. Логин: {volunteerApplication.Email.Value} , Пароль: {password}",
+            $"Вы успешно зарегистрировались в Pet Family." +
+            $" Логин: {volunteerApplication.Email.Value}, Пароль: {password}",
             volunteerApplication.Email);
         
         await _messageBus.PublishAsync(emailNotification, ct);
