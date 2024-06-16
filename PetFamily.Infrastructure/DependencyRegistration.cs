@@ -89,7 +89,7 @@ public static class DependencyRegistration
         services.AddScoped<GetVolunteerQuery>();
         services.AddScoped<GetVolunteersQuery>();
         services.AddScoped<GetVolunteerPetsQuery>();
-        services.AddScoped<GetPetQuery>();
+        services.AddScoped<GetByIdPetQuery>();
 
         return services;
     }

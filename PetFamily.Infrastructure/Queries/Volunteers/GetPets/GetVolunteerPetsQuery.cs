@@ -18,20 +18,19 @@ public class GetVolunteerPetsQuery
         GetVolunteerPetsRequest request, 
         CancellationToken ct)
     {
-        var volunteer = await _readDbContext.Volunteers
-            .Include(v => v.Pets)
-            .FirstOrDefaultAsync(v => v.Id == request.VolunteerId, cancellationToken: ct);
+       
+        var petReadModel = await _readDbContext.Pets
+            .Where(p => p.VolunteerId == request.VolunteerId).Include(petReadModel => petReadModel.Address)
+            .ToListAsync(cancellationToken: ct);
 
-        if (volunteer is null)
-            return Errors.General.NotFound(request.VolunteerId);
-
-        var pets = volunteer.Pets.Select(pet => new PetDto(
+        var petDto = petReadModel.Select(pet => new PetDto(
             pet.Id,
             pet.Nickname,
             pet.Description,
             pet.BirthDate,
             pet.Breed,
             pet.Color,
+            pet.Address,
             pet.Castration,
             pet.PeopleAttitude,
             pet.AnimalAttitude, 
@@ -39,8 +38,9 @@ public class GetVolunteerPetsQuery
             pet.Health, 
             pet.Height, 
             [],
-            pet.CreatedDate)).ToList();
+            pet.CreatedDate))
+            .ToList();
       
-        return new GetVolunteerPetsResponse(pets);
+        return new GetVolunteerPetsResponse(petDto);
     }
 }

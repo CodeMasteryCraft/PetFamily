@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
-using PetFamily.Infrastructure.Queries.Volunteers.GetPets;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
@@ -26,18 +25,7 @@ public class VolunteerController : ApplicationController
         return Ok(idResult.Value);
     }
     
-    [HttpGet("pet")]
-    public async Task<IActionResult> GetPets(
-        [FromServices] GetVolunteerPetsQuery handler,
-        [FromQuery] GetVolunteerPetsRequest request,
-        CancellationToken ct)
-    {
-        var result = await handler.Handle(request, ct);
-        if (result.IsFailure)
-            return BadRequest(result.Error);
-
-        return Ok(result.Value);
-    }
+  
 
     [HttpPost("photo")]
     public async Task<IActionResult> UploadPhoto(

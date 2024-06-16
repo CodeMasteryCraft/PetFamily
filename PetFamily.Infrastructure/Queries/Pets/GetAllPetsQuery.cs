@@ -42,8 +42,8 @@ public class GetAllPetsQuery
                 {
                     petsDictionary.Add(pet.Id, pet);
                 }
-
-                pet.Photos.Add(photo);
+                //TODO проблема с IReadOnlyList
+                //pet.Photos.Add(photo);
                 return pet;
             },
             splitOn: "id");

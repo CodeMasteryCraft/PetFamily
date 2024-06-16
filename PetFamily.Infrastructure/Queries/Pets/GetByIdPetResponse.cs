@@ -2,4 +2,4 @@
 
 namespace PetFamily.Infrastructure.Queries.Pets;
 
-public record GetPetResponse(PetDto Pet);
+public record GetByIdPetResponse(PetDto Pet);

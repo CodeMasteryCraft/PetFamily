@@ -1,3 +1,3 @@
 ﻿namespace PetFamily.Infrastructure.Queries.Pets;
 
-public record GetPetRequest(Guid PetId);
+public record GetByIdPetRequest(Guid PetId);

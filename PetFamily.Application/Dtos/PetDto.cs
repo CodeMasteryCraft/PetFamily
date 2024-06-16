@@ -1,3 +1,5 @@
+using PetFamily.Domain.ValueObjects;
+
 namespace PetFamily.Application.Dtos;
 
 public record PetDto(
@@ -7,11 +9,7 @@ public record PetDto(
     DateTimeOffset BirthDate,
     string Breed,
     string Color,
-    //string City,
-    //string Street,
-    //string Building,
-    //string Index,
-    //string Place,
+    Address Address,
     bool Castration,
     string PeopleAttitude,
     string AnimalAttitude,
@@ -21,5 +19,5 @@ public record PetDto(
     //float Weight,
     //string ContactPhoneNumber,
     //string VolunteerPhoneNumber,
-    List<PetPhotoDto> Photos,
+    IReadOnlyList<PetPhotoDto> Photos,
     DateTimeOffset CreatedDate);

@@ -4,7 +4,6 @@ using PetFamily.Application.Features.Users;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.MessageBus;
 using PetFamily.Application.Messages;
-using PetFamily.Application.Providers;
 using PetFamily.Domain.Common;
 using PetFamily.Domain.Entities;
 

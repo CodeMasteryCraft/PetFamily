@@ -1,3 +1,5 @@
+using PetFamily.Domain.ValueObjects;
+
 namespace PetFamily.Infrastructure.ReadModels;
 
 public class PetReadModel
@@ -12,7 +14,7 @@ public class PetReadModel
     public string AnimalAttitude { get; init; } = string.Empty;
     public string Health { get; init; } = string.Empty;
 
-    // public Address Address { get; private set; } = null!;
+    public Address Address { get; private set; } = null!;
     // public Place Place { get; private set; } = null!;
     // public Weight Weight { get; private set; } = null!;
     // public PhoneNumber ContactPhoneNumber { get; private set; } = null!;

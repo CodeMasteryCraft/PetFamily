@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 using PetFamily.Application.Messages;
 using PetFamily.Application.Providers;
-using PetFamily.Domain.Common;
 using PetFamily.Domain.ValueObjects;
 using PetFamily.Infrastructure.Options;
 
