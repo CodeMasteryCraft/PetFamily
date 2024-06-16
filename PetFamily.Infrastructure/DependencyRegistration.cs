@@ -84,7 +84,6 @@ public static class DependencyRegistration
     private static IServiceCollection AddQueries(this IServiceCollection services)
     {
         services.AddScoped<GetPetsQuery>();
-        services.AddScoped<GetAllPetsQuery>();
         // services.AddScoped<GetVolunteerQuery>();
         services.AddScoped<GetVolunteerQuery>();
         services.AddScoped<GetVolunteersQuery>();

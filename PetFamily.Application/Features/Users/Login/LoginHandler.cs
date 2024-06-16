@@ -22,7 +22,7 @@ public class LoginHandler
         if (user.IsFailure)
             return user.Error;
         
-        var isVerified = BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.Value.PasswordHash);
+        var isVerified = BCrypt.Net.BCrypt.Verify(request.Password, user.Value.PasswordHash);
         if (isVerified == false)
             return Errors.Users.InvalidCredentials();
 

@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Users.Login;
+using PetFamily.Application.Features.Users.Register;
 
 namespace PetFamily.API.Controllers;
 
 public class UserController : ApplicationController
 {
-    [HttpPost]
+    [HttpPost("login")]
     public async Task<IActionResult> Login(
         [FromBody] LoginRequest request,
         [FromServices] LoginHandler handler,
@@ -17,10 +18,17 @@ public class UserController : ApplicationController
 
         return Ok(token.Value);
     }
-
-    [HttpGet]
-    public async Task<IActionResult> Get()
+    
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(
+        [FromBody] RegisterRequest request,
+        [FromServices] RegisterHandler handler,
+        CancellationToken ct)
     {
-        return Ok(HttpContext.User.Claims.Select(x => x.Value));
+        var result = await handler.Handle(request, ct);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok();
     }
 }

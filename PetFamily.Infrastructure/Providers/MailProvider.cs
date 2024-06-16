@@ -50,7 +50,7 @@ public class MailProvider : IMailProvider
         mail.From.Add(new MailboxAddress(_mailOptions.DisplayName, _mailOptions.From));
         mail.To.Add(new MailboxAddress("", email.Value));
 
-        mail.Subject = "Заголовок";
+        mail.Subject = "Pet Family";
         mail.Body = new TextPart(MimeKit.Text.TextFormat.Html)
         {
             Text = message

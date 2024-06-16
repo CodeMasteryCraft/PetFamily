@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using PetFamily.Application.Features.Volunteers.CreatePet;
 using PetFamily.Application.Features.Volunteers.DeletePhoto;
+using PetFamily.Application.Features.Volunteers.PublishPet;
 using PetFamily.Application.Features.Volunteers.UploadPhoto;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
 using PetFamily.Infrastructure.Queries.Volunteers.GetPhoto;
@@ -12,9 +12,9 @@ public class VolunteerController : ApplicationController
 {
     [HttpPost("pet")]
     // [HasPermission(Permissions.Pets.Create)]
-    public async Task<IActionResult> CreatePet(
-        [FromServices] CreatePetHandler handler,
-        [FromBody] CreatePetRequest request,
+    public async Task<IActionResult> PublishPet(
+        [FromServices] PublishPetHandler handler,
+        [FromForm] PublishPetRequest request,
         CancellationToken ct)
     {
         var idResult = await handler.Handle(request, ct);
