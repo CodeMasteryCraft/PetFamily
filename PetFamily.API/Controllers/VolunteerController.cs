@@ -24,6 +24,8 @@ public class VolunteerController : ApplicationController
 
         return Ok(idResult.Value);
     }
+    
+  
 
     [HttpPost("photo")]
     public async Task<IActionResult> UploadPhoto(
