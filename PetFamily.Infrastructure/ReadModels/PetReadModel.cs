@@ -20,7 +20,7 @@ public class PetReadModel
     public string Index { get; private set; } = null!;
     // public Place Place { get; private set; } = null!;
     // public Weight Weight { get; private set; } = null!;
-    // public PhoneNumber ContactPhoneNumber { get; private set; } = null!;
+    public string ContactPhoneNumber { get; private set; } = null!;
     // public PhoneNumber VolunteerPhoneNumber { get; private set; } = null!;
 
     public bool Castration { get; init; }

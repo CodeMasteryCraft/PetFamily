@@ -26,20 +26,11 @@ public class GetByIdPetQuery
             pet.Id, 
             pet.Nickname, 
             pet.Description, 
-            pet.BirthDate, 
-            pet.Breed, 
-            pet.Color,
             pet.City,
             pet.Street,
             pet.Building,
             pet.Index,
-            pet.Castration, 
-            pet.PeopleAttitude, 
-            pet.AnimalAttitude, 
-            pet.OnlyOneInFamily, 
-            pet.Health, 
-            pet.Height, 
-            [],
+            pet.ContactPhoneNumber, 
             pet.CreatedDate);
 
         return new GetByIdPetResponse(petDto);
