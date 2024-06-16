@@ -20,7 +20,7 @@ public class GetVolunteerPetsQuery
     {
        
         var petReadModel = await _readDbContext.Pets
-            .Where(p => p.VolunteerId == request.VolunteerId).Include(petReadModel => petReadModel.Address)
+            .Where(p => p.VolunteerId == request.VolunteerId)
             .ToListAsync(cancellationToken: ct);
 
         var petDto = petReadModel.Select(pet => new PetDto(
@@ -30,7 +30,10 @@ public class GetVolunteerPetsQuery
             pet.BirthDate,
             pet.Breed,
             pet.Color,
-            pet.Address,
+            pet.City,
+            pet.Street,
+            pet.Building,
+            pet.Index,
             pet.Castration,
             pet.PeopleAttitude,
             pet.AnimalAttitude, 

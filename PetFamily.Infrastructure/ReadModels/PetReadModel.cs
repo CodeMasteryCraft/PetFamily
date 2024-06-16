@@ -14,7 +14,10 @@ public class PetReadModel
     public string AnimalAttitude { get; init; } = string.Empty;
     public string Health { get; init; } = string.Empty;
 
-    public Address Address { get; private set; } = null!;
+    public string City { get; private set; } = null!;
+    public string Street { get; private set; } = null!;
+    public string Building { get; private set; } = null!;
+    public string Index { get; private set; } = null!;
     // public Place Place { get; private set; } = null!;
     // public Weight Weight { get; private set; } = null!;
     // public PhoneNumber ContactPhoneNumber { get; private set; } = null!;

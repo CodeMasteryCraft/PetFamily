@@ -15,13 +15,10 @@ public class PetReadConfiguration : IEntityTypeConfiguration<PetReadModel>
             .WithMany(v => v.Pets)
             .HasForeignKey(p => p.VolunteerId)
             .IsRequired();
-        
-        builder.ComplexProperty(p => p.Address, b =>
-        {
-            b.Property(f => f.City).HasColumnName("city");
-            b.Property(f => f.Street).HasColumnName("street");
-            b.Property(f => f.Building).HasColumnName("building");
-            b.Property(f => f.Index).HasColumnName("index").IsRequired(false);
-        });
+
+        builder.Property(p => p.City).HasColumnName("city");
+        builder.Property(p => p.Street).HasColumnName("street");
+        builder.Property(p => p.Building).HasColumnName("building");
+        builder.Property(p => p.Index).HasColumnName("index").IsRequired(false);
     }
 }

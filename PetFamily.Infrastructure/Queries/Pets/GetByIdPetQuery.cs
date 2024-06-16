@@ -16,11 +16,12 @@ public class GetByIdPetQuery
 
     public async Task<Result<GetByIdPetResponse>> Handle(GetByIdPetRequest request, CancellationToken ct)
     {
-        var pet = await _readDbContext.Pets.Include(petReadModel => petReadModel.Address).FirstOrDefaultAsync(p => p.Id == request.PetId, cancellationToken: ct);
+        var pet = await _readDbContext.Pets
+            .FirstOrDefaultAsync(p => p.Id == request.PetId, cancellationToken: ct);
 
         if (pet is null)
             return Errors.General.NotFound(request.PetId);
-        
+
         var petDto = new PetDto(
             pet.Id, 
             pet.Nickname, 
@@ -28,13 +29,17 @@ public class GetByIdPetQuery
             pet.BirthDate, 
             pet.Breed, 
             pet.Color,
-            pet.Address,
+            pet.City,
+            pet.Street,
+            pet.Building,
+            pet.Index,
             pet.Castration, 
             pet.PeopleAttitude, 
             pet.AnimalAttitude, 
             pet.OnlyOneInFamily, 
             pet.Health, 
-            pet.Height, [],
+            pet.Height, 
+            [],
             pet.CreatedDate);
 
         return new GetByIdPetResponse(petDto);
