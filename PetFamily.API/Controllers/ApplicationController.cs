@@ -17,14 +17,18 @@ public abstract class ApplicationController : ControllerBase
 
     protected IActionResult BadRequest(Error? error)
     {
-        var envelope = Envelope.Ok(error);
+        var errorInfo = new ErrorInfo(error);
+        
+        var envelope = Envelope.Error(errorInfo);
 
         return base.BadRequest(envelope);
     }
 
     protected IActionResult NotFound(Error? error)
     {
-        var envelope = Envelope.Ok(error);
+        var errorInfo = new ErrorInfo(error);
+        
+        var envelope = Envelope.Error(errorInfo);
 
         return base.NotFound(envelope);
     }

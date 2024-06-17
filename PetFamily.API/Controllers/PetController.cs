@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Application.Features.Pets.GetPets;
 using PetFamily.Infrastructure.Queries.Pets;
+using PetFamily.Infrastructure.Queries.Pets.GetPetById;
 using PetFamily.Infrastructure.Queries.Volunteers.GetPets;
 
 namespace PetFamily.API.Controllers;

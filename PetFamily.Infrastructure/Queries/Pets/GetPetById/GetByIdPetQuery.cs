@@ -3,7 +3,7 @@ using PetFamily.Application.Dtos;
 using PetFamily.Domain.Common;
 using PetFamily.Infrastructure.DbContexts;
 
-namespace PetFamily.Infrastructure.Queries.Pets;
+namespace PetFamily.Infrastructure.Queries.Pets.GetPetById;
 
 public class GetByIdPetQuery
 {
