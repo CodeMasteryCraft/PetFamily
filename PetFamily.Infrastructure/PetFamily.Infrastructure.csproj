@@ -23,5 +23,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PetFamily.Application\PetFamily.Application.csproj" />
+      <ProjectReference Include="..\PetFamily.Infrastructure.Kafka\PetFamily.Infrastructure.Kafka.csproj" />
     </ItemGroup>
 </Project>

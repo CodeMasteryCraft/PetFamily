@@ -73,6 +73,14 @@ public static class Errors
             return new("record.save.failure", $"{label} failed to save");
         }
     }
+    
+    public static class Kafka
+    {
+        public static Error PersistFail()
+        {
+            return new("kafka.persist.fail", "Fail to persist message");
+        }
+    }
 
     public static class Email
     {
