@@ -9,16 +9,16 @@ public class DeleteVolunteerPhotoHandler
 {
     private readonly IMinioProvider _minioProvider;
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ITransaction _transaction;
 
     public DeleteVolunteerPhotoHandler(
         IMinioProvider minioProvider,
         IVolunteersRepository volunteersRepository,
-        IUnitOfWork unitOfWork)
+        ITransaction transaction)
     {
         _minioProvider = minioProvider;
         _volunteersRepository = volunteersRepository;
-        _unitOfWork = unitOfWork;
+        _transaction = transaction;
     }
 
     public async Task<Result<bool, Error>> Handle(
@@ -37,7 +37,7 @@ public class DeleteVolunteerPhotoHandler
         if (isDelete.IsFailure)
             return isDelete.Error;
 
-        await _unitOfWork.SaveChangesAsync(ct);
+        await _transaction.SaveChangesAsync(ct);
 
         return true;
     }

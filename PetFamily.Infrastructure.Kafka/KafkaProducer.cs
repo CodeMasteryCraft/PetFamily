@@ -1,23 +1,26 @@
 ﻿using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PetFamily.Domain.Common;
 
 namespace PetFamily.Infrastructure.Kafka;
 
-public class KafkaMessageProducer
+public class KafkaProducer<T>
 {
-    private readonly ILogger<KafkaMessageProducer> _logger;
-    private readonly IProducer<Null, string> _producer;
+    private readonly ILogger<T> _logger;
+    private readonly IProducer<Null, T> _producer;
+    private readonly KafkaOptions _kafkaOptions;
 
-    public KafkaMessageProducer(ILogger<KafkaMessageProducer> logger)
+    public KafkaProducer(ILogger<T> logger, IOptions<KafkaOptions> kafkaOptions)
     {
         _logger = logger;
+        _kafkaOptions = kafkaOptions.Value;
         _producer = CreateProducer();
     }
 
-    public async Task<Result> Publish(string topic, string message)
+    public async Task<Result> Publish(string topic, T message)
     {
-        var kafkaMessage = new Message<Null, string>
+        var kafkaMessage = new Message<Null, T>
         {
             Value = message
         };
@@ -34,16 +37,18 @@ public class KafkaMessageProducer
         return Result.Success();
     }
 
-    private IProducer<Null, string> CreateProducer()
+    private IProducer<Null, T> CreateProducer()
     {
         var config = new ProducerConfig
         {
-            BootstrapServers = "localhost:9092",
+            BootstrapServers = _kafkaOptions.Host,
             AllowAutoCreateTopics = true,
-            ClientId = "PetFamily",
+            ClientId = _kafkaOptions.ClientId,
             MessageSendMaxRetries = 3
         };
 
-        return new ProducerBuilder<Null, string>(config).Build();
+        return new ProducerBuilder<Null, T>(config)
+            .SetValueSerializer(new KafkaSerializer<T>())
+            .Build();
     }
 }

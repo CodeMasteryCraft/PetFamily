@@ -17,7 +17,7 @@ public class ApproveVolunteerApplicationHandler
     private readonly IVolunteerApplicationsRepository _volunteerApplicationsRepository;
     private readonly IUsersRepository _usersRepository;
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ITransaction _transaction;
     private readonly ILogger<ApproveVolunteerApplicationHandler> _logger;
     private readonly IMessageBus _messageBus;
 
@@ -25,14 +25,14 @@ public class ApproveVolunteerApplicationHandler
         IVolunteerApplicationsRepository volunteerApplicationsRepository,
         IUsersRepository usersRepository,
         IVolunteersRepository volunteersRepository,
-        IUnitOfWork unitOfWork,
+        ITransaction transaction,
         ILogger<ApproveVolunteerApplicationHandler> logger,
         IMessageBus messageBus)
     {
         _volunteerApplicationsRepository = volunteerApplicationsRepository;
         _usersRepository = usersRepository;
         _volunteersRepository = volunteersRepository;
-        _unitOfWork = unitOfWork;
+        _transaction = transaction;
         _logger = logger;
         _messageBus = messageBus;
     }
@@ -72,7 +72,7 @@ public class ApproveVolunteerApplicationHandler
 
         await _volunteersRepository.Add(volunteer.Value, ct);
 
-        await _unitOfWork.SaveChangesAsync(ct);
+        await _transaction.SaveChangesAsync(ct);
 
         _logger.LogInformation(
             "Volunteer application has been successfully approved and volunteer has been created with id: {id}",

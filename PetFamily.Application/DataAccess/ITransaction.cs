@@ -1,6 +1,6 @@
 namespace PetFamily.Application.DataAccess;
 
-public interface IUnitOfWork
+public interface ITransaction
 {
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

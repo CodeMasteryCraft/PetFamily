@@ -8,12 +8,12 @@ namespace PetFamily.Application.Features.Users.Register;
 public class RegisterHandler
 {
     private readonly IUsersRepository _usersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ITransaction _transaction;
 
-    public RegisterHandler(IUsersRepository usersRepository, IUnitOfWork unitOfWork)
+    public RegisterHandler(IUsersRepository usersRepository, ITransaction transaction)
     {
         _usersRepository = usersRepository;
-        _unitOfWork = unitOfWork;
+        _transaction = transaction;
     }
 
     public async Task<Result> Handle(RegisterRequest request, CancellationToken ct)
@@ -29,7 +29,7 @@ public class RegisterHandler
 
         await _usersRepository.Add(user.Value, ct);
 
-        await _unitOfWork.SaveChangesAsync(ct);
+        await _transaction.SaveChangesAsync(ct);
 
         return Result.Success();
     }

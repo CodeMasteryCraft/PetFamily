@@ -7,7 +7,7 @@ using PetFamily.Infrastructure.Interseptors;
 
 namespace PetFamily.Infrastructure.DbContexts;
 
-public class PetFamilyWriteDbContext : DbContext, IUnitOfWork
+public class PetFamilyWriteDbContext : DbContext, ITransaction
 {
     private readonly IConfiguration _configuration;
     private readonly CacheInvalidationInterceptor _cacheInvalidationInterceptor;

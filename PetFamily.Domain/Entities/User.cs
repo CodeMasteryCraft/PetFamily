@@ -19,6 +19,12 @@ public class User : Entity
     public Email Email { get; private set; }
     public string PasswordHash { get; private set; }
     public Role Role { get; private set; }
+    public long? TelegramId { get; private set; }
+
+    public void AddTelegram(long telegramId)
+    {
+        TelegramId = telegramId;
+    }
 
     public static Result<User> CreateVolunteer(Email email, string passwordHash)
     {

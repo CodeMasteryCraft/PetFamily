@@ -9,6 +9,7 @@ using PetFamily.Application.Features.VolunteerApplications;
 using PetFamily.Application.Features.Volunteers;
 using PetFamily.Application.MessageBus;
 using PetFamily.Application.Providers;
+using PetFamily.Application.Services;
 using PetFamily.Infrastructure.Consumers;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Interseptors;
@@ -22,6 +23,7 @@ using PetFamily.Infrastructure.Queries.Volunteers.GetPets;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteer;
 using PetFamily.Infrastructure.Queries.Volunteers.GetVolunteers;
 using PetFamily.Infrastructure.Repositories;
+using PetFamily.Infrastructure.Services;
 
 namespace PetFamily.Infrastructure;
 
@@ -41,7 +43,8 @@ public static class DependencyRegistration
             .RegisterOptions(configuration)
             .AddConsumers()
             .AddChannels()
-            .AddMessageBuses();
+            .AddMessageBuses()
+            .AddServices();
 
         return services;
     }
@@ -94,6 +97,13 @@ public static class DependencyRegistration
         return services;
     }
 
+    private static IServiceCollection AddServices(this IServiceCollection services)
+    {
+        services.AddScoped<INotificationService, NotificationService>();
+
+        return services;
+    }
+
     private static IServiceCollection AddJobs(this IServiceCollection services)
     {
         services.AddScoped<IImageCleanupJob, ImageCleanupJob>();
@@ -125,7 +135,7 @@ public static class DependencyRegistration
     private static IServiceCollection AddDataStorages(
         this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<ITransaction, Transaction>();
         services.AddScoped<PetFamilyWriteDbContext>();
         services.AddScoped<PetFamilyReadDbContext>();
         services.AddSingleton<SqlConnectionFactory>();

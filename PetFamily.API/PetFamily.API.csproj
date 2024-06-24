@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\PetFamily.Infrastructure.TelegramBot\PetFamily.Infrastructure.TelegramBot.csproj" />
       <ProjectReference Include="..\PetFamily.Infrastructure\PetFamily.Infrastructure.csproj" />
     </ItemGroup>
 

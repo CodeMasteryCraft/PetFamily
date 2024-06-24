@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.UnitTests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Infrastructure.Kafka", "PetFamily.Infrastructure.Kafka\PetFamily.Infrastructure.Kafka.csproj", "{B6A712BF-892F-4C90-A70D-898969764C8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Infrastructure.TelegramBot", "PetFamily.Infrastructure.TelegramBot\PetFamily.Infrastructure.TelegramBot.csproj", "{BC4DC74B-0526-44BA-9BC7-A91B7051EA29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{B6A712BF-892F-4C90-A70D-898969764C8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6A712BF-892F-4C90-A70D-898969764C8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6A712BF-892F-4C90-A70D-898969764C8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC4DC74B-0526-44BA-9BC7-A91B7051EA29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC4DC74B-0526-44BA-9BC7-A91B7051EA29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC4DC74B-0526-44BA-9BC7-A91B7051EA29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC4DC74B-0526-44BA-9BC7-A91B7051EA29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

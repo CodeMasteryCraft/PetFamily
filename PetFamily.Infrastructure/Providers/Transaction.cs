@@ -3,11 +3,11 @@ using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Providers;
 
-public class UnitOfWork : IUnitOfWork
+public class Transaction : ITransaction
 {
     private readonly PetFamilyWriteDbContext _dbContext;
 
-    public UnitOfWork(PetFamilyWriteDbContext dbContext)
+    public Transaction(PetFamilyWriteDbContext dbContext)
     {
         _dbContext = dbContext;
     }

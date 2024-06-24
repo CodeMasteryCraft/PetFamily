@@ -4,16 +4,19 @@ using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PetFamily.API.Authorization;
 using PetFamily.API.Controllers;
 using PetFamily.API.Extensions;
 using PetFamily.API.Middlewares;
 using PetFamily.API.Validation;
 using PetFamily.Application;
+using PetFamily.Application.Models;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.DbContexts;
 using PetFamily.Infrastructure.Jobs;
 using PetFamily.Infrastructure.Kafka;
+using PetFamily.Infrastructure.TelegramBot;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
@@ -31,12 +34,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSerilog();
 
-builder.Services.AddSingleton<KafkaMessageProducer>();
-builder.Services.AddHostedService<NotificationWorker>();
-
 builder.Services
     .AddApplication()
-    .AddInfrastructure(builder.Configuration);
+    .AddInfrastructure(builder.Configuration)
+    .AddInfrastructureKafka(builder.Configuration)
+    .AddInfrastructureTelegram(builder.Configuration);
 
 builder.Services.AddFluentValidationAutoValidation(configuration =>
 {
@@ -79,13 +81,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapPost("kafka",
+app.MapPost("notification",
     async (
-        [FromQuery] string topic,
+        [FromQuery] Guid userId,
         [FromBody] string message,
-        KafkaMessageProducer producer) =>
+        [FromServices] IOptions<KafkaOptions> kafkaOptions,
+        [FromServices] KafkaProducer<Notification> producer) =>
     {
-        await producer.Publish(topic, message);
+        var notification = new Notification(userId, message);
+
+        await producer.Publish(kafkaOptions.Value.NotificationsTopic, notification);
     });
 
 app.UseHangfireDashboard();
@@ -93,23 +98,25 @@ app.MapHangfireDashboard();
 
 HangfireWorker.StartRecurringJobs();
 
+var kafkaOptions = app.Services.GetRequiredService<IOptions<KafkaOptions>>().Value;
+
 var kafkaConfig = new AdminClientConfig()
 {
-    BootstrapServers = "localhost:9092",
+    BootstrapServers = kafkaOptions.Host,
 };
 
 using var kafkaAdminClient = new AdminClientBuilder(kafkaConfig).Build();
 
 var metaData = kafkaAdminClient.GetMetadata(TimeSpan.FromSeconds(5));
 
-var topic = metaData.Topics.FirstOrDefault(t => t.Topic == "test-topic");
+var topic = metaData.Topics.FirstOrDefault(t => t.Topic == kafkaOptions.NotificationsTopic);
 
 if (topic is null)
 {
-    var topicSpecification = new TopicSpecification()
+    var topicSpecification = new TopicSpecification
     {
-        Name = "test-topic",
-        NumPartitions = 2
+        Name = kafkaOptions.NotificationsTopic,
+        NumPartitions = kafkaOptions.NotificationsTopicPartitions
     };
 
     await kafkaAdminClient.CreateTopicsAsync([topicSpecification]);

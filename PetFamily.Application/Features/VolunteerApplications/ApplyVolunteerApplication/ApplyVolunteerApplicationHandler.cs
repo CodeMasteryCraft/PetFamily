@@ -8,16 +8,16 @@ namespace PetFamily.Application.Features.VolunteerApplications.ApplyVolunteerApp
 
 public class ApplyVolunteerApplicationHandler
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ITransaction _transaction;
     private readonly IVolunteerApplicationsRepository _volunteerApplicationsRepository;
     private readonly ILogger<ApplyVolunteerApplicationHandler> _logger;
 
     public ApplyVolunteerApplicationHandler(
-        IUnitOfWork unitOfWork,
+        ITransaction transaction,
         IVolunteerApplicationsRepository volunteerApplicationsRepository,
         ILogger<ApplyVolunteerApplicationHandler> logger)
     {
-        _unitOfWork = unitOfWork;
+        _transaction = transaction;
         _volunteerApplicationsRepository = volunteerApplicationsRepository;
         _logger = logger;
     }
@@ -38,7 +38,7 @@ public class ApplyVolunteerApplicationHandler
             request.FromShelter);
 
         await _volunteerApplicationsRepository.Add(application, ct);
-        await _unitOfWork.SaveChangesAsync(ct);
+        await _transaction.SaveChangesAsync(ct);
 
         _logger.LogInformation("Volunteer application has been created {id}", application.Id);
 

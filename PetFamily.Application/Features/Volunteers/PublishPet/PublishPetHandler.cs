@@ -11,16 +11,16 @@ namespace PetFamily.Application.Features.Volunteers.PublishPet;
 public class PublishPetHandler
 {
     private readonly IVolunteersRepository _volunteersRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ITransaction _transaction;
     private readonly IMinioProvider _minioProvider;
 
     public PublishPetHandler(
         IVolunteersRepository volunteersRepository,
-        IUnitOfWork unitOfWork,
+        ITransaction transaction,
         IMinioProvider minioProvider)
     {
         _volunteersRepository = volunteersRepository;
-        _unitOfWork = unitOfWork;
+        _transaction = transaction;
         _minioProvider = minioProvider;
     }
 
@@ -81,7 +81,7 @@ public class PublishPetHandler
                 return objectName.Error;
         }
 
-        await _unitOfWork.SaveChangesAsync(ct);
+        await _transaction.SaveChangesAsync(ct);
         return volunteer.Value.Id;
     }
 

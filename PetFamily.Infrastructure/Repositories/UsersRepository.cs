@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Features.Users;
 using PetFamily.Domain.Common;
@@ -21,7 +20,18 @@ public class UsersRepository : IUsersRepository
         await _dbContext.AddAsync(user, ct);
     }
 
-    public async Task<Result<User, Error>> GetByEmail(string email, CancellationToken ct)
+    public async Task<Result<User>> GetById(Guid id, CancellationToken ct)
+    {
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken: ct);
+
+        if (user is null)
+            return Errors.General.NotFound();
+
+        return user;
+    }
+
+    public async Task<Result<User>> GetByEmail(string email, CancellationToken ct)
     {
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Email.Value == email, cancellationToken: ct);
